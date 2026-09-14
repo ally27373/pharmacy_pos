@@ -4,12 +4,13 @@
 // Pharmacy POS System
 // Phase 4.1
 // =====================================================
-?>
-
-<?php
 
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
+
+// =====================================================
+// AUTH CONTROLLER
+// =====================================================
 
 require_once __DIR__ . '/../Controllers/AuthController.php';
 
@@ -17,12 +18,20 @@ $controller = new AuthController();
 
 $message = '';
 
+// =====================================================
+// SESSION MESSAGE
+// =====================================================
+
 if (!empty($_SESSION['auth_message'])) {
 
     $message = $_SESSION['auth_message'];
 
     unset($_SESSION['auth_message']);
 }
+
+// =====================================================
+// LOGIN SUBMISSION
+// =====================================================
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
@@ -37,25 +46,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $message = $result['message'];
 }
 
-require_once __DIR__ . '/../includes/header.php';
+// =====================================================
+// SHARED HEADER
+// =====================================================
 
+require_once __DIR__ . '/../includes/header.php';
 
 ?>
 
-
-
-
-
 <div class="wrapper">
-
-    <!-- =============================
-         TOP NAVIGATION
-    ============================== -->
-
-
-
-     
-
 
     <!-- =============================
          MAIN CONTENT
@@ -123,15 +122,15 @@ require_once __DIR__ . '/../includes/header.php';
 
                 <div class="login-card">
 
-                <?php if (!empty($message)): ?>
+                    <?php if (!empty($message)): ?>
 
-                    <div class="alert alert-danger">
+                        <div class="alert alert-danger">
 
-                        <?= htmlspecialchars($message); ?>
+                            <?= htmlspecialchars($message); ?>
 
-                    </div>
+                        </div>
 
-                <?php endif; ?>
+                    <?php endif; ?>
 
                     <form
                         method="POST"
@@ -154,15 +153,10 @@ require_once __DIR__ . '/../includes/header.php';
                                 </span>
 
                                 <input
-
                                     type="text"
-
                                     name="login"
-
                                     class="form-control"
-
                                     placeholder="Enter Username"
-
                                     required>
 
                             </div>
@@ -186,25 +180,16 @@ require_once __DIR__ . '/../includes/header.php';
                                 </span>
 
                                 <input
-
                                     id="password"
-
                                     type="password"
-
                                     name="password"
-
                                     class="form-control"
-
                                     placeholder="Enter Password"
-
                                     required>
 
                                 <button
-
                                     class="btn btn-outline-secondary"
-
                                     type="button"
-
                                     id="togglePassword">
 
                                     <i class="bi bi-eye"></i>
@@ -217,24 +202,26 @@ require_once __DIR__ . '/../includes/header.php';
 
                         <div class="d-flex justify-content-center align-items-center mb-3">
 
-    <div class="d-flex align-items-center gap-2">
+                            <div class="d-flex align-items-center gap-2">
 
-        <input
-            type="checkbox"
-            id="remember">
+                                <input
+                                    type="checkbox"
+                                    id="remember">
 
-        <label for="remember" class="mb-0">
+                                <label
+                                    for="remember"
+                                    class="mb-0">
 
-            Remember Me
+                                    Remember Me
 
-        </label>
+                                </label>
 
-    </div>
+                            </div>
 
-</div>
+                        </div>
+
                         <button
                             class="btn login-btn w-100"
-
                             type="submit">
 
                             <i class="bi bi-box-arrow-in-right"></i>
@@ -242,7 +229,6 @@ require_once __DIR__ . '/../includes/header.php';
                             SIGN IN
 
                         </button>
-
 
                     </form>
 
@@ -256,4 +242,4 @@ require_once __DIR__ . '/../includes/header.php';
 
 </div>
 
-<?php include __DIR__ . '/../includes/footer.php'; ?>
+<?php require_once __DIR__ . '/../includes/footer.php'; ?>
