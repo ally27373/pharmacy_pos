@@ -1,4 +1,7 @@
 <?php
+
+die('LOGIN.PHP IS WORKING');
+
 // =====================================================
 // LOGIN PAGE
 // Pharmacy POS System
