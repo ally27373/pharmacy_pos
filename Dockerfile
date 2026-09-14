@@ -17,12 +17,12 @@ RUN apt-get update && apt-get install -y \
         zip \
     && rm -rf /var/lib/apt/lists/*
 
-RUN a2dismod mpm_event mpm_worker \
-    && a2enmod mpm_prefork rewrite
-
-COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
+# Enable Apache modules
+RUN a2enmod rewrite
 
 WORKDIR /var/www/html
+
+COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
 COPY . /var/www/html/
 
@@ -31,4 +31,5 @@ RUN composer install \
     --no-scripts \
     --no-interaction
 
-EXPOSE 80
+# Make Apache listen on Railway's PORT
+CMD ["sh", "-c", "sed -i \"s/Listen 80/Listen ${PORT}/\" /etc/apache2/ports.conf && sed -i \"s/:80>/:${PORT}>/\" /etc/apache2/sites-available/000-default.conf && apache2-foreground"]
