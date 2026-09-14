@@ -7,8 +7,8 @@ require_once '../../Middleware/AuthMiddleware.php';
 
 AuthMiddleware::admin();
 
-$menu = 'users';
-$page = 'users';
+$menu = 'reports';
+$page = 'reports';
 
 require_once '../../Controllers/UserManagementController.php';
 
