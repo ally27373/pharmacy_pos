@@ -34,7 +34,7 @@ require_once '../../../includes/header.php';
                     <p>Review sales and inventory activity with live filters and downloadable reports.</p>
                 </div>
             </div>
-
+ 
             <section class="reports-card">
 
                 <div class="reports-toolbar">
