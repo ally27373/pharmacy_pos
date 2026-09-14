@@ -10,7 +10,19 @@ RUN apt-get update && apt-get install -y \
     && docker-php-ext-install -j"$(nproc)" gd mysqli pdo pdo_mysql zip \
     && rm -rf /var/lib/apt/lists/*
 
-RUN a2enmod rewrite
+# Remove ALL existing MPM LoadModule directives
+RUN find /etc/apache2 -type f \
+    \( -name "*.conf" -o -name "*.load" \) \
+    -exec sed -i '/^[[:space:]]*LoadModule[[:space:]]\+mpm_/d' {} \;
+
+# Enable ONLY prefork
+RUN a2enmod mpm_prefork rewrite
+
+# Verify that only prefork is loaded
+RUN echo "=== MPM CONFIGURATION ===" \
+    && apache2ctl -M 2>&1 | grep mpm \
+    && echo "=== APACHE CONFIG TEST ===" \
+    && apache2ctl configtest
 
 WORKDIR /var/www/html
 
@@ -23,7 +35,7 @@ RUN composer install \
     --no-scripts \
     --no-interaction
 
-# Make Apache listen on 8080
+# Listen on 8080
 RUN sed -i 's/Listen 80/Listen 8080/' /etc/apache2/ports.conf \
     && sed -i 's/:80>/:8080>/' /etc/apache2/sites-available/000-default.conf
 
