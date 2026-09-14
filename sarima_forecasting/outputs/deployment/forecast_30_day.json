@@ -1,0 +1,220 @@
+{
+    "metadata": {
+        "model_name": "SARIMA",
+        "model_order": [
+            1,
+            0,
+            2
+        ],
+        "seasonal_order": [
+            1,
+            0,
+            1,
+            7
+        ],
+        "seasonal_period": 7,
+        "target_variable": "quantity_sold",
+        "training_start": "2025-01-01",
+        "training_end": "2025-12-31",
+        "frequency": "D",
+        "input_first_date": "2026-08-30",
+        "input_last_date": "2026-09-03",
+        "model_last_date_before_update": "2025-12-31",
+        "live_operational_start": "2026-08-30",
+        "new_observations_appended": 2,
+        "model_refit": false,
+        "forecast_type": "baseline",
+        "forecast_horizon_days": 30,
+        "forecast_generated_at": "2026-09-03T11:32:41.439710+08:00",
+        "evaluation_metrics": {
+            "MAE": 54.17,
+            "RMSE": 60.8193,
+            "MAPE": 14.53,
+            "SMAPE": 14.55
+        },
+        "forecast_start": "2026-09-04",
+        "forecast_end": "2026-10-03"
+    },
+    "forecast": [
+        {
+            "date": "2026-09-04",
+            "forecast_quantity": 371.080372,
+            "lower_bound": 215.937157,
+            "upper_bound": 526.223586
+        },
+        {
+            "date": "2026-09-05",
+            "forecast_quantity": 373.251838,
+            "lower_bound": 218.108258,
+            "upper_bound": 528.395418
+        },
+        {
+            "date": "2026-09-06",
+            "forecast_quantity": 387.9372,
+            "lower_bound": 232.793547,
+            "upper_bound": 543.080853
+        },
+        {
+            "date": "2026-09-07",
+            "forecast_quantity": 372.774195,
+            "lower_bound": 217.630527,
+            "upper_bound": 527.917863
+        },
+        {
+            "date": "2026-09-08",
+            "forecast_quantity": 371.909364,
+            "lower_bound": 216.765693,
+            "upper_bound": 527.053035
+        },
+        {
+            "date": "2026-09-09",
+            "forecast_quantity": 350.633144,
+            "lower_bound": 195.489473,
+            "upper_bound": 505.776816
+        },
+        {
+            "date": "2026-09-10",
+            "forecast_quantity": 376.472,
+            "lower_bound": 220.545285,
+            "upper_bound": 532.398716
+        },
+        {
+            "date": "2026-09-11",
+            "forecast_quantity": 371.19929,
+            "lower_bound": 215.270726,
+            "upper_bound": 527.127855
+        },
+        {
+            "date": "2026-09-12",
+            "forecast_quantity": 373.371453,
+            "lower_bound": 217.442525,
+            "upper_bound": 529.300381
+        },
+        {
+            "date": "2026-09-13",
+            "forecast_quantity": 388.061521,
+            "lower_bound": 232.13252,
+            "upper_bound": 543.990522
+        },
+        {
+            "date": "2026-09-14",
+            "forecast_quantity": 372.893657,
+            "lower_bound": 216.964641,
+            "upper_bound": 528.822673
+        },
+        {
+            "date": "2026-09-15",
+            "forecast_quantity": 372.028548,
+            "lower_bound": 216.099529,
+            "upper_bound": 527.957567
+        },
+        {
+            "date": "2026-09-16",
+            "forecast_quantity": 350.74551,
+            "lower_bound": 194.816491,
+            "upper_bound": 506.67453
+        },
+        {
+            "date": "2026-09-17",
+            "forecast_quantity": 376.592647,
+            "lower_bound": 219.88401,
+            "upper_bound": 533.301285
+        },
+        {
+            "date": "2026-09-18",
+            "forecast_quantity": 371.318247,
+            "lower_bound": 214.607769,
+            "upper_bound": 528.028726
+        },
+        {
+            "date": "2026-09-19",
+            "forecast_quantity": 373.491106,
+            "lower_bound": 216.780266,
+            "upper_bound": 530.201946
+        },
+        {
+            "date": "2026-09-20",
+            "forecast_quantity": 388.185882,
+            "lower_bound": 231.474968,
+            "upper_bound": 544.896795
+        },
+        {
+            "date": "2026-09-21",
+            "forecast_quantity": 373.013157,
+            "lower_bound": 216.302229,
+            "upper_bound": 529.724085
+        },
+        {
+            "date": "2026-09-22",
+            "forecast_quantity": 372.147771,
+            "lower_bound": 215.43684,
+            "upper_bound": 528.858702
+        },
+        {
+            "date": "2026-09-23",
+            "forecast_quantity": 350.857913,
+            "lower_bound": 194.146981,
+            "upper_bound": 507.568844
+        },
+        {
+            "date": "2026-09-24",
+            "forecast_quantity": 376.713333,
+            "lower_bound": 219.226158,
+            "upper_bound": 534.200508
+        },
+        {
+            "date": "2026-09-25",
+            "forecast_quantity": 371.437242,
+            "lower_bound": 213.948235,
+            "upper_bound": 528.92625
+        },
+        {
+            "date": "2026-09-26",
+            "forecast_quantity": 373.610797,
+            "lower_bound": 216.121429,
+            "upper_bound": 531.100166
+        },
+        {
+            "date": "2026-09-27",
+            "forecast_quantity": 388.310282,
+            "lower_bound": 230.820841,
+            "upper_bound": 545.799723
+        },
+        {
+            "date": "2026-09-28",
+            "forecast_quantity": 373.132695,
+            "lower_bound": 215.64324,
+            "upper_bound": 530.622151
+        },
+        {
+            "date": "2026-09-29",
+            "forecast_quantity": 372.267032,
+            "lower_bound": 214.777573,
+            "upper_bound": 529.75649
+        },
+        {
+            "date": "2026-09-30",
+            "forecast_quantity": 350.970351,
+            "lower_bound": 193.480892,
+            "upper_bound": 508.45981
+        },
+        {
+            "date": "2026-10-01",
+            "forecast_quantity": 376.834057,
+            "lower_bound": 218.571679,
+            "upper_bound": 535.096435
+        },
+        {
+            "date": "2026-10-02",
+            "forecast_quantity": 371.556276,
+            "lower_bound": 213.292073,
+            "upper_bound": 529.820479
+        },
+        {
+            "date": "2026-10-03",
+            "forecast_quantity": 373.730527,
+            "lower_bound": 215.465965,
+            "upper_bound": 531.995089
+        }
+    ]
+}

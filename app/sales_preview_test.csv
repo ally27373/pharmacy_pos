@@ -1,0 +1,4 @@
+date,category,description,qty,unit_price,total_price,taxtype
+2025-02-01,Analgesics,PARACETAMOL 500MG,2,10.00,20.00,VAT
+2025-02-02,Antibiotics,AMOXICILLIN 500MG,1,25.00,25.00,VAT
+2025-02-03,Vitamins & Supplements,VITAMIN C 500MG,3,15.00,45.00,VAT

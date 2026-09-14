@@ -1,0 +1,2 @@
+historical_start,historical_end,observations,original_stationary,first_difference_stationary,seasonal_difference_stationary,recommended_d,initial_seasonal_period
+2025-01-01,2025-12-31,365,True,True,True,0,7

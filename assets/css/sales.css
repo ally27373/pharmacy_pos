@@ -1,0 +1,170 @@
+.dashboard-content{
+
+    padding:30px;
+
+}
+
+.page-header{
+
+    margin-bottom:20px;
+
+}
+
+.sales-card{
+
+    background:#fff;
+
+    border-radius:15px;
+
+    padding:25px;
+
+    box-shadow:0 5px 15px rgba(0,0,0,.08);
+
+}
+
+.sales-toolbar{
+
+    display:flex;
+
+    justify-content:flex-end;
+
+    margin-bottom:20px;
+
+}
+
+.search-box{
+
+    width:300px;
+
+    padding:10px 15px;
+
+    border:1px solid #ddd;
+
+    border-radius:8px;
+
+}
+
+.sales-table{
+
+    width:100%;
+
+    border-collapse:collapse;
+
+}
+
+.sales-table thead{
+
+    background:#118d6d;
+
+    color:#fff;
+
+}
+
+.sales-table th,
+.sales-table td{
+
+    padding:15px;
+
+    text-align:center;
+
+    border-bottom:1px solid #eee;
+
+}
+
+.sales-table tbody tr:hover{
+
+    background:#f7f7f7;
+
+    cursor:pointer;
+
+}
+
+.status-paid{
+
+    background:#d1fae5;
+
+    color:#065f46;
+
+    padding:5px 12px;
+
+    border-radius:30px;
+
+    font-size:12px;
+
+    font-weight:600;
+
+}
+
+
+/* =====================================
+   SERVER-SIDE PAGINATION
+===================================== */
+
+.records-page {
+    min-width: 0;
+}
+
+.sales-toolbar {
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.sales-toolbar .search-box {
+    margin-left: auto;
+}
+
+.table-responsive {
+    width: 100%;
+    overflow-x: auto;
+}
+
+.sales-table {
+    min-width: 980px;
+}
+
+.empty-state {
+    padding: 45px 20px !important;
+    text-align: center !important;
+    color: #777;
+}
+
+.records-pagination {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    margin-top: 18px;
+    padding-top: 16px;
+    border-top: 1px solid #eee;
+}
+
+.pagination-info {
+    color: #666;
+    font-size: 14px;
+}
+
+.pagination-controls {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+.pagination-page {
+    white-space: nowrap;
+    color: #555;
+    font-size: 14px;
+}
+
+@media (max-width: 900px) {
+    .records-pagination {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .sales-toolbar .search-box {
+        margin-left: 0;
+        width: min(100%, 360px);
+    }
+}

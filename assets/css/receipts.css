@@ -1,0 +1,48 @@
+body{
+
+    font-family:monospace;
+
+    background:white;
+
+    padding:20px;
+
+}
+
+.receipt{
+
+    width:300px;
+
+    margin:auto;
+
+}
+
+.receipt h2{
+
+    text-align:center;
+
+}
+
+.receipt table{
+
+    width:100%;
+
+    border-collapse:collapse;
+
+    margin-top:10px;
+
+}
+
+.receipt th,
+.receipt td{
+
+    padding:5px;
+
+    font-size:13px;
+
+}
+
+hr{
+
+    margin:10px 0;
+
+}

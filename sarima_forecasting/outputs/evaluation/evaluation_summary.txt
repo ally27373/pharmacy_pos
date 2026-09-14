@@ -1,0 +1,22 @@
+CRISP-DM PHASE 5 - MODEL EVALUATION
+NICA XANDRA PHARMACY POS
+============================================================
+
+Target variable: quantity_sold
+Seasonal period: 7 days
+Training observations: 335
+Testing observations: 30
+Training period: 2025-01-01 to 2025-12-01
+Testing period: 2025-12-02 to 2025-12-31
+
+SELECTED MODEL
+SARIMA(1, 0, 2)(1, 0, 1, 7)
+
+EVALUATION METRICS
+MAE   : 54.170049
+RMSE  : 60.819345
+MAPE  : 14.528579%
+SMAPE : 14.547799%
+
+MODEL SELECTION NOTE
+The model was selected using out-of-sample forecasting performance on the chronological hold-out test set. AIC was used during model training and candidate generation, while MAE, RMSE, MAPE, and SMAPE were used for final forecast evaluation.

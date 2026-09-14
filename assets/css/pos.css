@@ -1,0 +1,590 @@
+/* =====================================
+   TERMINAL LAYOUT
+===================================== */
+
+.dashboard-content{
+    height:calc(100vh - 80px);
+    padding:20px;
+    overflow:hidden;
+}
+
+.terminal-layout{
+
+    display:grid;
+
+    grid-template-columns:60% 40%;
+
+    gap:18px;
+
+    height:100%;
+}
+
+.terminal-layout{
+
+    display:grid;
+
+    grid-template-columns:60% 40%;
+
+    gap:18px;
+
+    height:100%;
+}
+.terminal-top{
+    display:grid;
+    grid-template-columns:70% 30%;
+    gap:18px;
+}
+
+/* =====================================
+   PANELS
+===================================== */
+
+.left-panel{
+
+    display:grid;
+
+    grid-template-rows:50% 50%;
+
+    gap:18px;
+
+    min-height:0;
+}
+
+.cart-panel{
+
+    display:flex;
+
+    flex-direction:column;
+
+    background:#fff;
+
+    border-radius:12px;
+
+    overflow:hidden;
+}
+
+.cart-table-wrapper{
+
+    flex:1;
+
+    overflow-y:auto;
+}
+
+.payment-panel{
+    display:flex;
+    flex-direction:column;
+
+    background:#fff;
+
+    border-radius:14px;
+
+    box-shadow:0 6px 18px rgba(0,0,0,.08);
+
+    overflow:hidden;
+}
+
+.products-panel{
+
+    background:#fff;
+
+    border-radius:12px;
+
+    box-shadow:0 3px 12px rgba(0,0,0,.08);
+
+    overflow:hidden;
+
+    display:flex;
+
+    flex-direction:column;
+
+}
+
+/* =====================================
+   TITLES
+===================================== */
+
+.cart-panel h2{
+
+    padding:16px;
+
+    border-bottom:1px solid #e5e5e5;
+
+    margin:0;
+
+}
+
+.payment-panel h2{
+    margin:0;
+
+    padding:18px 20px;
+
+    font-size:24px;
+
+    font-weight:700;
+
+    border-bottom:1px solid #ececec;
+
+    background:#fafafa;
+}
+
+/* =====================================
+   CART
+===================================== */
+
+.cart-scroll{
+
+    flex:1;
+
+    overflow-y:auto;
+
+}
+
+.cart-table{
+
+    width:100%;
+
+    border-collapse:collapse;
+
+}
+
+.cart-table th,
+.cart-table td{
+
+    padding:12px;
+
+}
+
+/* =====================================
+   PAYMENT
+===================================== */
+
+.payment-panel{
+
+    display:flex;
+
+    flex-direction:column;
+
+    background:#fff;
+
+    border-radius:12px;
+
+    overflow:hidden;
+}
+
+.payment-form{
+
+    flex:1;
+
+    display:flex;
+
+    flex-direction:column;
+
+    padding:20px;
+
+    gap:12px;
+
+}
+
+.payment-form label{
+
+    font-size:14px;
+
+    font-weight:600;
+
+    color:#444;
+
+}
+
+.payment-form input,
+.payment-form select{
+
+    height:42px;
+
+    border-radius:8px;
+
+    border:1px solid #dcdcdc;
+
+    padding:10px;
+
+    font-size:14px;
+
+}
+
+.summary{
+
+    margin-top:12px;
+
+    padding-top:12px;
+
+    border-top:1px solid #e5e5e5;
+
+}
+
+.summary div{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    margin-bottom:10px;
+
+    font-size:14px;
+
+}
+
+.total-row{
+
+    font-size:22px;
+
+    color:#198754;
+
+    font-weight:bold;
+
+    padding:14px 0;
+
+    margin:10px 0;
+
+    border-top:2px dashed #ccc;
+
+    border-bottom:2px dashed #ccc;
+
+}
+
+.complete-sale{
+
+    margin-top:auto;
+
+    height:50px;
+
+    border-radius:10px;
+
+    font-size:18px;
+
+    font-weight:700;
+
+}
+
+/* =====================================
+   PRODUCTS
+===================================== */
+
+.products-header{
+
+    display:grid;
+
+    grid-template-columns:3fr 1fr 1fr;
+
+    gap:14px;
+
+}
+
+.add-product{
+
+    min-width:82px;
+
+    font-size:13px;
+
+    font-weight:600;
+
+    border-radius:7px;
+
+}
+
+.products-panel{
+
+    display:flex;
+
+    flex-direction:column;
+
+    background:#fff;
+
+    border-radius:12px;
+
+    overflow:hidden;
+}
+
+.products-table-wrapper{
+
+    flex:1;
+
+    overflow-y:auto;
+}
+
+.products-table{
+
+    width:100%;
+
+    border-collapse:collapse;
+
+}
+
+.products-table thead{
+
+    position:sticky;
+
+    top:0;
+
+    background:#fff;
+
+}
+
+.products-table th,
+.products-table td{
+
+    padding:10px;
+
+}
+
+
+/* =====================================
+   PRODUCT PAGINATION
+===================================== */
+
+.products-header {
+    padding: 14px;
+    flex-shrink: 0;
+}
+
+.products-table-wrapper {
+    min-height: 0;
+    overflow: auto;
+}
+
+.products-table {
+    min-width: 760px;
+}
+
+.products-table thead {
+    z-index: 2;
+}
+
+.products-table th,
+.products-table td {
+    white-space: nowrap;
+}
+
+.products-table th:nth-child(2),
+.products-table td:nth-child(2) {
+    white-space: normal;
+    min-width: 190px;
+}
+
+.products-pagination {
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 10px 14px;
+    border-top: 1px solid #e8e8e8;
+    background: #fff;
+}
+
+.products-pagination .pagination-info {
+    color: #666;
+    font-size: 13px;
+}
+
+.products-pagination .pagination-controls {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.products-pagination .pagination-page {
+    white-space: nowrap;
+    color: #555;
+    font-size: 13px;
+}
+
+@media (max-width: 900px) {
+    .products-pagination {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+}
+
+/* =====================================
+   DISCOUNT CONTROLS
+===================================== */
+.discount-section {
+    padding: 2px 0 4px;
+}
+
+.discount-label-row {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 10px;
+    margin-bottom: 7px;
+}
+
+.discount-label-row label {
+    margin: 0;
+}
+
+.discount-label-row label span {
+    color: #8a8f98;
+    font-weight: 400;
+}
+
+.discount-hint {
+    color: #8a8f98;
+    font-size: 11px;
+    text-align: right;
+}
+
+.discount-controls {
+    display: grid;
+    grid-template-columns: 1.25fr 1fr;
+    gap: 8px;
+}
+
+.discount-controls select,
+.discount-controls input {
+    height: 42px;
+}
+
+.discount-input-wrap {
+    position: relative;
+}
+
+.discount-input-wrap input {
+    padding-right: 38px;
+}
+
+.discount-unit {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #6b7280;
+    font-weight: 600;
+    pointer-events: none;
+}
+
+.discount-message {
+    display: block;
+    min-height: 16px;
+    margin-top: 4px;
+    color: #dc3545;
+    font-size: 11px;
+}
+
+@media (max-width: 500px) {
+    .discount-controls {
+        grid-template-columns: 1fr;
+    }
+
+    .discount-hint {
+        display: none;
+    }
+}
+
+/* =====================================================
+   FINAL TERMINAL POLISH
+   ===================================================== */
+.terminal-page {
+    height: 100%;
+    min-height: 0;
+}
+
+.terminal-layout {
+    grid-template-columns: minmax(0, 1.55fr) minmax(360px, .75fr);
+    height: 100%;
+    min-height: 0;
+}
+
+.left-panel,
+.cart-panel,
+.products-panel,
+.payment-panel {
+    min-height: 0;
+}
+
+.payment-panel {
+    height: 100%;
+}
+
+.payment-form {
+    min-height: 0;
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding: 16px 18px;
+    gap: 9px;
+    scrollbar-width: thin;
+}
+
+.payment-form h2 {
+    flex-shrink: 0;
+}
+
+.discount-section {
+    flex-shrink: 0;
+}
+
+.discount-label-row {
+    align-items: flex-start;
+    margin-bottom: 6px;
+}
+
+.discount-label-row label {
+    line-height: 1.25;
+}
+
+.discount-hint {
+    max-width: 190px;
+    line-height: 1.25;
+}
+
+.discount-controls {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+}
+
+.summary {
+    margin-top: 4px;
+    padding-top: 9px;
+}
+
+.summary div {
+    margin-bottom: 7px;
+}
+
+.total-row {
+    font-size: 20px;
+    padding: 9px 0;
+    margin: 7px 0;
+}
+
+.complete-sale {
+    flex: 0 0 48px;
+    height: 48px;
+    min-height: 48px;
+    margin-top: 2px;
+}
+
+@media (max-width: 1050px) {
+    .terminal-layout {
+        grid-template-columns: minmax(0, 1fr) minmax(330px, .82fr);
+    }
+}
+
+@media (max-width: 850px) {
+    .terminal-page {
+        height: auto;
+    }
+
+    .terminal-layout {
+        height: auto;
+        grid-template-columns: 1fr;
+    }
+
+    .left-panel {
+        grid-template-rows: 420px 520px;
+    }
+
+    .payment-panel {
+        min-height: 600px;
+        height: auto;
+    }
+}

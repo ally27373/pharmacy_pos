@@ -1,0 +1,16 @@
+{
+    "ready": false,
+    "status": "waiting_for_continuous_history",
+    "reason": "Live POS demand contains one or more missing calendar days after the operational start. Missing dates are not treated as zero sales. The trained 2025 SARIMA model remains available as the baseline forecast.",
+    "model_last_date": "2025-12-31",
+    "training_start": "2025-01-01",
+    "training_end": "2025-12-31",
+    "live_operational_start": "2026-08-30",
+    "input_last_date": "2026-09-03",
+    "new_observations": 2,
+    "minimum_new_observations_for_refit": 30,
+    "forecast_start": "2026-09-04",
+    "forecast_end": "2026-10-03",
+    "forecast_type": "baseline",
+    "updated_at": "2026-09-03T11:32:41.439710+08:00"
+}

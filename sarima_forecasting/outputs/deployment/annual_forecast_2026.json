@@ -1,0 +1,122 @@
+{
+  "metadata": {
+    "model": "SARIMA",
+    "model_order": [
+      1,
+      0,
+      2
+    ],
+    "seasonal_order": [
+      1,
+      0,
+      1,
+      7
+    ],
+    "seasonality": "Weekly",
+    "training_start": "2025-01-01",
+    "training_end": "2025-12-31",
+    "forecast_year": 2026,
+    "frequency": "D",
+    "baseline": true,
+    "generated_at": "2026-09-04T09:24:05",
+    "purpose": "Monthly annual outlook for dashboard presentation; operational 30-day forecasting uses forecast_30_day.json."
+  },
+  "months": [
+    {
+      "month": 1,
+      "month_name": "Jan",
+      "actual_2025": 11720.0,
+      "forecast_2026": 11442.44,
+      "lower_bound": 7713.17,
+      "upper_bound": 15171.71
+    },
+    {
+      "month": 2,
+      "month_name": "Feb",
+      "actual_2025": 10034.0,
+      "forecast_2026": 10363.59,
+      "lower_bound": 6908.55,
+      "upper_bound": 13818.63
+    },
+    {
+      "month": 3,
+      "month_name": "Mar",
+      "actual_2025": 10679.0,
+      "forecast_2026": 11527.98,
+      "lower_bound": 7609.1,
+      "upper_bound": 15446.86
+    },
+    {
+      "month": 4,
+      "month_name": "Apr",
+      "actual_2025": 10074.0,
+      "forecast_2026": 11157.67,
+      "lower_bound": 7272.54,
+      "upper_bound": 15042.81
+    },
+    {
+      "month": 5,
+      "month_name": "May",
+      "actual_2025": 10082.0,
+      "forecast_2026": 11602.18,
+      "lower_bound": 7493.41,
+      "upper_bound": 15710.95
+    },
+    {
+      "month": 6,
+      "month_name": "Jun",
+      "actual_2025": 10177.0,
+      "forecast_2026": 11250.61,
+      "lower_bound": 7185.59,
+      "upper_bound": 15315.63
+    },
+    {
+      "month": 7,
+      "month_name": "Jul",
+      "actual_2025": 10789.0,
+      "forecast_2026": 11642.42,
+      "lower_bound": 7350.47,
+      "upper_bound": 15934.36
+    },
+    {
+      "month": 8,
+      "month_name": "Aug",
+      "actual_2025": 11425.0,
+      "forecast_2026": 11720.39,
+      "lower_bound": 7337.54,
+      "upper_bound": 16103.23
+    },
+    {
+      "month": 9,
+      "month_name": "Sep",
+      "actual_2025": 10754.0,
+      "forecast_2026": 11338.91,
+      "lower_bound": 7012.37,
+      "upper_bound": 15665.45
+    },
+    {
+      "month": 10,
+      "month_name": "Oct",
+      "actual_2025": 11345.0,
+      "forecast_2026": 11781.13,
+      "lower_bound": 7222.12,
+      "upper_bound": 16340.15
+    },
+    {
+      "month": 11,
+      "month_name": "Nov",
+      "actual_2025": 10815.0,
+      "forecast_2026": 11453.09,
+      "lower_bound": 6958.39,
+      "upper_bound": 15947.79
+    },
+    {
+      "month": 12,
+      "month_name": "Dec",
+      "actual_2025": 11607.0,
+      "forecast_2026": 11836.54,
+      "lower_bound": 7106.97,
+      "upper_bound": 16566.11
+    }
+  ]
+}

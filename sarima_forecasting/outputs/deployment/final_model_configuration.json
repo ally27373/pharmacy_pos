@@ -1,0 +1,31 @@
+{
+    "model_name": "SARIMA",
+    "model_order": [
+        1,
+        0,
+        2
+    ],
+    "seasonal_order": [
+        1,
+        0,
+        1,
+        7
+    ],
+    "seasonal_period": 7,
+    "target_variable": "quantity_sold",
+    "frequency": "D",
+    "training_observations": 365,
+    "training_start": "2025-01-01",
+    "training_end": "2025-12-31",
+    "aic": 3948.7094463674207,
+    "bic": 3971.942153104273,
+    "log_likelihood": -1968.3547231837103,
+    "selection_method": "Out-of-sample forecasting performance",
+    "evaluation_metrics": [
+        "MAE",
+        "RMSE",
+        "MAPE",
+        "SMAPE"
+    ],
+    "test_period_days": 30
+}

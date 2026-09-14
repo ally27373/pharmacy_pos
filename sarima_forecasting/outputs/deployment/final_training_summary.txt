@@ -1,0 +1,27 @@
+CRISP-DM PHASE 6 - FINAL MODEL TRAINING
+NICA XANDRA PHARMACY POS
+
+FINAL MODEL
+SARIMA(1, 0, 2)(1, 0, 1, 7)
+
+TRAINING DATA
+Start date: 2025-01-01
+End date: 2025-12-31
+Observations: 365
+Target variable: quantity_sold
+Frequency: Daily
+Seasonal period: 7
+
+MODEL INFORMATION
+AIC: 3948.709446
+BIC: 3971.942153
+Log likelihood: -1968.354723
+
+PHASE 5 OUT-OF-SAMPLE EVALUATION
+MAE: 54.1700
+RMSE: 60.8193
+MAPE: 14.53%
+SMAPE: 14.55%
+
+DEPLOYMENT ARTIFACT
+C:\xampp\htdocs\pharmacy_pos\sarima_forecasting\models\sarima_final_model.pkl

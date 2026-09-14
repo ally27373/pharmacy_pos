@@ -1,0 +1,2957 @@
+{
+  "metadata": {
+    "model": "SARIMA",
+    "model_order": [
+      1,
+      0,
+      2
+    ],
+    "seasonal_order": [
+      1,
+      0,
+      1,
+      7
+    ],
+    "seasonality": "Weekly",
+    "forecast_horizon_days": 30,
+    "training_start": "2025-01-01",
+    "training_end": "2025-12-31",
+    "baseline": true,
+    "minimum_observed_sale_days": 60,
+    "product_count": 10,
+    "generated_at": "2026-09-04T09:41:41",
+    "method_note": "Product demand is forecast from observed daily unit sales. Monthly rows include 2025 observed units and 2026 SARIMA forecast units. Days with pharmacy-wide completed sales but no product sale are represented as zero observed product sales in the historical baseline."
+  },
+  "products": [
+    {
+      "product_name": "ROBITUSSIN DM 120ML",
+      "historical_units_sold": 953,
+      "observed_sale_days": 330,
+      "forecast_30_day_units": 84.35,
+      "average_daily_forecast": 2.81,
+      "lower_30_day_units": 0.0,
+      "upper_30_day_units": 228.98,
+      "peak_month": "December",
+      "peak_month_units": 97.19,
+      "monthly_forecast_2026": [
+        {
+          "month": 1,
+          "month_name": "January",
+          "actual_2025_units": 88.0,
+          "forecast_units": 87.07,
+          "lower_bound": 0.0,
+          "upper_bound": 236.52
+        },
+        {
+          "month": 2,
+          "month_name": "February",
+          "actual_2025_units": 61.0,
+          "forecast_units": 78.71,
+          "lower_bound": 0.0,
+          "upper_bound": 213.79
+        },
+        {
+          "month": 3,
+          "month_name": "March",
+          "actual_2025_units": 59.0,
+          "forecast_units": 88.1,
+          "lower_bound": 0.0,
+          "upper_bound": 237.68
+        },
+        {
+          "month": 4,
+          "month_name": "April",
+          "actual_2025_units": 78.0,
+          "forecast_units": 85.96,
+          "lower_bound": 0.0,
+          "upper_bound": 230.75
+        },
+        {
+          "month": 5,
+          "month_name": "May",
+          "actual_2025_units": 86.0,
+          "forecast_units": 90.36,
+          "lower_bound": 0.0,
+          "upper_bound": 240.0
+        },
+        {
+          "month": 6,
+          "month_name": "June",
+          "actual_2025_units": 103.0,
+          "forecast_units": 88.16,
+          "lower_bound": 0.0,
+          "upper_bound": 233.02
+        },
+        {
+          "month": 7,
+          "month_name": "July",
+          "actual_2025_units": 58.0,
+          "forecast_units": 92.22,
+          "lower_bound": 0.0,
+          "upper_bound": 241.94
+        },
+        {
+          "month": 8,
+          "month_name": "August",
+          "actual_2025_units": 89.0,
+          "forecast_units": 93.12,
+          "lower_bound": 0.0,
+          "upper_bound": 242.88
+        },
+        {
+          "month": 9,
+          "month_name": "September",
+          "actual_2025_units": 83.0,
+          "forecast_units": 91.18,
+          "lower_bound": 0.0,
+          "upper_bound": 236.15
+        },
+        {
+          "month": 10,
+          "month_name": "October",
+          "actual_2025_units": 83.0,
+          "forecast_units": 95.33,
+          "lower_bound": 0.0,
+          "upper_bound": 245.17
+        },
+        {
+          "month": 11,
+          "month_name": "November",
+          "actual_2025_units": 85.0,
+          "forecast_units": 93.28,
+          "lower_bound": 0.0,
+          "upper_bound": 238.33
+        },
+        {
+          "month": 12,
+          "month_name": "December",
+          "actual_2025_units": 80.0,
+          "forecast_units": 97.19,
+          "lower_bound": 0.0,
+          "upper_bound": 247.11
+        }
+      ],
+      "forecast": [
+        {
+          "date": "2026-01-01",
+          "forecast_quantity": 2.59,
+          "lower_bound": 0.0,
+          "upper_bound": 7.39
+        },
+        {
+          "date": "2026-01-02",
+          "forecast_quantity": 3.25,
+          "lower_bound": 0.0,
+          "upper_bound": 8.05
+        },
+        {
+          "date": "2026-01-03",
+          "forecast_quantity": 2.82,
+          "lower_bound": 0.0,
+          "upper_bound": 7.63
+        },
+        {
+          "date": "2026-01-04",
+          "forecast_quantity": 2.89,
+          "lower_bound": 0.0,
+          "upper_bound": 7.7
+        },
+        {
+          "date": "2026-01-05",
+          "forecast_quantity": 2.85,
+          "lower_bound": 0.0,
+          "upper_bound": 7.67
+        },
+        {
+          "date": "2026-01-06",
+          "forecast_quantity": 2.83,
+          "lower_bound": 0.0,
+          "upper_bound": 7.65
+        },
+        {
+          "date": "2026-01-07",
+          "forecast_quantity": 2.8,
+          "lower_bound": 0.0,
+          "upper_bound": 7.63
+        },
+        {
+          "date": "2026-01-08",
+          "forecast_quantity": 2.59,
+          "lower_bound": 0.0,
+          "upper_bound": 7.42
+        },
+        {
+          "date": "2026-01-09",
+          "forecast_quantity": 3.12,
+          "lower_bound": 0.0,
+          "upper_bound": 7.94
+        },
+        {
+          "date": "2026-01-10",
+          "forecast_quantity": 2.73,
+          "lower_bound": 0.0,
+          "upper_bound": 7.55
+        },
+        {
+          "date": "2026-01-11",
+          "forecast_quantity": 2.81,
+          "lower_bound": 0.0,
+          "upper_bound": 7.63
+        },
+        {
+          "date": "2026-01-12",
+          "forecast_quantity": 2.79,
+          "lower_bound": 0.0,
+          "upper_bound": 7.61
+        },
+        {
+          "date": "2026-01-13",
+          "forecast_quantity": 2.79,
+          "lower_bound": 0.0,
+          "upper_bound": 7.61
+        },
+        {
+          "date": "2026-01-14",
+          "forecast_quantity": 2.77,
+          "lower_bound": 0.0,
+          "upper_bound": 7.59
+        },
+        {
+          "date": "2026-01-15",
+          "forecast_quantity": 2.57,
+          "lower_bound": 0.0,
+          "upper_bound": 7.39
+        },
+        {
+          "date": "2026-01-16",
+          "forecast_quantity": 3.1,
+          "lower_bound": 0.0,
+          "upper_bound": 7.93
+        },
+        {
+          "date": "2026-01-17",
+          "forecast_quantity": 2.71,
+          "lower_bound": 0.0,
+          "upper_bound": 7.53
+        },
+        {
+          "date": "2026-01-18",
+          "forecast_quantity": 2.8,
+          "lower_bound": 0.0,
+          "upper_bound": 7.62
+        },
+        {
+          "date": "2026-01-19",
+          "forecast_quantity": 2.78,
+          "lower_bound": 0.0,
+          "upper_bound": 7.6
+        },
+        {
+          "date": "2026-01-20",
+          "forecast_quantity": 2.78,
+          "lower_bound": 0.0,
+          "upper_bound": 7.61
+        },
+        {
+          "date": "2026-01-21",
+          "forecast_quantity": 2.77,
+          "lower_bound": 0.0,
+          "upper_bound": 7.59
+        },
+        {
+          "date": "2026-01-22",
+          "forecast_quantity": 2.57,
+          "lower_bound": 0.0,
+          "upper_bound": 7.39
+        },
+        {
+          "date": "2026-01-23",
+          "forecast_quantity": 3.11,
+          "lower_bound": 0.0,
+          "upper_bound": 7.93
+        },
+        {
+          "date": "2026-01-24",
+          "forecast_quantity": 2.71,
+          "lower_bound": 0.0,
+          "upper_bound": 7.54
+        },
+        {
+          "date": "2026-01-25",
+          "forecast_quantity": 2.8,
+          "lower_bound": 0.0,
+          "upper_bound": 7.63
+        },
+        {
+          "date": "2026-01-26",
+          "forecast_quantity": 2.79,
+          "lower_bound": 0.0,
+          "upper_bound": 7.61
+        },
+        {
+          "date": "2026-01-27",
+          "forecast_quantity": 2.79,
+          "lower_bound": 0.0,
+          "upper_bound": 7.61
+        },
+        {
+          "date": "2026-01-28",
+          "forecast_quantity": 2.77,
+          "lower_bound": 0.0,
+          "upper_bound": 7.6
+        },
+        {
+          "date": "2026-01-29",
+          "forecast_quantity": 2.57,
+          "lower_bound": 0.0,
+          "upper_bound": 7.4
+        },
+        {
+          "date": "2026-01-30",
+          "forecast_quantity": 3.11,
+          "lower_bound": 0.0,
+          "upper_bound": 7.94
+        }
+      ],
+      "rank": 1,
+      "demand_level": "High"
+    },
+    {
+      "product_name": "BIOGESIC DROPS",
+      "historical_units_sold": 970,
+      "observed_sale_days": 342,
+      "forecast_30_day_units": 72.26,
+      "average_daily_forecast": 2.41,
+      "lower_30_day_units": 0.0,
+      "upper_30_day_units": 213.57,
+      "peak_month": "January",
+      "peak_month_units": 74.62,
+      "monthly_forecast_2026": [
+        {
+          "month": 1,
+          "month_name": "January",
+          "actual_2025_units": 77.0,
+          "forecast_units": 74.62,
+          "lower_bound": 0.0,
+          "upper_bound": 220.64
+        },
+        {
+          "month": 2,
+          "month_name": "February",
+          "actual_2025_units": 79.0,
+          "forecast_units": 65.97,
+          "lower_bound": 0.0,
+          "upper_bound": 197.89
+        },
+        {
+          "month": 3,
+          "month_name": "March",
+          "actual_2025_units": 69.0,
+          "forecast_units": 71.58,
+          "lower_bound": 0.0,
+          "upper_bound": 217.6
+        },
+        {
+          "month": 4,
+          "month_name": "April",
+          "actual_2025_units": 109.0,
+          "forecast_units": 68.59,
+          "lower_bound": 0.0,
+          "upper_bound": 209.86
+        },
+        {
+          "month": 5,
+          "month_name": "May",
+          "actual_2025_units": 89.0,
+          "forecast_units": 69.62,
+          "lower_bound": 0.0,
+          "upper_bound": 215.56
+        },
+        {
+          "month": 6,
+          "month_name": "June",
+          "actual_2025_units": 76.0,
+          "forecast_units": 66.11,
+          "lower_bound": 0.0,
+          "upper_bound": 207.31
+        },
+        {
+          "month": 7,
+          "month_name": "July",
+          "actual_2025_units": 77.0,
+          "forecast_units": 67.67,
+          "lower_bound": 0.0,
+          "upper_bound": 213.54
+        },
+        {
+          "month": 8,
+          "month_name": "August",
+          "actual_2025_units": 88.0,
+          "forecast_units": 65.91,
+          "lower_bound": 0.0,
+          "upper_bound": 211.74
+        },
+        {
+          "month": 9,
+          "month_name": "September",
+          "actual_2025_units": 64.0,
+          "forecast_units": 63.24,
+          "lower_bound": 0.0,
+          "upper_bound": 204.34
+        },
+        {
+          "month": 10,
+          "month_name": "October",
+          "actual_2025_units": 105.0,
+          "forecast_units": 64.3,
+          "lower_bound": 0.0,
+          "upper_bound": 210.08
+        },
+        {
+          "month": 11,
+          "month_name": "November",
+          "actual_2025_units": 71.0,
+          "forecast_units": 60.74,
+          "lower_bound": 0.0,
+          "upper_bound": 201.78
+        },
+        {
+          "month": 12,
+          "month_name": "December",
+          "actual_2025_units": 66.0,
+          "forecast_units": 62.24,
+          "lower_bound": 0.0,
+          "upper_bound": 207.95
+        }
+      ],
+      "forecast": [
+        {
+          "date": "2026-01-01",
+          "forecast_quantity": 2.7,
+          "lower_bound": 0.0,
+          "upper_bound": 7.39
+        },
+        {
+          "date": "2026-01-02",
+          "forecast_quantity": 2.53,
+          "lower_bound": 0.0,
+          "upper_bound": 7.22
+        },
+        {
+          "date": "2026-01-03",
+          "forecast_quantity": 2.46,
+          "lower_bound": 0.0,
+          "upper_bound": 7.16
+        },
+        {
+          "date": "2026-01-04",
+          "forecast_quantity": 2.2,
+          "lower_bound": 0.0,
+          "upper_bound": 6.91
+        },
+        {
+          "date": "2026-01-05",
+          "forecast_quantity": 2.22,
+          "lower_bound": 0.0,
+          "upper_bound": 6.93
+        },
+        {
+          "date": "2026-01-06",
+          "forecast_quantity": 2.44,
+          "lower_bound": 0.0,
+          "upper_bound": 7.15
+        },
+        {
+          "date": "2026-01-07",
+          "forecast_quantity": 2.55,
+          "lower_bound": 0.0,
+          "upper_bound": 7.26
+        },
+        {
+          "date": "2026-01-08",
+          "forecast_quantity": 2.41,
+          "lower_bound": 0.0,
+          "upper_bound": 7.12
+        },
+        {
+          "date": "2026-01-09",
+          "forecast_quantity": 2.61,
+          "lower_bound": 0.0,
+          "upper_bound": 7.32
+        },
+        {
+          "date": "2026-01-10",
+          "forecast_quantity": 2.38,
+          "lower_bound": 0.0,
+          "upper_bound": 7.1
+        },
+        {
+          "date": "2026-01-11",
+          "forecast_quantity": 2.24,
+          "lower_bound": 0.0,
+          "upper_bound": 6.96
+        },
+        {
+          "date": "2026-01-12",
+          "forecast_quantity": 2.18,
+          "lower_bound": 0.0,
+          "upper_bound": 6.89
+        },
+        {
+          "date": "2026-01-13",
+          "forecast_quantity": 2.46,
+          "lower_bound": 0.0,
+          "upper_bound": 7.17
+        },
+        {
+          "date": "2026-01-14",
+          "forecast_quantity": 2.52,
+          "lower_bound": 0.0,
+          "upper_bound": 7.23
+        },
+        {
+          "date": "2026-01-15",
+          "forecast_quantity": 2.41,
+          "lower_bound": 0.0,
+          "upper_bound": 7.12
+        },
+        {
+          "date": "2026-01-16",
+          "forecast_quantity": 2.59,
+          "lower_bound": 0.0,
+          "upper_bound": 7.3
+        },
+        {
+          "date": "2026-01-17",
+          "forecast_quantity": 2.38,
+          "lower_bound": 0.0,
+          "upper_bound": 7.09
+        },
+        {
+          "date": "2026-01-18",
+          "forecast_quantity": 2.23,
+          "lower_bound": 0.0,
+          "upper_bound": 6.94
+        },
+        {
+          "date": "2026-01-19",
+          "forecast_quantity": 2.17,
+          "lower_bound": 0.0,
+          "upper_bound": 6.88
+        },
+        {
+          "date": "2026-01-20",
+          "forecast_quantity": 2.44,
+          "lower_bound": 0.0,
+          "upper_bound": 7.16
+        },
+        {
+          "date": "2026-01-21",
+          "forecast_quantity": 2.51,
+          "lower_bound": 0.0,
+          "upper_bound": 7.22
+        },
+        {
+          "date": "2026-01-22",
+          "forecast_quantity": 2.4,
+          "lower_bound": 0.0,
+          "upper_bound": 7.11
+        },
+        {
+          "date": "2026-01-23",
+          "forecast_quantity": 2.58,
+          "lower_bound": 0.0,
+          "upper_bound": 7.29
+        },
+        {
+          "date": "2026-01-24",
+          "forecast_quantity": 2.37,
+          "lower_bound": 0.0,
+          "upper_bound": 7.08
+        },
+        {
+          "date": "2026-01-25",
+          "forecast_quantity": 2.22,
+          "lower_bound": 0.0,
+          "upper_bound": 6.93
+        },
+        {
+          "date": "2026-01-26",
+          "forecast_quantity": 2.16,
+          "lower_bound": 0.0,
+          "upper_bound": 6.88
+        },
+        {
+          "date": "2026-01-27",
+          "forecast_quantity": 2.44,
+          "lower_bound": 0.0,
+          "upper_bound": 7.15
+        },
+        {
+          "date": "2026-01-28",
+          "forecast_quantity": 2.5,
+          "lower_bound": 0.0,
+          "upper_bound": 7.21
+        },
+        {
+          "date": "2026-01-29",
+          "forecast_quantity": 2.39,
+          "lower_bound": 0.0,
+          "upper_bound": 7.1
+        },
+        {
+          "date": "2026-01-30",
+          "forecast_quantity": 2.57,
+          "lower_bound": 0.0,
+          "upper_bound": 7.28
+        }
+      ],
+      "rank": 2,
+      "demand_level": "Moderate"
+    },
+    {
+      "product_name": "CETIRIZINE DROPS 2.5mg",
+      "historical_units_sold": 952,
+      "observed_sale_days": 336,
+      "forecast_30_day_units": 70.66,
+      "average_daily_forecast": 2.36,
+      "lower_30_day_units": 0.0,
+      "upper_30_day_units": 222.06,
+      "peak_month": "January",
+      "peak_month_units": 72.63,
+      "monthly_forecast_2026": [
+        {
+          "month": 1,
+          "month_name": "January",
+          "actual_2025_units": 59.0,
+          "forecast_units": 72.63,
+          "lower_bound": 0.0,
+          "upper_bound": 229.07
+        },
+        {
+          "month": 2,
+          "month_name": "February",
+          "actual_2025_units": 73.0,
+          "forecast_units": 65.25,
+          "lower_bound": 0.0,
+          "upper_bound": 206.55
+        },
+        {
+          "month": 3,
+          "month_name": "March",
+          "actual_2025_units": 75.0,
+          "forecast_units": 71.6,
+          "lower_bound": 0.0,
+          "upper_bound": 228.01
+        },
+        {
+          "month": 4,
+          "month_name": "April",
+          "actual_2025_units": 117.0,
+          "forecast_units": 67.41,
+          "lower_bound": 0.0,
+          "upper_bound": 218.74
+        },
+        {
+          "month": 5,
+          "month_name": "May",
+          "actual_2025_units": 92.0,
+          "forecast_units": 69.45,
+          "lower_bound": 0.0,
+          "upper_bound": 225.78
+        },
+        {
+          "month": 6,
+          "month_name": "June",
+          "actual_2025_units": 91.0,
+          "forecast_units": 65.28,
+          "lower_bound": 0.0,
+          "upper_bound": 216.53
+        },
+        {
+          "month": 7,
+          "month_name": "July",
+          "actual_2025_units": 68.0,
+          "forecast_units": 66.57,
+          "lower_bound": 0.0,
+          "upper_bound": 222.82
+        },
+        {
+          "month": 8,
+          "month_name": "August",
+          "actual_2025_units": 78.0,
+          "forecast_units": 66.11,
+          "lower_bound": 0.0,
+          "upper_bound": 222.33
+        },
+        {
+          "month": 9,
+          "month_name": "September",
+          "actual_2025_units": 63.0,
+          "forecast_units": 62.1,
+          "lower_bound": 0.0,
+          "upper_bound": 213.25
+        },
+        {
+          "month": 10,
+          "month_name": "October",
+          "actual_2025_units": 96.0,
+          "forecast_units": 63.01,
+          "lower_bound": 0.0,
+          "upper_bound": 219.16
+        },
+        {
+          "month": 11,
+          "month_name": "November",
+          "actual_2025_units": 69.0,
+          "forecast_units": 61.29,
+          "lower_bound": 0.0,
+          "upper_bound": 212.38
+        },
+        {
+          "month": 12,
+          "month_name": "December",
+          "actual_2025_units": 71.0,
+          "forecast_units": 60.82,
+          "lower_bound": 0.0,
+          "upper_bound": 216.91
+        }
+      ],
+      "forecast": [
+        {
+          "date": "2026-01-01",
+          "forecast_quantity": 1.93,
+          "lower_bound": 0.0,
+          "upper_bound": 6.95
+        },
+        {
+          "date": "2026-01-02",
+          "forecast_quantity": 2.56,
+          "lower_bound": 0.0,
+          "upper_bound": 7.59
+        },
+        {
+          "date": "2026-01-03",
+          "forecast_quantity": 1.97,
+          "lower_bound": 0.0,
+          "upper_bound": 7.02
+        },
+        {
+          "date": "2026-01-04",
+          "forecast_quantity": 3.18,
+          "lower_bound": 0.0,
+          "upper_bound": 8.23
+        },
+        {
+          "date": "2026-01-05",
+          "forecast_quantity": 2.53,
+          "lower_bound": 0.0,
+          "upper_bound": 7.57
+        },
+        {
+          "date": "2026-01-06",
+          "forecast_quantity": 1.9,
+          "lower_bound": 0.0,
+          "upper_bound": 6.95
+        },
+        {
+          "date": "2026-01-07",
+          "forecast_quantity": 2.45,
+          "lower_bound": 0.0,
+          "upper_bound": 7.5
+        },
+        {
+          "date": "2026-01-08",
+          "forecast_quantity": 1.97,
+          "lower_bound": 0.0,
+          "upper_bound": 7.02
+        },
+        {
+          "date": "2026-01-09",
+          "forecast_quantity": 2.58,
+          "lower_bound": 0.0,
+          "upper_bound": 7.63
+        },
+        {
+          "date": "2026-01-10",
+          "forecast_quantity": 1.99,
+          "lower_bound": 0.0,
+          "upper_bound": 7.04
+        },
+        {
+          "date": "2026-01-11",
+          "forecast_quantity": 3.19,
+          "lower_bound": 0.0,
+          "upper_bound": 8.23
+        },
+        {
+          "date": "2026-01-12",
+          "forecast_quantity": 2.53,
+          "lower_bound": 0.0,
+          "upper_bound": 7.58
+        },
+        {
+          "date": "2026-01-13",
+          "forecast_quantity": 1.9,
+          "lower_bound": 0.0,
+          "upper_bound": 6.95
+        },
+        {
+          "date": "2026-01-14",
+          "forecast_quantity": 2.45,
+          "lower_bound": 0.0,
+          "upper_bound": 7.49
+        },
+        {
+          "date": "2026-01-15",
+          "forecast_quantity": 1.97,
+          "lower_bound": 0.0,
+          "upper_bound": 7.02
+        },
+        {
+          "date": "2026-01-16",
+          "forecast_quantity": 2.57,
+          "lower_bound": 0.0,
+          "upper_bound": 7.62
+        },
+        {
+          "date": "2026-01-17",
+          "forecast_quantity": 1.98,
+          "lower_bound": 0.0,
+          "upper_bound": 7.03
+        },
+        {
+          "date": "2026-01-18",
+          "forecast_quantity": 3.17,
+          "lower_bound": 0.0,
+          "upper_bound": 8.22
+        },
+        {
+          "date": "2026-01-19",
+          "forecast_quantity": 2.52,
+          "lower_bound": 0.0,
+          "upper_bound": 7.57
+        },
+        {
+          "date": "2026-01-20",
+          "forecast_quantity": 1.89,
+          "lower_bound": 0.0,
+          "upper_bound": 6.94
+        },
+        {
+          "date": "2026-01-21",
+          "forecast_quantity": 2.44,
+          "lower_bound": 0.0,
+          "upper_bound": 7.48
+        },
+        {
+          "date": "2026-01-22",
+          "forecast_quantity": 1.96,
+          "lower_bound": 0.0,
+          "upper_bound": 7.01
+        },
+        {
+          "date": "2026-01-23",
+          "forecast_quantity": 2.57,
+          "lower_bound": 0.0,
+          "upper_bound": 7.61
+        },
+        {
+          "date": "2026-01-24",
+          "forecast_quantity": 1.98,
+          "lower_bound": 0.0,
+          "upper_bound": 7.02
+        },
+        {
+          "date": "2026-01-25",
+          "forecast_quantity": 3.16,
+          "lower_bound": 0.0,
+          "upper_bound": 8.21
+        },
+        {
+          "date": "2026-01-26",
+          "forecast_quantity": 2.51,
+          "lower_bound": 0.0,
+          "upper_bound": 7.56
+        },
+        {
+          "date": "2026-01-27",
+          "forecast_quantity": 1.89,
+          "lower_bound": 0.0,
+          "upper_bound": 6.93
+        },
+        {
+          "date": "2026-01-28",
+          "forecast_quantity": 2.43,
+          "lower_bound": 0.0,
+          "upper_bound": 7.48
+        },
+        {
+          "date": "2026-01-29",
+          "forecast_quantity": 1.95,
+          "lower_bound": 0.0,
+          "upper_bound": 7.0
+        },
+        {
+          "date": "2026-01-30",
+          "forecast_quantity": 2.56,
+          "lower_bound": 0.0,
+          "upper_bound": 7.6
+        }
+      ],
+      "rank": 3,
+      "demand_level": "Moderate"
+    },
+    {
+      "product_name": "NEOZEP DROPS",
+      "historical_units_sold": 920,
+      "observed_sale_days": 334,
+      "forecast_30_day_units": 69.11,
+      "average_daily_forecast": 2.3,
+      "lower_30_day_units": 0.0,
+      "upper_30_day_units": 210.2,
+      "peak_month": "January",
+      "peak_month_units": 71.38,
+      "monthly_forecast_2026": [
+        {
+          "month": 1,
+          "month_name": "January",
+          "actual_2025_units": 75.0,
+          "forecast_units": 71.38,
+          "lower_bound": 0.0,
+          "upper_bound": 217.18
+        },
+        {
+          "month": 2,
+          "month_name": "February",
+          "actual_2025_units": 79.0,
+          "forecast_units": 63.67,
+          "lower_bound": 0.0,
+          "upper_bound": 195.33
+        },
+        {
+          "month": 3,
+          "month_name": "March",
+          "actual_2025_units": 54.0,
+          "forecast_units": 69.8,
+          "lower_bound": 0.0,
+          "upper_bound": 215.54
+        },
+        {
+          "month": 4,
+          "month_name": "April",
+          "actual_2025_units": 79.0,
+          "forecast_units": 66.04,
+          "lower_bound": 0.0,
+          "upper_bound": 207.05
+        },
+        {
+          "month": 5,
+          "month_name": "May",
+          "actual_2025_units": 101.0,
+          "forecast_units": 67.74,
+          "lower_bound": 0.0,
+          "upper_bound": 213.42
+        },
+        {
+          "month": 6,
+          "month_name": "June",
+          "actual_2025_units": 85.0,
+          "forecast_units": 64.82,
+          "lower_bound": 0.0,
+          "upper_bound": 205.77
+        },
+        {
+          "month": 7,
+          "month_name": "July",
+          "actual_2025_units": 90.0,
+          "forecast_units": 65.58,
+          "lower_bound": 0.0,
+          "upper_bound": 211.2
+        },
+        {
+          "month": 8,
+          "month_name": "August",
+          "actual_2025_units": 71.0,
+          "forecast_units": 65.25,
+          "lower_bound": 0.0,
+          "upper_bound": 210.83
+        },
+        {
+          "month": 9,
+          "month_name": "September",
+          "actual_2025_units": 76.0,
+          "forecast_units": 61.56,
+          "lower_bound": 0.0,
+          "upper_bound": 202.42
+        },
+        {
+          "month": 10,
+          "month_name": "October",
+          "actual_2025_units": 73.0,
+          "forecast_units": 63.12,
+          "lower_bound": 0.0,
+          "upper_bound": 208.65
+        },
+        {
+          "month": 11,
+          "month_name": "November",
+          "actual_2025_units": 60.0,
+          "forecast_units": 60.59,
+          "lower_bound": 0.0,
+          "upper_bound": 201.41
+        },
+        {
+          "month": 12,
+          "month_name": "December",
+          "actual_2025_units": 77.0,
+          "forecast_units": 60.95,
+          "lower_bound": 0.0,
+          "upper_bound": 206.43
+        }
+      ],
+      "forecast": [
+        {
+          "date": "2026-01-01",
+          "forecast_quantity": 2.15,
+          "lower_bound": 0.0,
+          "upper_bound": 6.84
+        },
+        {
+          "date": "2026-01-02",
+          "forecast_quantity": 2.45,
+          "lower_bound": 0.0,
+          "upper_bound": 7.15
+        },
+        {
+          "date": "2026-01-03",
+          "forecast_quantity": 2.31,
+          "lower_bound": 0.0,
+          "upper_bound": 7.01
+        },
+        {
+          "date": "2026-01-04",
+          "forecast_quantity": 2.3,
+          "lower_bound": 0.0,
+          "upper_bound": 7.01
+        },
+        {
+          "date": "2026-01-05",
+          "forecast_quantity": 2.74,
+          "lower_bound": 0.0,
+          "upper_bound": 7.45
+        },
+        {
+          "date": "2026-01-06",
+          "forecast_quantity": 2.16,
+          "lower_bound": 0.0,
+          "upper_bound": 6.86
+        },
+        {
+          "date": "2026-01-07",
+          "forecast_quantity": 2.06,
+          "lower_bound": 0.0,
+          "upper_bound": 6.76
+        },
+        {
+          "date": "2026-01-08",
+          "forecast_quantity": 2.21,
+          "lower_bound": 0.0,
+          "upper_bound": 6.92
+        },
+        {
+          "date": "2026-01-09",
+          "forecast_quantity": 2.42,
+          "lower_bound": 0.0,
+          "upper_bound": 7.13
+        },
+        {
+          "date": "2026-01-10",
+          "forecast_quantity": 2.3,
+          "lower_bound": 0.0,
+          "upper_bound": 7.0
+        },
+        {
+          "date": "2026-01-11",
+          "forecast_quantity": 2.3,
+          "lower_bound": 0.0,
+          "upper_bound": 7.0
+        },
+        {
+          "date": "2026-01-12",
+          "forecast_quantity": 2.73,
+          "lower_bound": 0.0,
+          "upper_bound": 7.44
+        },
+        {
+          "date": "2026-01-13",
+          "forecast_quantity": 2.15,
+          "lower_bound": 0.0,
+          "upper_bound": 6.85
+        },
+        {
+          "date": "2026-01-14",
+          "forecast_quantity": 2.05,
+          "lower_bound": 0.0,
+          "upper_bound": 6.75
+        },
+        {
+          "date": "2026-01-15",
+          "forecast_quantity": 2.21,
+          "lower_bound": 0.0,
+          "upper_bound": 6.91
+        },
+        {
+          "date": "2026-01-16",
+          "forecast_quantity": 2.42,
+          "lower_bound": 0.0,
+          "upper_bound": 7.12
+        },
+        {
+          "date": "2026-01-17",
+          "forecast_quantity": 2.29,
+          "lower_bound": 0.0,
+          "upper_bound": 7.0
+        },
+        {
+          "date": "2026-01-18",
+          "forecast_quantity": 2.29,
+          "lower_bound": 0.0,
+          "upper_bound": 6.99
+        },
+        {
+          "date": "2026-01-19",
+          "forecast_quantity": 2.72,
+          "lower_bound": 0.0,
+          "upper_bound": 7.43
+        },
+        {
+          "date": "2026-01-20",
+          "forecast_quantity": 2.14,
+          "lower_bound": 0.0,
+          "upper_bound": 6.85
+        },
+        {
+          "date": "2026-01-21",
+          "forecast_quantity": 2.04,
+          "lower_bound": 0.0,
+          "upper_bound": 6.75
+        },
+        {
+          "date": "2026-01-22",
+          "forecast_quantity": 2.2,
+          "lower_bound": 0.0,
+          "upper_bound": 6.9
+        },
+        {
+          "date": "2026-01-23",
+          "forecast_quantity": 2.41,
+          "lower_bound": 0.0,
+          "upper_bound": 7.11
+        },
+        {
+          "date": "2026-01-24",
+          "forecast_quantity": 2.29,
+          "lower_bound": 0.0,
+          "upper_bound": 6.99
+        },
+        {
+          "date": "2026-01-25",
+          "forecast_quantity": 2.28,
+          "lower_bound": 0.0,
+          "upper_bound": 6.99
+        },
+        {
+          "date": "2026-01-26",
+          "forecast_quantity": 2.72,
+          "lower_bound": 0.0,
+          "upper_bound": 7.42
+        },
+        {
+          "date": "2026-01-27",
+          "forecast_quantity": 2.14,
+          "lower_bound": 0.0,
+          "upper_bound": 6.84
+        },
+        {
+          "date": "2026-01-28",
+          "forecast_quantity": 2.04,
+          "lower_bound": 0.0,
+          "upper_bound": 6.74
+        },
+        {
+          "date": "2026-01-29",
+          "forecast_quantity": 2.19,
+          "lower_bound": 0.0,
+          "upper_bound": 6.9
+        },
+        {
+          "date": "2026-01-30",
+          "forecast_quantity": 2.4,
+          "lower_bound": 0.0,
+          "upper_bound": 7.1
+        }
+      ],
+      "rank": 4,
+      "demand_level": "Moderate"
+    },
+    {
+      "product_name": "TEMPRA 120MG",
+      "historical_units_sold": 934,
+      "observed_sale_days": 336,
+      "forecast_30_day_units": 68.26,
+      "average_daily_forecast": 2.28,
+      "lower_30_day_units": 0.0,
+      "upper_30_day_units": 203.15,
+      "peak_month": "January",
+      "peak_month_units": 70.51,
+      "monthly_forecast_2026": [
+        {
+          "month": 1,
+          "month_name": "January",
+          "actual_2025_units": 80.0,
+          "forecast_units": 70.51,
+          "lower_bound": 0.0,
+          "upper_bound": 209.9
+        },
+        {
+          "month": 2,
+          "month_name": "February",
+          "actual_2025_units": 72.0,
+          "forecast_units": 62.53,
+          "lower_bound": 0.0,
+          "upper_bound": 188.5
+        },
+        {
+          "month": 3,
+          "month_name": "March",
+          "actual_2025_units": 72.0,
+          "forecast_units": 68.07,
+          "lower_bound": 0.0,
+          "upper_bound": 207.53
+        },
+        {
+          "month": 4,
+          "month_name": "April",
+          "actual_2025_units": 86.0,
+          "forecast_units": 64.73,
+          "lower_bound": 0.0,
+          "upper_bound": 199.68
+        },
+        {
+          "month": 5,
+          "month_name": "May",
+          "actual_2025_units": 114.0,
+          "forecast_units": 65.72,
+          "lower_bound": 0.0,
+          "upper_bound": 205.17
+        },
+        {
+          "month": 6,
+          "month_name": "June",
+          "actual_2025_units": 97.0,
+          "forecast_units": 62.5,
+          "lower_bound": 0.0,
+          "upper_bound": 197.44
+        },
+        {
+          "month": 7,
+          "month_name": "July",
+          "actual_2025_units": 66.0,
+          "forecast_units": 63.46,
+          "lower_bound": 0.0,
+          "upper_bound": 202.9
+        },
+        {
+          "month": 8,
+          "month_name": "August",
+          "actual_2025_units": 59.0,
+          "forecast_units": 62.34,
+          "lower_bound": 0.0,
+          "upper_bound": 201.77
+        },
+        {
+          "month": 9,
+          "month_name": "September",
+          "actual_2025_units": 64.0,
+          "forecast_units": 59.28,
+          "lower_bound": 0.0,
+          "upper_bound": 194.21
+        },
+        {
+          "month": 10,
+          "month_name": "October",
+          "actual_2025_units": 86.0,
+          "forecast_units": 60.19,
+          "lower_bound": 0.0,
+          "upper_bound": 199.61
+        },
+        {
+          "month": 11,
+          "month_name": "November",
+          "actual_2025_units": 64.0,
+          "forecast_units": 57.24,
+          "lower_bound": 0.0,
+          "upper_bound": 192.15
+        },
+        {
+          "month": 12,
+          "month_name": "December",
+          "actual_2025_units": 74.0,
+          "forecast_units": 58.12,
+          "lower_bound": 0.0,
+          "upper_bound": 197.53
+        }
+      ],
+      "forecast": [
+        {
+          "date": "2026-01-01",
+          "forecast_quantity": 2.21,
+          "lower_bound": 0.0,
+          "upper_bound": 6.69
+        },
+        {
+          "date": "2026-01-02",
+          "forecast_quantity": 2.17,
+          "lower_bound": 0.0,
+          "upper_bound": 6.66
+        },
+        {
+          "date": "2026-01-03",
+          "forecast_quantity": 2.34,
+          "lower_bound": 0.0,
+          "upper_bound": 6.83
+        },
+        {
+          "date": "2026-01-04",
+          "forecast_quantity": 2.38,
+          "lower_bound": 0.0,
+          "upper_bound": 6.87
+        },
+        {
+          "date": "2026-01-05",
+          "forecast_quantity": 2.12,
+          "lower_bound": 0.0,
+          "upper_bound": 6.61
+        },
+        {
+          "date": "2026-01-06",
+          "forecast_quantity": 2.71,
+          "lower_bound": 0.0,
+          "upper_bound": 7.2
+        },
+        {
+          "date": "2026-01-07",
+          "forecast_quantity": 2.21,
+          "lower_bound": 0.0,
+          "upper_bound": 6.7
+        },
+        {
+          "date": "2026-01-08",
+          "forecast_quantity": 2.28,
+          "lower_bound": 0.0,
+          "upper_bound": 6.78
+        },
+        {
+          "date": "2026-01-09",
+          "forecast_quantity": 2.3,
+          "lower_bound": 0.0,
+          "upper_bound": 6.8
+        },
+        {
+          "date": "2026-01-10",
+          "forecast_quantity": 2.27,
+          "lower_bound": 0.0,
+          "upper_bound": 6.77
+        },
+        {
+          "date": "2026-01-11",
+          "forecast_quantity": 2.26,
+          "lower_bound": 0.0,
+          "upper_bound": 6.76
+        },
+        {
+          "date": "2026-01-12",
+          "forecast_quantity": 2.3,
+          "lower_bound": 0.0,
+          "upper_bound": 6.8
+        },
+        {
+          "date": "2026-01-13",
+          "forecast_quantity": 2.21,
+          "lower_bound": 0.0,
+          "upper_bound": 6.7
+        },
+        {
+          "date": "2026-01-14",
+          "forecast_quantity": 2.29,
+          "lower_bound": 0.0,
+          "upper_bound": 6.79
+        },
+        {
+          "date": "2026-01-15",
+          "forecast_quantity": 2.27,
+          "lower_bound": 0.0,
+          "upper_bound": 6.77
+        },
+        {
+          "date": "2026-01-16",
+          "forecast_quantity": 2.27,
+          "lower_bound": 0.0,
+          "upper_bound": 6.77
+        },
+        {
+          "date": "2026-01-17",
+          "forecast_quantity": 2.27,
+          "lower_bound": 0.0,
+          "upper_bound": 6.77
+        },
+        {
+          "date": "2026-01-18",
+          "forecast_quantity": 2.27,
+          "lower_bound": 0.0,
+          "upper_bound": 6.77
+        },
+        {
+          "date": "2026-01-19",
+          "forecast_quantity": 2.26,
+          "lower_bound": 0.0,
+          "upper_bound": 6.76
+        },
+        {
+          "date": "2026-01-20",
+          "forecast_quantity": 2.28,
+          "lower_bound": 0.0,
+          "upper_bound": 6.78
+        },
+        {
+          "date": "2026-01-21",
+          "forecast_quantity": 2.26,
+          "lower_bound": 0.0,
+          "upper_bound": 6.76
+        },
+        {
+          "date": "2026-01-22",
+          "forecast_quantity": 2.26,
+          "lower_bound": 0.0,
+          "upper_bound": 6.76
+        },
+        {
+          "date": "2026-01-23",
+          "forecast_quantity": 2.26,
+          "lower_bound": 0.0,
+          "upper_bound": 6.76
+        },
+        {
+          "date": "2026-01-24",
+          "forecast_quantity": 2.26,
+          "lower_bound": 0.0,
+          "upper_bound": 6.76
+        },
+        {
+          "date": "2026-01-25",
+          "forecast_quantity": 2.26,
+          "lower_bound": 0.0,
+          "upper_bound": 6.76
+        },
+        {
+          "date": "2026-01-26",
+          "forecast_quantity": 2.26,
+          "lower_bound": 0.0,
+          "upper_bound": 6.76
+        },
+        {
+          "date": "2026-01-27",
+          "forecast_quantity": 2.26,
+          "lower_bound": 0.0,
+          "upper_bound": 6.75
+        },
+        {
+          "date": "2026-01-28",
+          "forecast_quantity": 2.26,
+          "lower_bound": 0.0,
+          "upper_bound": 6.76
+        },
+        {
+          "date": "2026-01-29",
+          "forecast_quantity": 2.25,
+          "lower_bound": 0.0,
+          "upper_bound": 6.75
+        },
+        {
+          "date": "2026-01-30",
+          "forecast_quantity": 2.25,
+          "lower_bound": 0.0,
+          "upper_bound": 6.75
+        }
+      ],
+      "rank": 5,
+      "demand_level": "Moderate"
+    },
+    {
+      "product_name": "TEMPRA 500MG",
+      "historical_units_sold": 938,
+      "observed_sale_days": 336,
+      "forecast_30_day_units": 64.46,
+      "average_daily_forecast": 2.15,
+      "lower_30_day_units": 0.0,
+      "upper_30_day_units": 208.5,
+      "peak_month": "January",
+      "peak_month_units": 66.25,
+      "monthly_forecast_2026": [
+        {
+          "month": 1,
+          "month_name": "January",
+          "actual_2025_units": 93.0,
+          "forecast_units": 66.25,
+          "lower_bound": 0.0,
+          "upper_bound": 215.09
+        },
+        {
+          "month": 2,
+          "month_name": "February",
+          "actual_2025_units": 59.0,
+          "forecast_units": 59.38,
+          "lower_bound": 0.0,
+          "upper_bound": 194.01
+        },
+        {
+          "month": 3,
+          "month_name": "March",
+          "actual_2025_units": 67.0,
+          "forecast_units": 64.47,
+          "lower_bound": 0.0,
+          "upper_bound": 213.6
+        },
+        {
+          "month": 4,
+          "month_name": "April",
+          "actual_2025_units": 100.0,
+          "forecast_units": 61.02,
+          "lower_bound": 0.0,
+          "upper_bound": 205.41
+        },
+        {
+          "month": 5,
+          "month_name": "May",
+          "actual_2025_units": 91.0,
+          "forecast_units": 60.64,
+          "lower_bound": 0.0,
+          "upper_bound": 209.91
+        },
+        {
+          "month": 6,
+          "month_name": "June",
+          "actual_2025_units": 94.0,
+          "forecast_units": 57.67,
+          "lower_bound": 0.0,
+          "upper_bound": 202.18
+        },
+        {
+          "month": 7,
+          "month_name": "July",
+          "actual_2025_units": 56.0,
+          "forecast_units": 58.18,
+          "lower_bound": 0.0,
+          "upper_bound": 207.57
+        },
+        {
+          "month": 8,
+          "month_name": "August",
+          "actual_2025_units": 62.0,
+          "forecast_units": 56.75,
+          "lower_bound": 0.0,
+          "upper_bound": 206.19
+        },
+        {
+          "month": 9,
+          "month_name": "September",
+          "actual_2025_units": 81.0,
+          "forecast_units": 53.52,
+          "lower_bound": 0.0,
+          "upper_bound": 198.21
+        },
+        {
+          "month": 10,
+          "month_name": "October",
+          "actual_2025_units": 80.0,
+          "forecast_units": 53.58,
+          "lower_bound": 0.0,
+          "upper_bound": 203.13
+        },
+        {
+          "month": 11,
+          "month_name": "November",
+          "actual_2025_units": 88.0,
+          "forecast_units": 51.27,
+          "lower_bound": 0.0,
+          "upper_bound": 196.06
+        },
+        {
+          "month": 12,
+          "month_name": "December",
+          "actual_2025_units": 67.0,
+          "forecast_units": 51.58,
+          "lower_bound": 0.0,
+          "upper_bound": 201.24
+        }
+      ],
+      "forecast": [
+        {
+          "date": "2026-01-01",
+          "forecast_quantity": 2.41,
+          "lower_bound": 0.0,
+          "upper_bound": 7.18
+        },
+        {
+          "date": "2026-01-02",
+          "forecast_quantity": 1.68,
+          "lower_bound": 0.0,
+          "upper_bound": 6.46
+        },
+        {
+          "date": "2026-01-03",
+          "forecast_quantity": 1.74,
+          "lower_bound": 0.0,
+          "upper_bound": 6.53
+        },
+        {
+          "date": "2026-01-04",
+          "forecast_quantity": 2.43,
+          "lower_bound": 0.0,
+          "upper_bound": 7.22
+        },
+        {
+          "date": "2026-01-05",
+          "forecast_quantity": 2.29,
+          "lower_bound": 0.0,
+          "upper_bound": 7.08
+        },
+        {
+          "date": "2026-01-06",
+          "forecast_quantity": 2.0,
+          "lower_bound": 0.0,
+          "upper_bound": 6.8
+        },
+        {
+          "date": "2026-01-07",
+          "forecast_quantity": 2.32,
+          "lower_bound": 0.0,
+          "upper_bound": 7.11
+        },
+        {
+          "date": "2026-01-08",
+          "forecast_quantity": 2.47,
+          "lower_bound": 0.0,
+          "upper_bound": 7.27
+        },
+        {
+          "date": "2026-01-09",
+          "forecast_quantity": 1.75,
+          "lower_bound": 0.0,
+          "upper_bound": 6.56
+        },
+        {
+          "date": "2026-01-10",
+          "forecast_quantity": 1.8,
+          "lower_bound": 0.0,
+          "upper_bound": 6.6
+        },
+        {
+          "date": "2026-01-11",
+          "forecast_quantity": 2.46,
+          "lower_bound": 0.0,
+          "upper_bound": 7.27
+        },
+        {
+          "date": "2026-01-12",
+          "forecast_quantity": 2.31,
+          "lower_bound": 0.0,
+          "upper_bound": 7.12
+        },
+        {
+          "date": "2026-01-13",
+          "forecast_quantity": 2.02,
+          "lower_bound": 0.0,
+          "upper_bound": 6.83
+        },
+        {
+          "date": "2026-01-14",
+          "forecast_quantity": 2.33,
+          "lower_bound": 0.0,
+          "upper_bound": 7.13
+        },
+        {
+          "date": "2026-01-15",
+          "forecast_quantity": 2.48,
+          "lower_bound": 0.0,
+          "upper_bound": 7.28
+        },
+        {
+          "date": "2026-01-16",
+          "forecast_quantity": 1.76,
+          "lower_bound": 0.0,
+          "upper_bound": 6.57
+        },
+        {
+          "date": "2026-01-17",
+          "forecast_quantity": 1.8,
+          "lower_bound": 0.0,
+          "upper_bound": 6.61
+        },
+        {
+          "date": "2026-01-18",
+          "forecast_quantity": 2.46,
+          "lower_bound": 0.0,
+          "upper_bound": 7.27
+        },
+        {
+          "date": "2026-01-19",
+          "forecast_quantity": 2.31,
+          "lower_bound": 0.0,
+          "upper_bound": 7.12
+        },
+        {
+          "date": "2026-01-20",
+          "forecast_quantity": 2.02,
+          "lower_bound": 0.0,
+          "upper_bound": 6.83
+        },
+        {
+          "date": "2026-01-21",
+          "forecast_quantity": 2.32,
+          "lower_bound": 0.0,
+          "upper_bound": 7.13
+        },
+        {
+          "date": "2026-01-22",
+          "forecast_quantity": 2.47,
+          "lower_bound": 0.0,
+          "upper_bound": 7.28
+        },
+        {
+          "date": "2026-01-23",
+          "forecast_quantity": 1.75,
+          "lower_bound": 0.0,
+          "upper_bound": 6.56
+        },
+        {
+          "date": "2026-01-24",
+          "forecast_quantity": 1.79,
+          "lower_bound": 0.0,
+          "upper_bound": 6.6
+        },
+        {
+          "date": "2026-01-25",
+          "forecast_quantity": 2.45,
+          "lower_bound": 0.0,
+          "upper_bound": 7.26
+        },
+        {
+          "date": "2026-01-26",
+          "forecast_quantity": 2.3,
+          "lower_bound": 0.0,
+          "upper_bound": 7.1
+        },
+        {
+          "date": "2026-01-27",
+          "forecast_quantity": 2.01,
+          "lower_bound": 0.0,
+          "upper_bound": 6.82
+        },
+        {
+          "date": "2026-01-28",
+          "forecast_quantity": 2.31,
+          "lower_bound": 0.0,
+          "upper_bound": 7.12
+        },
+        {
+          "date": "2026-01-29",
+          "forecast_quantity": 2.46,
+          "lower_bound": 0.0,
+          "upper_bound": 7.26
+        },
+        {
+          "date": "2026-01-30",
+          "forecast_quantity": 1.75,
+          "lower_bound": 0.0,
+          "upper_bound": 6.55
+        }
+      ],
+      "rank": 6,
+      "demand_level": "Moderate"
+    },
+    {
+      "product_name": "TEMPRA 250MG",
+      "historical_units_sold": 961,
+      "observed_sale_days": 340,
+      "forecast_30_day_units": 64.11,
+      "average_daily_forecast": 2.14,
+      "lower_30_day_units": 0.0,
+      "upper_30_day_units": 202.16,
+      "peak_month": "January",
+      "peak_month_units": 66.22,
+      "monthly_forecast_2026": [
+        {
+          "month": 1,
+          "month_name": "January",
+          "actual_2025_units": 88.0,
+          "forecast_units": 66.22,
+          "lower_bound": 0.0,
+          "upper_bound": 208.92
+        },
+        {
+          "month": 2,
+          "month_name": "February",
+          "actual_2025_units": 75.0,
+          "forecast_units": 58.56,
+          "lower_bound": 0.0,
+          "upper_bound": 189.32
+        },
+        {
+          "month": 3,
+          "month_name": "March",
+          "actual_2025_units": 90.0,
+          "forecast_units": 63.17,
+          "lower_bound": 0.0,
+          "upper_bound": 209.63
+        },
+        {
+          "month": 4,
+          "month_name": "April",
+          "actual_2025_units": 107.0,
+          "forecast_units": 59.51,
+          "lower_bound": 0.0,
+          "upper_bound": 202.84
+        },
+        {
+          "month": 5,
+          "month_name": "May",
+          "actual_2025_units": 103.0,
+          "forecast_units": 59.87,
+          "lower_bound": 0.0,
+          "upper_bound": 209.5
+        },
+        {
+          "month": 6,
+          "month_name": "June",
+          "actual_2025_units": 114.0,
+          "forecast_units": 56.4,
+          "lower_bound": 0.0,
+          "upper_bound": 202.6
+        },
+        {
+          "month": 7,
+          "month_name": "July",
+          "actual_2025_units": 61.0,
+          "forecast_units": 56.74,
+          "lower_bound": 0.0,
+          "upper_bound": 209.16
+        },
+        {
+          "month": 8,
+          "month_name": "August",
+          "actual_2025_units": 61.0,
+          "forecast_units": 55.21,
+          "lower_bound": 0.0,
+          "upper_bound": 208.92
+        },
+        {
+          "month": 9,
+          "month_name": "September",
+          "actual_2025_units": 60.0,
+          "forecast_units": 52.02,
+          "lower_bound": 0.0,
+          "upper_bound": 201.92
+        },
+        {
+          "month": 10,
+          "month_name": "October",
+          "actual_2025_units": 63.0,
+          "forecast_units": 52.33,
+          "lower_bound": 0.0,
+          "upper_bound": 208.35
+        },
+        {
+          "month": 11,
+          "month_name": "November",
+          "actual_2025_units": 69.0,
+          "forecast_units": 49.3,
+          "lower_bound": 0.0,
+          "upper_bound": 201.31
+        },
+        {
+          "month": 12,
+          "month_name": "December",
+          "actual_2025_units": 70.0,
+          "forecast_units": 49.59,
+          "lower_bound": 0.0,
+          "upper_bound": 207.67
+        }
+      ],
+      "forecast": [
+        {
+          "date": "2026-01-01",
+          "forecast_quantity": 2.05,
+          "lower_bound": 0.0,
+          "upper_bound": 6.55
+        },
+        {
+          "date": "2026-01-02",
+          "forecast_quantity": 2.15,
+          "lower_bound": 0.0,
+          "upper_bound": 6.7
+        },
+        {
+          "date": "2026-01-03",
+          "forecast_quantity": 2.05,
+          "lower_bound": 0.0,
+          "upper_bound": 6.6
+        },
+        {
+          "date": "2026-01-04",
+          "forecast_quantity": 2.08,
+          "lower_bound": 0.0,
+          "upper_bound": 6.63
+        },
+        {
+          "date": "2026-01-05",
+          "forecast_quantity": 2.16,
+          "lower_bound": 0.0,
+          "upper_bound": 6.72
+        },
+        {
+          "date": "2026-01-06",
+          "forecast_quantity": 2.17,
+          "lower_bound": 0.0,
+          "upper_bound": 6.73
+        },
+        {
+          "date": "2026-01-07",
+          "forecast_quantity": 2.21,
+          "lower_bound": 0.0,
+          "upper_bound": 6.77
+        },
+        {
+          "date": "2026-01-08",
+          "forecast_quantity": 2.15,
+          "lower_bound": 0.0,
+          "upper_bound": 6.75
+        },
+        {
+          "date": "2026-01-09",
+          "forecast_quantity": 2.16,
+          "lower_bound": 0.0,
+          "upper_bound": 6.76
+        },
+        {
+          "date": "2026-01-10",
+          "forecast_quantity": 2.16,
+          "lower_bound": 0.0,
+          "upper_bound": 6.76
+        },
+        {
+          "date": "2026-01-11",
+          "forecast_quantity": 2.16,
+          "lower_bound": 0.0,
+          "upper_bound": 6.76
+        },
+        {
+          "date": "2026-01-12",
+          "forecast_quantity": 2.15,
+          "lower_bound": 0.0,
+          "upper_bound": 6.76
+        },
+        {
+          "date": "2026-01-13",
+          "forecast_quantity": 2.15,
+          "lower_bound": 0.0,
+          "upper_bound": 6.76
+        },
+        {
+          "date": "2026-01-14",
+          "forecast_quantity": 2.15,
+          "lower_bound": 0.0,
+          "upper_bound": 6.76
+        },
+        {
+          "date": "2026-01-15",
+          "forecast_quantity": 2.15,
+          "lower_bound": 0.0,
+          "upper_bound": 6.76
+        },
+        {
+          "date": "2026-01-16",
+          "forecast_quantity": 2.15,
+          "lower_bound": 0.0,
+          "upper_bound": 6.76
+        },
+        {
+          "date": "2026-01-17",
+          "forecast_quantity": 2.14,
+          "lower_bound": 0.0,
+          "upper_bound": 6.76
+        },
+        {
+          "date": "2026-01-18",
+          "forecast_quantity": 2.14,
+          "lower_bound": 0.0,
+          "upper_bound": 6.76
+        },
+        {
+          "date": "2026-01-19",
+          "forecast_quantity": 2.14,
+          "lower_bound": 0.0,
+          "upper_bound": 6.76
+        },
+        {
+          "date": "2026-01-20",
+          "forecast_quantity": 2.14,
+          "lower_bound": 0.0,
+          "upper_bound": 6.76
+        },
+        {
+          "date": "2026-01-21",
+          "forecast_quantity": 2.14,
+          "lower_bound": 0.0,
+          "upper_bound": 6.76
+        },
+        {
+          "date": "2026-01-22",
+          "forecast_quantity": 2.13,
+          "lower_bound": 0.0,
+          "upper_bound": 6.76
+        },
+        {
+          "date": "2026-01-23",
+          "forecast_quantity": 2.13,
+          "lower_bound": 0.0,
+          "upper_bound": 6.76
+        },
+        {
+          "date": "2026-01-24",
+          "forecast_quantity": 2.13,
+          "lower_bound": 0.0,
+          "upper_bound": 6.76
+        },
+        {
+          "date": "2026-01-25",
+          "forecast_quantity": 2.13,
+          "lower_bound": 0.0,
+          "upper_bound": 6.76
+        },
+        {
+          "date": "2026-01-26",
+          "forecast_quantity": 2.13,
+          "lower_bound": 0.0,
+          "upper_bound": 6.76
+        },
+        {
+          "date": "2026-01-27",
+          "forecast_quantity": 2.13,
+          "lower_bound": 0.0,
+          "upper_bound": 6.76
+        },
+        {
+          "date": "2026-01-28",
+          "forecast_quantity": 2.12,
+          "lower_bound": 0.0,
+          "upper_bound": 6.76
+        },
+        {
+          "date": "2026-01-29",
+          "forecast_quantity": 2.12,
+          "lower_bound": 0.0,
+          "upper_bound": 6.76
+        },
+        {
+          "date": "2026-01-30",
+          "forecast_quantity": 2.12,
+          "lower_bound": 0.0,
+          "upper_bound": 6.76
+        }
+      ],
+      "rank": 7,
+      "demand_level": "Moderate"
+    },
+    {
+      "product_name": "BIOGESIC 250MG",
+      "historical_units_sold": 922,
+      "observed_sale_days": 333,
+      "forecast_30_day_units": 61.15,
+      "average_daily_forecast": 2.04,
+      "lower_30_day_units": 0.0,
+      "upper_30_day_units": 199.52,
+      "peak_month": "January",
+      "peak_month_units": 63.15,
+      "monthly_forecast_2026": [
+        {
+          "month": 1,
+          "month_name": "January",
+          "actual_2025_units": 69.0,
+          "forecast_units": 63.15,
+          "lower_bound": 0.0,
+          "upper_bound": 206.13
+        },
+        {
+          "month": 2,
+          "month_name": "February",
+          "actual_2025_units": 80.0,
+          "forecast_units": 55.21,
+          "lower_bound": 0.0,
+          "upper_bound": 184.35
+        },
+        {
+          "month": 3,
+          "month_name": "March",
+          "actual_2025_units": 90.0,
+          "forecast_units": 59.19,
+          "lower_bound": 0.0,
+          "upper_bound": 202.16
+        },
+        {
+          "month": 4,
+          "month_name": "April",
+          "actual_2025_units": 82.0,
+          "forecast_units": 55.41,
+          "lower_bound": 0.0,
+          "upper_bound": 193.76
+        },
+        {
+          "month": 5,
+          "month_name": "May",
+          "actual_2025_units": 108.0,
+          "forecast_units": 55.39,
+          "lower_bound": 0.0,
+          "upper_bound": 198.34
+        },
+        {
+          "month": 6,
+          "month_name": "June",
+          "actual_2025_units": 100.0,
+          "forecast_units": 51.85,
+          "lower_bound": 0.0,
+          "upper_bound": 190.18
+        },
+        {
+          "month": 7,
+          "month_name": "July",
+          "actual_2025_units": 64.0,
+          "forecast_units": 51.82,
+          "lower_bound": 0.0,
+          "upper_bound": 194.76
+        },
+        {
+          "month": 8,
+          "month_name": "August",
+          "actual_2025_units": 74.0,
+          "forecast_units": 50.1,
+          "lower_bound": 0.0,
+          "upper_bound": 193.03
+        },
+        {
+          "month": 9,
+          "month_name": "September",
+          "actual_2025_units": 68.0,
+          "forecast_units": 46.9,
+          "lower_bound": 0.0,
+          "upper_bound": 185.22
+        },
+        {
+          "month": 10,
+          "month_name": "October",
+          "actual_2025_units": 65.0,
+          "forecast_units": 46.88,
+          "lower_bound": 0.0,
+          "upper_bound": 189.8
+        },
+        {
+          "month": 11,
+          "month_name": "November",
+          "actual_2025_units": 58.0,
+          "forecast_units": 43.88,
+          "lower_bound": 0.0,
+          "upper_bound": 182.19
+        },
+        {
+          "month": 12,
+          "month_name": "December",
+          "actual_2025_units": 64.0,
+          "forecast_units": 43.86,
+          "lower_bound": 0.0,
+          "upper_bound": 186.77
+        }
+      ],
+      "forecast": [
+        {
+          "date": "2026-01-01",
+          "forecast_quantity": 2.13,
+          "lower_bound": 0.0,
+          "upper_bound": 6.74
+        },
+        {
+          "date": "2026-01-02",
+          "forecast_quantity": 2.06,
+          "lower_bound": 0.0,
+          "upper_bound": 6.68
+        },
+        {
+          "date": "2026-01-03",
+          "forecast_quantity": 2.02,
+          "lower_bound": 0.0,
+          "upper_bound": 6.63
+        },
+        {
+          "date": "2026-01-04",
+          "forecast_quantity": 2.06,
+          "lower_bound": 0.0,
+          "upper_bound": 6.67
+        },
+        {
+          "date": "2026-01-05",
+          "forecast_quantity": 2.06,
+          "lower_bound": 0.0,
+          "upper_bound": 6.67
+        },
+        {
+          "date": "2026-01-06",
+          "forecast_quantity": 2.07,
+          "lower_bound": 0.0,
+          "upper_bound": 6.68
+        },
+        {
+          "date": "2026-01-07",
+          "forecast_quantity": 2.06,
+          "lower_bound": 0.0,
+          "upper_bound": 6.67
+        },
+        {
+          "date": "2026-01-08",
+          "forecast_quantity": 2.05,
+          "lower_bound": 0.0,
+          "upper_bound": 6.66
+        },
+        {
+          "date": "2026-01-09",
+          "forecast_quantity": 2.05,
+          "lower_bound": 0.0,
+          "upper_bound": 6.67
+        },
+        {
+          "date": "2026-01-10",
+          "forecast_quantity": 2.07,
+          "lower_bound": 0.0,
+          "upper_bound": 6.68
+        },
+        {
+          "date": "2026-01-11",
+          "forecast_quantity": 2.05,
+          "lower_bound": 0.0,
+          "upper_bound": 6.66
+        },
+        {
+          "date": "2026-01-12",
+          "forecast_quantity": 2.05,
+          "lower_bound": 0.0,
+          "upper_bound": 6.66
+        },
+        {
+          "date": "2026-01-13",
+          "forecast_quantity": 2.04,
+          "lower_bound": 0.0,
+          "upper_bound": 6.65
+        },
+        {
+          "date": "2026-01-14",
+          "forecast_quantity": 2.04,
+          "lower_bound": 0.0,
+          "upper_bound": 6.65
+        },
+        {
+          "date": "2026-01-15",
+          "forecast_quantity": 2.04,
+          "lower_bound": 0.0,
+          "upper_bound": 6.65
+        },
+        {
+          "date": "2026-01-16",
+          "forecast_quantity": 2.04,
+          "lower_bound": 0.0,
+          "upper_bound": 6.65
+        },
+        {
+          "date": "2026-01-17",
+          "forecast_quantity": 2.03,
+          "lower_bound": 0.0,
+          "upper_bound": 6.64
+        },
+        {
+          "date": "2026-01-18",
+          "forecast_quantity": 2.03,
+          "lower_bound": 0.0,
+          "upper_bound": 6.64
+        },
+        {
+          "date": "2026-01-19",
+          "forecast_quantity": 2.03,
+          "lower_bound": 0.0,
+          "upper_bound": 6.64
+        },
+        {
+          "date": "2026-01-20",
+          "forecast_quantity": 2.03,
+          "lower_bound": 0.0,
+          "upper_bound": 6.64
+        },
+        {
+          "date": "2026-01-21",
+          "forecast_quantity": 2.03,
+          "lower_bound": 0.0,
+          "upper_bound": 6.64
+        },
+        {
+          "date": "2026-01-22",
+          "forecast_quantity": 2.02,
+          "lower_bound": 0.0,
+          "upper_bound": 6.63
+        },
+        {
+          "date": "2026-01-23",
+          "forecast_quantity": 2.02,
+          "lower_bound": 0.0,
+          "upper_bound": 6.63
+        },
+        {
+          "date": "2026-01-24",
+          "forecast_quantity": 2.02,
+          "lower_bound": 0.0,
+          "upper_bound": 6.63
+        },
+        {
+          "date": "2026-01-25",
+          "forecast_quantity": 2.02,
+          "lower_bound": 0.0,
+          "upper_bound": 6.63
+        },
+        {
+          "date": "2026-01-26",
+          "forecast_quantity": 2.01,
+          "lower_bound": 0.0,
+          "upper_bound": 6.63
+        },
+        {
+          "date": "2026-01-27",
+          "forecast_quantity": 2.01,
+          "lower_bound": 0.0,
+          "upper_bound": 6.62
+        },
+        {
+          "date": "2026-01-28",
+          "forecast_quantity": 2.01,
+          "lower_bound": 0.0,
+          "upper_bound": 6.62
+        },
+        {
+          "date": "2026-01-29",
+          "forecast_quantity": 2.01,
+          "lower_bound": 0.0,
+          "upper_bound": 6.62
+        },
+        {
+          "date": "2026-01-30",
+          "forecast_quantity": 2.01,
+          "lower_bound": 0.0,
+          "upper_bound": 6.62
+        }
+      ],
+      "rank": 8,
+      "demand_level": "Moderate"
+    },
+    {
+      "product_name": "ROBITUSSIN 60ML",
+      "historical_units_sold": 932,
+      "observed_sale_days": 333,
+      "forecast_30_day_units": 59.82,
+      "average_daily_forecast": 1.99,
+      "lower_30_day_units": 0.0,
+      "upper_30_day_units": 206.61,
+      "peak_month": "January",
+      "peak_month_units": 61.8,
+      "monthly_forecast_2026": [
+        {
+          "month": 1,
+          "month_name": "January",
+          "actual_2025_units": 58.0,
+          "forecast_units": 61.8,
+          "lower_bound": 0.0,
+          "upper_bound": 213.52
+        },
+        {
+          "month": 2,
+          "month_name": "February",
+          "actual_2025_units": 64.0,
+          "forecast_units": 54.88,
+          "lower_bound": 0.0,
+          "upper_bound": 194.28
+        },
+        {
+          "month": 3,
+          "month_name": "March",
+          "actual_2025_units": 71.0,
+          "forecast_units": 59.73,
+          "lower_bound": 0.0,
+          "upper_bound": 216.52
+        },
+        {
+          "month": 4,
+          "month_name": "April",
+          "actual_2025_units": 84.0,
+          "forecast_units": 56.79,
+          "lower_bound": 0.0,
+          "upper_bound": 210.87
+        },
+        {
+          "month": 5,
+          "month_name": "May",
+          "actual_2025_units": 85.0,
+          "forecast_units": 57.65,
+          "lower_bound": 0.0,
+          "upper_bound": 219.17
+        },
+        {
+          "month": 6,
+          "month_name": "June",
+          "actual_2025_units": 143.0,
+          "forecast_units": 54.81,
+          "lower_bound": 0.0,
+          "upper_bound": 213.24
+        },
+        {
+          "month": 7,
+          "month_name": "July",
+          "actual_2025_units": 88.0,
+          "forecast_units": 55.65,
+          "lower_bound": 0.0,
+          "upper_bound": 221.44
+        },
+        {
+          "month": 8,
+          "month_name": "August",
+          "actual_2025_units": 60.0,
+          "forecast_units": 54.66,
+          "lower_bound": 0.0,
+          "upper_bound": 222.47
+        },
+        {
+          "month": 9,
+          "month_name": "September",
+          "actual_2025_units": 73.0,
+          "forecast_units": 51.97,
+          "lower_bound": 0.0,
+          "upper_bound": 216.2
+        },
+        {
+          "month": 10,
+          "month_name": "October",
+          "actual_2025_units": 79.0,
+          "forecast_units": 52.76,
+          "lower_bound": 0.0,
+          "upper_bound": 224.27
+        },
+        {
+          "month": 11,
+          "month_name": "November",
+          "actual_2025_units": 67.0,
+          "forecast_units": 50.16,
+          "lower_bound": 0.0,
+          "upper_bound": 217.82
+        },
+        {
+          "month": 12,
+          "month_name": "December",
+          "actual_2025_units": 60.0,
+          "forecast_units": 50.92,
+          "lower_bound": 0.0,
+          "upper_bound": 225.82
+        }
+      ],
+      "forecast": [
+        {
+          "date": "2026-01-01",
+          "forecast_quantity": 2.06,
+          "lower_bound": 0.0,
+          "upper_bound": 6.9
+        },
+        {
+          "date": "2026-01-02",
+          "forecast_quantity": 2.08,
+          "lower_bound": 0.0,
+          "upper_bound": 6.93
+        },
+        {
+          "date": "2026-01-03",
+          "forecast_quantity": 1.66,
+          "lower_bound": 0.0,
+          "upper_bound": 6.52
+        },
+        {
+          "date": "2026-01-04",
+          "forecast_quantity": 2.01,
+          "lower_bound": 0.0,
+          "upper_bound": 6.87
+        },
+        {
+          "date": "2026-01-05",
+          "forecast_quantity": 2.01,
+          "lower_bound": 0.0,
+          "upper_bound": 6.87
+        },
+        {
+          "date": "2026-01-06",
+          "forecast_quantity": 2.15,
+          "lower_bound": 0.0,
+          "upper_bound": 7.01
+        },
+        {
+          "date": "2026-01-07",
+          "forecast_quantity": 2.07,
+          "lower_bound": 0.0,
+          "upper_bound": 6.94
+        },
+        {
+          "date": "2026-01-08",
+          "forecast_quantity": 2.0,
+          "lower_bound": 0.0,
+          "upper_bound": 6.87
+        },
+        {
+          "date": "2026-01-09",
+          "forecast_quantity": 2.0,
+          "lower_bound": 0.0,
+          "upper_bound": 6.87
+        },
+        {
+          "date": "2026-01-10",
+          "forecast_quantity": 2.03,
+          "lower_bound": 0.0,
+          "upper_bound": 6.9
+        },
+        {
+          "date": "2026-01-11",
+          "forecast_quantity": 2.0,
+          "lower_bound": 0.0,
+          "upper_bound": 6.88
+        },
+        {
+          "date": "2026-01-12",
+          "forecast_quantity": 2.0,
+          "lower_bound": 0.0,
+          "upper_bound": 6.88
+        },
+        {
+          "date": "2026-01-13",
+          "forecast_quantity": 1.99,
+          "lower_bound": 0.0,
+          "upper_bound": 6.87
+        },
+        {
+          "date": "2026-01-14",
+          "forecast_quantity": 1.99,
+          "lower_bound": 0.0,
+          "upper_bound": 6.88
+        },
+        {
+          "date": "2026-01-15",
+          "forecast_quantity": 2.0,
+          "lower_bound": 0.0,
+          "upper_bound": 6.89
+        },
+        {
+          "date": "2026-01-16",
+          "forecast_quantity": 1.99,
+          "lower_bound": 0.0,
+          "upper_bound": 6.89
+        },
+        {
+          "date": "2026-01-17",
+          "forecast_quantity": 1.99,
+          "lower_bound": 0.0,
+          "upper_bound": 6.89
+        },
+        {
+          "date": "2026-01-18",
+          "forecast_quantity": 1.99,
+          "lower_bound": 0.0,
+          "upper_bound": 6.89
+        },
+        {
+          "date": "2026-01-19",
+          "forecast_quantity": 1.99,
+          "lower_bound": 0.0,
+          "upper_bound": 6.89
+        },
+        {
+          "date": "2026-01-20",
+          "forecast_quantity": 1.99,
+          "lower_bound": 0.0,
+          "upper_bound": 6.9
+        },
+        {
+          "date": "2026-01-21",
+          "forecast_quantity": 1.99,
+          "lower_bound": 0.0,
+          "upper_bound": 6.9
+        },
+        {
+          "date": "2026-01-22",
+          "forecast_quantity": 1.99,
+          "lower_bound": 0.0,
+          "upper_bound": 6.9
+        },
+        {
+          "date": "2026-01-23",
+          "forecast_quantity": 1.99,
+          "lower_bound": 0.0,
+          "upper_bound": 6.9
+        },
+        {
+          "date": "2026-01-24",
+          "forecast_quantity": 1.98,
+          "lower_bound": 0.0,
+          "upper_bound": 6.9
+        },
+        {
+          "date": "2026-01-25",
+          "forecast_quantity": 1.98,
+          "lower_bound": 0.0,
+          "upper_bound": 6.9
+        },
+        {
+          "date": "2026-01-26",
+          "forecast_quantity": 1.98,
+          "lower_bound": 0.0,
+          "upper_bound": 6.91
+        },
+        {
+          "date": "2026-01-27",
+          "forecast_quantity": 1.98,
+          "lower_bound": 0.0,
+          "upper_bound": 6.91
+        },
+        {
+          "date": "2026-01-28",
+          "forecast_quantity": 1.98,
+          "lower_bound": 0.0,
+          "upper_bound": 6.91
+        },
+        {
+          "date": "2026-01-29",
+          "forecast_quantity": 1.98,
+          "lower_bound": 0.0,
+          "upper_bound": 6.91
+        },
+        {
+          "date": "2026-01-30",
+          "forecast_quantity": 1.98,
+          "lower_bound": 0.0,
+          "upper_bound": 6.91
+        }
+      ],
+      "rank": 9,
+      "demand_level": "Moderate"
+    },
+    {
+      "product_name": "BIOGESIC 500MG",
+      "historical_units_sold": 942,
+      "observed_sale_days": 332,
+      "forecast_30_day_units": 56.87,
+      "average_daily_forecast": 1.9,
+      "lower_30_day_units": 0.0,
+      "upper_30_day_units": 204.08,
+      "peak_month": "January",
+      "peak_month_units": 58.54,
+      "monthly_forecast_2026": [
+        {
+          "month": 1,
+          "month_name": "January",
+          "actual_2025_units": 69.0,
+          "forecast_units": 58.54,
+          "lower_bound": 0.0,
+          "upper_bound": 210.79
+        },
+        {
+          "month": 2,
+          "month_name": "February",
+          "actual_2025_units": 53.0,
+          "forecast_units": 50.84,
+          "lower_bound": 0.0,
+          "upper_bound": 194.18
+        },
+        {
+          "month": 3,
+          "month_name": "March",
+          "actual_2025_units": 80.0,
+          "forecast_units": 53.8,
+          "lower_bound": 0.0,
+          "upper_bound": 216.49
+        },
+        {
+          "month": 4,
+          "month_name": "April",
+          "actual_2025_units": 66.0,
+          "forecast_units": 49.6,
+          "lower_bound": 0.0,
+          "upper_bound": 210.07
+        },
+        {
+          "month": 5,
+          "month_name": "May",
+          "actual_2025_units": 119.0,
+          "forecast_units": 48.79,
+          "lower_bound": 0.0,
+          "upper_bound": 217.2
+        },
+        {
+          "month": 6,
+          "month_name": "June",
+          "actual_2025_units": 123.0,
+          "forecast_units": 44.96,
+          "lower_bound": 0.0,
+          "upper_bound": 210.11
+        },
+        {
+          "month": 7,
+          "month_name": "July",
+          "actual_2025_units": 76.0,
+          "forecast_units": 44.22,
+          "lower_bound": 0.0,
+          "upper_bound": 216.86
+        },
+        {
+          "month": 8,
+          "month_name": "August",
+          "actual_2025_units": 69.0,
+          "forecast_units": 42.05,
+          "lower_bound": 0.0,
+          "upper_bound": 216.48
+        },
+        {
+          "month": 9,
+          "month_name": "September",
+          "actual_2025_units": 110.0,
+          "forecast_units": 38.73,
+          "lower_bound": 0.0,
+          "upper_bound": 209.06
+        },
+        {
+          "month": 10,
+          "month_name": "October",
+          "actual_2025_units": 57.0,
+          "forecast_units": 38.09,
+          "lower_bound": 0.0,
+          "upper_bound": 215.51
+        },
+        {
+          "month": 11,
+          "month_name": "November",
+          "actual_2025_units": 61.0,
+          "forecast_units": 35.08,
+          "lower_bound": 0.0,
+          "upper_bound": 208.01
+        },
+        {
+          "month": 12,
+          "month_name": "December",
+          "actual_2025_units": 59.0,
+          "forecast_units": 34.5,
+          "lower_bound": 0.0,
+          "upper_bound": 214.33
+        }
+      ],
+      "forecast": [
+        {
+          "date": "2026-01-01",
+          "forecast_quantity": 2.05,
+          "lower_bound": 0.0,
+          "upper_bound": 6.81
+        },
+        {
+          "date": "2026-01-02",
+          "forecast_quantity": 2.04,
+          "lower_bound": 0.0,
+          "upper_bound": 6.8
+        },
+        {
+          "date": "2026-01-03",
+          "forecast_quantity": 1.52,
+          "lower_bound": 0.0,
+          "upper_bound": 6.29
+        },
+        {
+          "date": "2026-01-04",
+          "forecast_quantity": 1.69,
+          "lower_bound": 0.0,
+          "upper_bound": 6.48
+        },
+        {
+          "date": "2026-01-05",
+          "forecast_quantity": 2.02,
+          "lower_bound": 0.0,
+          "upper_bound": 6.82
+        },
+        {
+          "date": "2026-01-06",
+          "forecast_quantity": 2.15,
+          "lower_bound": 0.0,
+          "upper_bound": 6.96
+        },
+        {
+          "date": "2026-01-07",
+          "forecast_quantity": 1.98,
+          "lower_bound": 0.0,
+          "upper_bound": 6.81
+        },
+        {
+          "date": "2026-01-08",
+          "forecast_quantity": 2.01,
+          "lower_bound": 0.0,
+          "upper_bound": 6.84
+        },
+        {
+          "date": "2026-01-09",
+          "forecast_quantity": 2.0,
+          "lower_bound": 0.0,
+          "upper_bound": 6.85
+        },
+        {
+          "date": "2026-01-10",
+          "forecast_quantity": 1.58,
+          "lower_bound": 0.0,
+          "upper_bound": 6.43
+        },
+        {
+          "date": "2026-01-11",
+          "forecast_quantity": 1.72,
+          "lower_bound": 0.0,
+          "upper_bound": 6.59
+        },
+        {
+          "date": "2026-01-12",
+          "forecast_quantity": 1.98,
+          "lower_bound": 0.0,
+          "upper_bound": 6.87
+        },
+        {
+          "date": "2026-01-13",
+          "forecast_quantity": 2.09,
+          "lower_bound": 0.0,
+          "upper_bound": 6.98
+        },
+        {
+          "date": "2026-01-14",
+          "forecast_quantity": 1.95,
+          "lower_bound": 0.0,
+          "upper_bound": 6.86
+        },
+        {
+          "date": "2026-01-15",
+          "forecast_quantity": 1.97,
+          "lower_bound": 0.0,
+          "upper_bound": 6.88
+        },
+        {
+          "date": "2026-01-16",
+          "forecast_quantity": 1.97,
+          "lower_bound": 0.0,
+          "upper_bound": 6.89
+        },
+        {
+          "date": "2026-01-17",
+          "forecast_quantity": 1.62,
+          "lower_bound": 0.0,
+          "upper_bound": 6.55
+        },
+        {
+          "date": "2026-01-18",
+          "forecast_quantity": 1.73,
+          "lower_bound": 0.0,
+          "upper_bound": 6.67
+        },
+        {
+          "date": "2026-01-19",
+          "forecast_quantity": 1.95,
+          "lower_bound": 0.0,
+          "upper_bound": 6.9
+        },
+        {
+          "date": "2026-01-20",
+          "forecast_quantity": 2.04,
+          "lower_bound": 0.0,
+          "upper_bound": 6.99
+        },
+        {
+          "date": "2026-01-21",
+          "forecast_quantity": 1.92,
+          "lower_bound": 0.0,
+          "upper_bound": 6.89
+        },
+        {
+          "date": "2026-01-22",
+          "forecast_quantity": 1.94,
+          "lower_bound": 0.0,
+          "upper_bound": 6.91
+        },
+        {
+          "date": "2026-01-23",
+          "forecast_quantity": 1.94,
+          "lower_bound": 0.0,
+          "upper_bound": 6.91
+        },
+        {
+          "date": "2026-01-24",
+          "forecast_quantity": 1.65,
+          "lower_bound": 0.0,
+          "upper_bound": 6.64
+        },
+        {
+          "date": "2026-01-25",
+          "forecast_quantity": 1.74,
+          "lower_bound": 0.0,
+          "upper_bound": 6.74
+        },
+        {
+          "date": "2026-01-26",
+          "forecast_quantity": 1.92,
+          "lower_bound": 0.0,
+          "upper_bound": 6.93
+        },
+        {
+          "date": "2026-01-27",
+          "forecast_quantity": 1.99,
+          "lower_bound": 0.0,
+          "upper_bound": 7.0
+        },
+        {
+          "date": "2026-01-28",
+          "forecast_quantity": 1.9,
+          "lower_bound": 0.0,
+          "upper_bound": 6.92
+        },
+        {
+          "date": "2026-01-29",
+          "forecast_quantity": 1.91,
+          "lower_bound": 0.0,
+          "upper_bound": 6.93
+        },
+        {
+          "date": "2026-01-30",
+          "forecast_quantity": 1.91,
+          "lower_bound": 0.0,
+          "upper_bound": 6.94
+        }
+      ],
+      "rank": 10,
+      "demand_level": "Moderate"
+    }
+  ]
+}
