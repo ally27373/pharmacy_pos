@@ -1,4 +1,3 @@
 <?php
 
-header('Location: /auth/login.php');
-exit;
+echo "ROOT INDEX WORKS";
