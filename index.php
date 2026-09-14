@@ -200,12 +200,15 @@
 
             startButton.addEventListener("click", function () {
 
-                window.location.href = "/auth/login.php";
+                window.location.href =
+                    <?= json_encode(rtrim(dirname($_SERVER['SCRIPT_NAME']), '/\\')) ?>
+                    + "/auth/login.php";
 
             });
 
         });
     </script>
+
 
 </body>
 </html>
