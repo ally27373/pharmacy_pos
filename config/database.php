@@ -10,10 +10,10 @@ declare(strict_types=1);
 
 class Database
 {
-    private string $host = "localhost";
+    private string $host = "altaria.proxy.rlwy.net";
     private string $db_name = "pharmacy_pos";
     private string $username = "root";
-    private string $password = "";
+    private string $password = "hefoVTYeVrmYqzmVamHIXhEzwnzIgzAk";
 
     private ?PDO $connection = null;
 
@@ -21,7 +21,7 @@ class Database
     {
         if ($this->connection === null) {
 
-            $dsn = "mysql:host={$this->host};dbname={$this->db_name};charset=utf8mb4";
+            $dsn = "mysql:host={$this->host};port=16087;dbname={$this->db_name};charset=utf8mb4";
 
             try {
 
