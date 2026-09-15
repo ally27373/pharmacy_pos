@@ -1,6 +1,8 @@
 {
     "require": {
         "php": "^8.2",
+        "ext-pdo": "*",
+        "ext-pdo_mysql": "*",
         "ext-gd": "*",
         "ext-zip": "*",
         "phpoffice/phpspreadsheet": "^5.9"
