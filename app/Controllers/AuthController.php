@@ -127,8 +127,8 @@ public function login(array $data): array
         $_SESSION['role_id'] = (int)$user['role_id'];
 
         $redirect = ((int)$user['role_id'] === 2)
-            ? '/pharmacy_pos/app/dashboard/pos/index.php?page=terminal'
-            : '/pharmacy_pos/app/dashboard/analytics/index.php';
+            ? '/app/dashboard/pos/index.php?page=terminal'
+            : '/app/dashboard/analytics/index.php';
 
         return [
             'success' => true,
