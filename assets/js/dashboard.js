@@ -114,7 +114,7 @@ function setTopProducts(limit) {
 function exportBestSellerCSV() {
 
     window.location.href =
-        "/pharmacy_pos/app/export/export_best_seller.php";
+        "/app/export/export_best_seller.php";
 }
 
 function updateFastMoving(){

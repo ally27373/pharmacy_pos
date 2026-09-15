@@ -1,8 +1,8 @@
 'use strict';
 
 (() => {
-    const API_URL = '/pharmacy_pos/app/dashboard/reports/ajax/get_report.php';
-    const EXPORT_URL = '/pharmacy_pos/app/dashboard/reports/ajax/export_report.php';
+    const API_URL = '/app/dashboard/reports/ajax/get_report.php';
+    const EXPORT_URL = '/app/dashboard/reports/ajax/export_report.php';
     const LIMIT = 25;
 
     const searchInput = document.getElementById('report-search');

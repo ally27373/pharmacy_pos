@@ -104,7 +104,7 @@ if (saleModalElement) {
 
 function printReceipt(saleId) {
     window.open(
-        "/pharmacy_pos/app/dashboard/pos/receipt.php?sale_id=" + encodeURIComponent(saleId),
+        "/app/dashboard/pos/receipt.php?sale_id=" + encodeURIComponent(saleId),
         "_blank"
     );
 }

@@ -397,7 +397,7 @@ async function completeSale()
     };
 
     try {
-        const response = await fetch("/pharmacy_pos/app/controllers/process_sale.php", {
+        const response = await fetch("/app/Controllers/process_sale.php", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
