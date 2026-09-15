@@ -1,3 +1,4 @@
+import os
 import mysql.connector
 import pandas as pd
 
@@ -7,10 +8,11 @@ def load_sales_data():
     print("Connecting to MySQL database...")
 
     connection = mysql.connector.connect(
-        host="localhost",
-        database="pharmacy_pos",
-        user="root",
-        password=""
+        host=os.getenv("DB_HOST", "localhost"),
+        port=int(os.getenv("DB_PORT", "3306")),
+        database=os.getenv("DB_DATABASE", "pharmacy_pos"),
+        user=os.getenv("DB_USERNAME", "pharma"),
+        password=os.getenv("DB_PASSWORD", "ALLYSA")
     )
 
     print("Database connection successful!")

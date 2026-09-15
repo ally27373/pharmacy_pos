@@ -1,3 +1,4 @@
+import os
 import mysql.connector
 import pandas as pd
 
@@ -5,10 +6,11 @@ import pandas as pd
 def get_sales_history():
 
     connection = mysql.connector.connect(
-        host="localhost",
-        database="pharmacy_pos",
-        user="root",
-        password=""
+        host=os.getenv("DB_HOST", "localhost"),
+        port=int(os.getenv("DB_PORT", "3306")),
+        database=os.getenv("DB_DATABASE", "pharmacy_pos"),
+        user=os.getenv("DB_USERNAME", "pharma"),
+        password=os.getenv("DB_PASSWORD", "ALLYSA")
     )
 
     query = """

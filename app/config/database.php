@@ -21,19 +21,20 @@ class Database
     public function __construct()
     {
         /*
-         * Local XAMPP defaults
+         * VPS defaults (Hostinger KVM 2 - Ubuntu 26.04)
          *
-         * Railway can override these through environment
-         * variables without changing the code.
+         * Override through environment variables without
+         * changing the code:
+         * DB_HOST, DB_DATABASE, DB_USERNAME, DB_PASSWORD, DB_PORT
          */
 
         $this->host = getenv('DB_HOST') ?: '127.0.0.1';
 
         $this->db_name = getenv('DB_DATABASE') ?: 'pharmacy_pos';
 
-        $this->username = getenv('DB_USERNAME') ?: 'root';
+        $this->username = getenv('DB_USERNAME') ?: 'pharma';
 
-        $this->password = getenv('DB_PASSWORD') ?: '';
+        $this->password = getenv('DB_PASSWORD') ?: 'ALLYSA';
 
         $this->port = (int)(getenv('DB_PORT') ?: 3306);
     }

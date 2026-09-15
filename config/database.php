@@ -10,18 +10,45 @@ declare(strict_types=1);
 
 class Database
 {
-    private string $host = "altaria.proxy.rlwy.net";
-    private string $db_name = "pharmacy_pos";
-    private string $username = "root";
-    private string $password = "hefoVTYeVrmYqzmVamHIXhEzwnzIgzAk";
+    private string $host;
+    private string $db_name;
+    private string $username;
+    private string $password;
+    private int $port;
 
     private ?PDO $connection = null;
+
+    public function __construct()
+    {
+        /*
+         * VPS defaults (Hostinger KVM 2 - Ubuntu 26.04)
+         *
+         * Override through environment variables without
+         * changing the code:
+         * DB_HOST, DB_DATABASE, DB_USERNAME, DB_PASSWORD, DB_PORT
+         */
+
+        $this->host = getenv('DB_HOST') ?: '127.0.0.1';
+
+        $this->db_name = getenv('DB_DATABASE') ?: 'pharmacy_pos';
+
+        $this->username = getenv('DB_USERNAME') ?: 'pharma';
+
+        $this->password = getenv('DB_PASSWORD') ?: 'ALLYSA';
+
+        $this->port = (int)(getenv('DB_PORT') ?: 3306);
+    }
 
     public function connect(): PDO
     {
         if ($this->connection === null) {
 
-            $dsn = "mysql:host={$this->host};port=16087;dbname={$this->db_name};charset=utf8mb4";
+            $dsn = sprintf(
+                'mysql:host=%s;port=%d;dbname=%s;charset=utf8mb4',
+                $this->host,
+                $this->port,
+                $this->db_name
+            );
 
             try {
 
