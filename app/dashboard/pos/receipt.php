@@ -27,7 +27,7 @@ $header = $details[0];
 
 <title>Receipt</title>
 
-<link rel="stylesheet" href="/pharmacy_pos/assets/css/receipt.css">
+<link rel="stylesheet" href="/assets/css/receipt.css">
 
 </head>
 

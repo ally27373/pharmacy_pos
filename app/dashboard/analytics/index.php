@@ -41,11 +41,11 @@ $dashboardData = $dashboardController->getDashboardData($period);
 
 
 
-<link rel="stylesheet" href="/pharmacy_pos/assets/css/dashboard.css">
-<link rel="stylesheet" href="/pharmacy_pos/assets/css/sidebar.css">
-<link rel="stylesheet" href="/pharmacy_pos/assets/css/navbar.css">
-<link rel="stylesheet" href="/pharmacy_pos/assets/css/charts.css">
-<link rel="stylesheet" href="/pharmacy_pos/assets/css/analytics.css">
+<link rel="stylesheet" href="/assets/css/dashboard.css">
+<link rel="stylesheet" href="/assets/css/sidebar.css">
+<link rel="stylesheet" href="/assets/css/navbar.css">
+<link rel="stylesheet" href="/assets/css/charts.css">
+<link rel="stylesheet" href="/assets/css/analytics.css">
 
 <div class="dashboard-wrapper">
 
@@ -63,7 +63,7 @@ $dashboardData = $dashboardController->getDashboardData($period);
 
     <!-- Load Chart.js BEFORE chart partials -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="/pharmacy_pos/assets/js/dashboard.js"></script>
+    <script src="/assets/js/dashboard.js"></script>
 
 
     <div class="analytics-dashboard-layout">

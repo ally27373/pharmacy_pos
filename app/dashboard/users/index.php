@@ -92,22 +92,22 @@ require_once '../../../includes/header.php';
 
 <link
     rel="stylesheet"
-    href="/pharmacy_pos/assets/css/dashboard.css"
+    href="/assets/css/dashboard.css"
 >
 
 <link
     rel="stylesheet"
-    href="/pharmacy_pos/assets/css/sidebar.css"
+    href="/assets/css/sidebar.css"
 >
 
 <link
     rel="stylesheet"
-    href="/pharmacy_pos/assets/css/navbar.css"
+    href="/assets/css/navbar.css"
 >
 
 <link
     rel="stylesheet"
-    href="/pharmacy_pos/assets/css/user_management.css"
+    href="/assets/css/user_management.css"
 >
 
 

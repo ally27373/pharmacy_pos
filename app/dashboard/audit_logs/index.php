@@ -42,10 +42,10 @@ $queryForPagination = $filters;
 require_once '../../../includes/header.php';
 ?>
 
-<link rel="stylesheet" href="/pharmacy_pos/assets/css/dashboard.css">
-<link rel="stylesheet" href="/pharmacy_pos/assets/css/sidebar.css">
-<link rel="stylesheet" href="/pharmacy_pos/assets/css/navbar.css">
-<link rel="stylesheet" href="/pharmacy_pos/assets/css/audit_logs.css">
+<link rel="stylesheet" href="/assets/css/dashboard.css">
+<link rel="stylesheet" href="/assets/css/sidebar.css">
+<link rel="stylesheet" href="/assets/css/navbar.css">
+<link rel="stylesheet" href="/assets/css/audit_logs.css">
 
 <div class="dashboard-wrapper">
 

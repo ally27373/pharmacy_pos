@@ -13,10 +13,10 @@ $page = 'reports';
 require_once '../../../includes/header.php';
 ?>
 
-<link rel="stylesheet" href="/pharmacy_pos/assets/css/dashboard.css">
-<link rel="stylesheet" href="/pharmacy_pos/assets/css/sidebar.css">
-<link rel="stylesheet" href="/pharmacy_pos/assets/css/navbar.css">
-<link rel="stylesheet" href="/pharmacy_pos/assets/css/reports.css">
+<link rel="stylesheet" href="/assets/css/dashboard.css">
+<link rel="stylesheet" href="/assets/css/sidebar.css">
+<link rel="stylesheet" href="/assets/css/navbar.css">
+<link rel="stylesheet" href="/assets/css/reports.css">
 
 <div class="dashboard-wrapper">
 
@@ -154,6 +154,6 @@ require_once '../../../includes/header.php';
     </div>
 </div>
 
-<script src="/pharmacy_pos/assets/js/reports.js"></script>
+<script src="/assets/js/reports.js"></script>
 
 <?php require_once '../../../includes/footer.php'; ?>

@@ -9,11 +9,11 @@ require_once "../../Controllers/DashboardController.php";
 $dashboardController=new DashboardController();
 $dashboardData=$dashboardController->getDashboardData();
 ?>
-<link rel="stylesheet" href="/pharmacy_pos/assets/css/dashboard.css">
-<link rel="stylesheet" href="/pharmacy_pos/assets/css/charts.css?v=<?php echo time(); ?>">
-<link rel="stylesheet" href="/pharmacy_pos/assets/css/inventory.css">
-<link rel="stylesheet" href="/pharmacy_pos/assets/css/sidebar.css">
-<link rel="stylesheet" href="/pharmacy_pos/assets/css/navbar.css">
+<link rel="stylesheet" href="/assets/css/dashboard.css">
+<link rel="stylesheet" href="/assets/css/charts.css?v=<?php echo time(); ?>">
+<link rel="stylesheet" href="/assets/css/inventory.css">
+<link rel="stylesheet" href="/assets/css/sidebar.css">
+<link rel="stylesheet" href="/assets/css/navbar.css">
 <div class="dashboard-wrapper">
 <?php include "../../../includes/sidebar.php"; ?>
 <div class="main-content">
@@ -27,5 +27,5 @@ $dashboardData=$dashboardController->getDashboardData();
 <section class="inventory-two-column-row inventory-operational-row"><div class="inventory-column-panel"><?php include __DIR__."/partials/fast_moving.php"; ?></div><div class="inventory-column-panel"><?php include __DIR__."/partials/near_expiry.php"; ?></div></section>
 <section class="inventory-full-row inventory-insights-row"><?php include __DIR__."/partials/inventory_insights.php"; ?></section>
 </main></div></div>
-<script src="/pharmacy_pos/assets/js/dashboard.js"></script>
+<script src="/assets/js/dashboard.js"></script>
 <?php require_once "../../../includes/footer.php"; ?>

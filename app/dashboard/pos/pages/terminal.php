@@ -26,7 +26,7 @@ require_once '../../../includes/header.php';
 
 ?>
 
-<link rel="stylesheet" href="/pharmacy_pos/assets/css/pos.css">
+<link rel="stylesheet" href="/assets/css/pos.css">
 
 <div class="terminal-page">
 
@@ -61,7 +61,7 @@ require_once '../../../includes/header.php';
 </div>
 
 
-<script src="/pharmacy_pos/assets/js/pos.js"></script>
+<script src="/assets/js/pos.js"></script>
 
 <?php require_once '../../../includes/footer.php'; ?>
 ```

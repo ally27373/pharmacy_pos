@@ -14,7 +14,7 @@ $isCashier = $roleId === 2;
 
         <div class="logo-placeholder">
             <img
-                src="/pharmacy_pos/assets/image/nica-xandra-logo.png"
+                src="/assets/image/nica-xandra-logo.png"
                 alt="Nica Xandra logo"
             >
         </div>
@@ -50,7 +50,7 @@ $isCashier = $roleId === 2;
                     <li>
 
                         <a
-                            href="/pharmacy_pos/app/dashboard/analytics/index.php"
+                            href="/app/dashboard/analytics/index.php"
                             class="<?= ($page == 'analytics') ? 'active' : ''; ?>"
                         >
 
@@ -65,7 +65,7 @@ $isCashier = $roleId === 2;
                     <li>
 
                         <a
-                            href="/pharmacy_pos/app/dashboard/inventory/index.php"
+                            href="/app/dashboard/inventory/index.php"
                             class="<?= ($page == 'inventory_dashboard') ? 'active' : ''; ?>"
                         >
 
@@ -92,7 +92,7 @@ $isCashier = $roleId === 2;
         <li class="menu-item">
 
             <a
-                href="/pharmacy_pos/app/dashboard/pos/index.php?page=terminal"
+                href="/app/dashboard/pos/index.php?page=terminal"
                 class="submenu-toggle <?= ($page == 'pos') ? 'active' : ''; ?>"
             >
 
@@ -113,7 +113,7 @@ $isCashier = $roleId === 2;
                 <li>
 
                     <a
-                        href="/pharmacy_pos/app/dashboard/pos/index.php?page=sales"
+                        href="/app/dashboard/pos/index.php?page=sales"
                         class="<?= ($page == 'sales') ? 'active' : ''; ?>"
                     >
 
@@ -128,7 +128,7 @@ $isCashier = $roleId === 2;
                 <li>
 
                     <a
-                        href="/pharmacy_pos/app/dashboard/pos/index.php?page=billings"
+                        href="/app/dashboard/pos/index.php?page=billings"
                         class="<?= ($page == 'billings') ? 'active' : ''; ?>"
                     >
 
@@ -175,7 +175,7 @@ $isCashier = $roleId === 2;
                     <li>
 
                         <a
-                            href="/pharmacy_pos/app/dashboard/inventory_management/index.php"
+                            href="/app/dashboard/inventory_management/index.php"
                             class="<?= ($page == 'inventory_management') ? 'active' : ''; ?>"
                         >
 
@@ -190,7 +190,7 @@ $isCashier = $roleId === 2;
                     <li>
 
                         <a
-                            href="/pharmacy_pos/app/dashboard/inventory_management/history/index.php"
+                            href="/app/dashboard/inventory_management/history/index.php"
                             class="<?= ($page == 'inventory_history') ? 'active' : ''; ?>"
                         >
 
@@ -210,7 +210,7 @@ $isCashier = $roleId === 2;
             <li>
 
                 <a
-                    href="/pharmacy_pos/app/dashboard/data_management/index.php"
+                    href="/app/dashboard/data_management/index.php"
                     class="<?= ($menu == 'data_management') ? 'active' : ''; ?>"
                 >
 
@@ -226,7 +226,7 @@ $isCashier = $roleId === 2;
             <li>
 
                 <a
-                    href="/pharmacy_pos/app/dashboard/reports/index.php"
+                    href="/app/dashboard/reports/index.php"
                     class="<?= ($menu == 'reports') ? 'active' : ''; ?>"
                 >
 
@@ -242,7 +242,7 @@ $isCashier = $roleId === 2;
             <li>
 
                 <a
-                    href="/pharmacy_pos/app/dashboard/audit_logs/index.php"
+                    href="/app/dashboard/audit_logs/index.php"
                     class="<?= ($page == 'audit_logs') ? 'active' : ''; ?>"
                 >
 
@@ -258,7 +258,7 @@ $isCashier = $roleId === 2;
             <li>
 
                 <a
-                    href="/pharmacy_pos/app/dashboard/users/index.php"
+                    href="/app/dashboard/users/index.php"
                     class="<?= ($menu == 'users') ? 'active' : ''; ?>"
                 >
 
@@ -280,7 +280,7 @@ $isCashier = $roleId === 2;
 
         <li>
 
-            <a href="/pharmacy_pos/app/auth/logout.php">
+            <a href="/app/auth/logout.php">
 
                 <i class="bi bi-box-arrow-right"></i>
 

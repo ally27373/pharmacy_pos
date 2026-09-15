@@ -13,10 +13,10 @@ $page = 'data_management';
 require_once '../../../includes/header.php';
 ?>
 
-<link rel="stylesheet" href="/pharmacy_pos/assets/css/dashboard.css">
-<link rel="stylesheet" href="/pharmacy_pos/assets/css/sidebar.css">
-<link rel="stylesheet" href="/pharmacy_pos/assets/css/navbar.css">
-<link rel="stylesheet" href="/pharmacy_pos/assets/css/data_management.css">
+<link rel="stylesheet" href="/assets/css/dashboard.css">
+<link rel="stylesheet" href="/assets/css/sidebar.css">
+<link rel="stylesheet" href="/assets/css/navbar.css">
+<link rel="stylesheet" href="/assets/css/data_management.css">
 
 <div class="dashboard-wrapper">
 
@@ -79,6 +79,6 @@ require_once '../../../includes/header.php';
     </div>
 </div>
 
-<script src="/pharmacy_pos/assets/js/data_management.js"></script>
+<script src="/assets/js/data_management.js"></script>
 
 <?php require_once '../../../includes/footer.php'; ?>

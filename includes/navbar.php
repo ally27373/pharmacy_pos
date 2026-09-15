@@ -1,5 +1,5 @@
-<link rel="stylesheet" href="/pharmacy_pos/assets/css/navbar.css">
-<link rel="stylesheet" href="/pharmacy_pos/assets/css/notifications.css">
+<link rel="stylesheet" href="/assets/css/navbar.css">
+<link rel="stylesheet" href="/assets/css/notifications.css">
 
 <nav class="navbar-custom">
 
@@ -90,7 +90,7 @@
                 </div>
 
                 <div class="notification-panel-footer">
-                    <a href="/pharmacy_pos/app/dashboard/inventory_management/index.php" class="notification-inventory-link">
+                    <a href="/app/dashboard/inventory_management/index.php" class="notification-inventory-link">
                         <i class="bi bi-box-seam me-1"></i>
                         Open Inventory Management
                     </a>
@@ -134,4 +134,4 @@
 })();
 </script>
 
-<script src="/pharmacy_pos/assets/js/notifications.js"></script>
+<script src="/assets/js/notifications.js"></script>

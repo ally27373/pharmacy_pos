@@ -29,10 +29,10 @@ $pagination = $result['pagination'] ?? [
 require_once '../../../includes/header.php';
 ?>
 
-<link rel="stylesheet" href="/pharmacy_pos/assets/css/dashboard.css">
-<link rel="stylesheet" href="/pharmacy_pos/assets/css/sidebar.css">
-<link rel="stylesheet" href="/pharmacy_pos/assets/css/navbar.css">
-<link rel="stylesheet" href="/pharmacy_pos/assets/css/sales.css">
+<link rel="stylesheet" href="/assets/css/dashboard.css">
+<link rel="stylesheet" href="/assets/css/sidebar.css">
+<link rel="stylesheet" href="/assets/css/navbar.css">
+<link rel="stylesheet" href="/assets/css/sales.css">
 
 <div class="dashboard-content records-page">
 
@@ -172,7 +172,7 @@ require_once '../../../includes/header.php';
     </div>
 </div>
 
-<script src="/pharmacy_pos/assets/js/billings.js"></script>
-<script src="/pharmacy_pos/assets/js/sales.js"></script>
+<script src="/assets/js/billings.js"></script>
+<script src="/assets/js/sales.js"></script>
 
 <?php require_once '../../../includes/footer.php'; ?>

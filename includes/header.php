@@ -17,7 +17,7 @@
 
     <title>Nica Xandra Pharmacy POS</title>
 
-    <link rel="icon" type="image/png" href="/pharmacy_pos/assets/image/nica-xandra-logo.png">
+    <link rel="icon" type="image/png" href="/assets/image/nica-xandra-logo.png">
 
     <!-- Bootstrap -->
 
@@ -31,8 +31,8 @@
         rel="stylesheet"
         href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 
-        <link rel="stylesheet" href="/Pharmacy_POS/assets/css/style.css">
-        <link rel="stylesheet" href="/Pharmacy_POS/assets/css/auth.css">
+        <link rel="stylesheet" href="/assets/css/style.css">
+        <link rel="stylesheet" href="/assets/css/auth.css">
 
     <!-- Google Font -->
 

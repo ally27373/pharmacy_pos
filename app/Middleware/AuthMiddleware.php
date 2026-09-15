@@ -159,7 +159,7 @@ public static function dataManagement(): void
             </p>
 
             <p>
-                <a href="/pharmacy_pos/app/dashboard/pos/index.php?page=terminal">
+                <a href="/app/dashboard/pos/index.php?page=terminal">
                     Return to POS Terminal
                 </a>
             </p>
@@ -232,7 +232,7 @@ public static function dataManagement(): void
          */
 
         header(
-            'Location: /pharmacy_pos/app/auth/login.php'
+            'Location: /app/auth/login.php'
         );
 
         exit;

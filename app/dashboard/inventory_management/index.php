@@ -36,10 +36,10 @@ require_once '../../../includes/header.php';
 
 ?>
 
-<link rel="stylesheet" href="/pharmacy_pos/assets/css/dashboard.css">
-<link rel="stylesheet" href="/pharmacy_pos/assets/css/sidebar.css">
-<link rel="stylesheet" href="/pharmacy_pos/assets/css/navbar.css">
-<link rel="stylesheet" href="/pharmacy_pos/assets/css/inventory.css">
+<link rel="stylesheet" href="/assets/css/dashboard.css">
+<link rel="stylesheet" href="/assets/css/sidebar.css">
+<link rel="stylesheet" href="/assets/css/navbar.css">
+<link rel="stylesheet" href="/assets/css/inventory.css">
 
 <div class="dashboard-wrapper">
 
@@ -927,6 +927,6 @@ Update Product
 
 </div>
 
-<script src="/pharmacy_pos/assets/js/inventory.js"></script>
+<script src="/assets/js/inventory.js"></script>
 
 <?php require_once '../../../includes/footer.php'; ?>

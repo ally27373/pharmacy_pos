@@ -36,22 +36,22 @@ require_once '../../../../includes/header.php';
 ?>
 
 <link rel="stylesheet"
-      href="/pharmacy_pos/assets/css/dashboard.css">
+      href="/assets/css/dashboard.css">
 
 <link rel="stylesheet"
-      href="/pharmacy_pos/assets/css/sidebar.css">
+      href="/assets/css/sidebar.css">
 
 <link rel="stylesheet"
-      href="/pharmacy_pos/assets/css/navbar.css">
+      href="/assets/css/navbar.css">
 
 <link rel="stylesheet"
-      href="/pharmacy_pos/assets/css/inventory.css">
+      href="/assets/css/inventory.css">
 
 <link rel="stylesheet"
-      href="/pharmacy_pos/assets/css/sales.css">
+      href="/assets/css/sales.css">
 
 <link rel="stylesheet"
-      href="/pharmacy_pos/assets/css/inventory_history.css">
+      href="/assets/css/inventory_history.css">
 
 
 <div class="dashboard-wrapper">
@@ -434,7 +434,7 @@ require_once '../../../../includes/header.php';
 </div>
 
 
-<script src="/pharmacy_pos/assets/js/inventory_history.js"></script>
+<script src="/assets/js/inventory_history.js"></script>
 
 
 <?php
