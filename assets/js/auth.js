@@ -31,19 +31,16 @@ document.addEventListener("DOMContentLoaded", function () {
 
         togglePassword.addEventListener("click", function () {
 
-            if (passwordInput.type === "password") {
+            // Single source of truth for show/hide:
+            // hidden (password) -> click reveals plaintext + shows eye-slash;
+            // visible (text) -> click masks + shows eye.
+            const isHidden = passwordInput.type === "password";
 
-                passwordInput.type = "text";
+            passwordInput.type = isHidden ? "text" : "password";
 
-                this.innerHTML = '<i class="bi bi-eye-slash"></i>';
-
-            } else {
-
-                passwordInput.type = "password";
-
-                this.innerHTML = '<i class="bi bi-eye"></i>';
-
-            }
+            this.innerHTML = isHidden
+                ? '<i class="bi bi-eye-slash"></i>'
+                : '<i class="bi bi-eye"></i>';
 
         });
 
