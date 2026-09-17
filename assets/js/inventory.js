@@ -250,6 +250,9 @@ updateProductButton?.addEventListener("click", async function () {
         alert(`✅ ${result.message || "Product updated successfully!"}`);
         window.location.reload();
     } catch (error) {
+        // Hide the modal first so the error is visible instead of
+        // being trapped behind the modal backdrop.
+        bootstrap.Modal.getInstance(document.getElementById("editProductModal"))?.hide();
         showAlert(error.message, "danger");
     } finally {
         button.disabled = false;
@@ -270,8 +273,12 @@ document.querySelectorAll(".delete-product").forEach(button => {
     });
 });
 
-document.getElementById("confirm-delete-product")?.addEventListener("click", async () => {
+document.getElementById("confirm-delete-product")?.addEventListener("click", async function () {
     if (!deleteProductId) return;
+    const button = this;
+    const originalHtml = button.innerHTML;
+    button.disabled = true;
+    button.innerHTML = `<span class="spinner-border spinner-border-sm me-2"></span>Deleting...`;
     const formData = new FormData();
     formData.append("product_id", deleteProductId);
 
@@ -281,7 +288,13 @@ document.getElementById("confirm-delete-product")?.addEventListener("click", asy
         alert(`🗑 ${result.message || "Product deleted successfully!"}`);
         window.location.reload();
     } catch (error) {
+        // Hide the modal first so the error is visible instead of
+        // being trapped behind the modal backdrop.
+        bootstrap.Modal.getInstance(document.getElementById("deleteProductModal"))?.hide();
         showAlert(error.message, "danger");
+    } finally {
+        button.disabled = false;
+        button.innerHTML = originalHtml;
     }
 });
 
