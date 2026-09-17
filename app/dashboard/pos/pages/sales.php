@@ -88,7 +88,7 @@ require_once '../../../includes/header.php';
                 <?php else: ?>
                     <?php foreach ($transactions as $transaction): ?>
                         <tr class="sales-row">
-                            <td class="nowrap-cell"><?= htmlspecialchars($transaction['transaction_number']) ?></td>
+                            <td><?= htmlspecialchars($transaction['transaction_number']) ?></td>
                             <td><?= htmlspecialchars($transaction['invoice_number']) ?></td>
                             <td><?= htmlspecialchars(toPhTime($transaction['sale_date'] ?? null, 'm/d/Y')) ?></td>
                             <td><?= htmlspecialchars(toPhTime($transaction['sale_time'] ?? null, 'h:i A')) ?></td>

@@ -89,14 +89,14 @@ require_once '../../../includes/header.php';
                 <?php else: ?>
                     <?php foreach ($billings as $billing): ?>
                         <tr class="billing-row">
-                            <td class="nowrap-cell"><?= htmlspecialchars($billing['transaction_number']) ?></td>
+                            <td><?= htmlspecialchars($billing['transaction_number']) ?></td>
                             <td><?= htmlspecialchars($billing['invoice_number']) ?></td>
                             <td><?= htmlspecialchars($billing['payment_method']) ?></td>
                             <td>₱<?= number_format((float) $billing['amount_due'], 2) ?></td>
                             <td>₱<?= number_format((float) $billing['amount_paid'], 2) ?></td>
                             <td>₱<?= number_format((float) $billing['change_amount'], 2) ?></td>
-                            <td><span class="status-pill status-<?= strtolower(htmlspecialchars($billing['payment_status'])) ?>"><?= htmlspecialchars($billing['payment_status']) ?></span></td>
-                            <td class="nowrap-cell"><?= htmlspecialchars(toPhTime($billing['payment_date'] ?? null, 'M d, Y h:i A')) ?></td>
+                            <td><?= htmlspecialchars($billing['payment_status']) ?></td>
+                            <td><?= htmlspecialchars($billing['payment_date']) ?></td>
                             <td>
                                 <button
                                     type="button"
