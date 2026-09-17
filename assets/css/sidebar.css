@@ -30,17 +30,9 @@
 
 }
 
-.sidebar ul{
-
-    list-style:none;
-
-    padding:0;
-
-}
-
 .sidebar li{
 
-    margin:18px 0;
+    margin:8px 0;
 
 }
 
@@ -57,12 +49,6 @@
     border-radius:8px;
 
     transition:.3s;
-
-}
-
-.sidebar a:hover{
-
-    background:#0d7a5d;
 
 }
 
@@ -109,12 +95,6 @@
 
 }
 
-.sidebar li{
-
-    margin:8px 0;
-
-}
-
 .sidebar a:hover{
 
     background:rgba(255,255,255,.15);
@@ -153,90 +133,11 @@
     width:100%;
 }
 
-/* Header of dropdown */
+/* Dropdown Button (single definition lives in the consolidated block at the end of this file) */
 
-.menu-header{
-
-    display:flex;
-
-    align-items:center;
-
-    width:100%;
-
-}
-
-/* Main clickable page */
-
-.menu-link{
-
-    flex:1;
-
-    display:flex;
-
-    align-items:center;
-
-    gap:14px;
-
-    padding:14px 18px;
-
-    color:white;
-
-    text-decoration:none;
-
-}
-
-.menu-link:hover{
-    background:rgba(255,255,255,.15);
-}
-
-.menu-link.active{
-    background:#fff;
-    color:#118d6d;
-    font-weight:600;
-}
-
-/* Dropdown Button */
-
-.submenu-toggle{
-
-    display:flex;
-
-    align-items:center;
-
-    justify-content:center;
-
-    width:45px;
-
-    min-width:45px;
-
-    height:45px;
-
-    border:none;
-
-    background:transparent;
-
-    color:white;
-
-    cursor:pointer;
-
-}
 .submenu-toggle:hover{
 
     background:rgba(255,255,255,.15);
-
-}
-
-.dropdown-icon{
-
-    font-size:16px;
-
-    transition:.3s ease;
-
-}
-
-.dropdown-icon.rotate{
-
-    transform:rotate(180deg);
 
 }
 
@@ -326,6 +227,7 @@
 }
 
 .dropdown-icon{
+    font-size:16px;
     margin-left:auto;
     transition:.3s;
 }
