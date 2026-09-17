@@ -66,6 +66,33 @@ class ForecastRefreshService
     }
 
     /**
+     * Resolve which Python executable to invoke.
+     *
+     * Priority: an explicit PYTHON_BIN override, then this project's own
+     * virtualenv (so the app never touches whatever else is on PATH), then
+     * a platform-appropriate system fallback. Plain "python" is not a safe
+     * fallback on Linux, where only "python3" is guaranteed to exist.
+     */
+    private function resolvePythonBinary(): string
+    {
+        $override = getenv('PYTHON_BIN');
+        if ($override) {
+            return $override;
+        }
+
+        $venvPython = $this->projectRoot . DIRECTORY_SEPARATOR . '.venv' . DIRECTORY_SEPARATOR
+            . (PHP_OS_FAMILY === 'Windows'
+                ? 'Scripts' . DIRECTORY_SEPARATOR . 'python.exe'
+                : 'bin' . DIRECTORY_SEPARATOR . 'python');
+
+        if (is_file($venvPython)) {
+            return $venvPython;
+        }
+
+        return PHP_OS_FAMILY === 'Windows' ? 'python' : 'python3';
+    }
+
+    /**
      * Run the Python forecast generator.
      * PYTHON_BIN may be set to a full Python executable path when needed.
      */
@@ -78,7 +105,7 @@ class ForecastRefreshService
             throw new RuntimeException('SARIMA forecast generation script is missing or empty.');
         }
 
-        $python = getenv('PYTHON_BIN') ?: 'python';
+        $python = $this->resolvePythonBinary();
         $command = escapeshellarg($python) . ' ' . escapeshellarg($script) . ' 2>&1';
         $output = [];
         $exitCode = 0;
