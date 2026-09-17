@@ -570,6 +570,11 @@
 }
 
 @media (max-width: 850px) {
+    .dashboard-content {
+        height: auto;
+        overflow: visible;
+    }
+
     .terminal-page {
         height: auto;
     }
@@ -580,11 +585,19 @@
     }
 
     .left-panel {
-        grid-template-rows: 420px 520px;
+        grid-template-rows: auto;
+    }
+
+    .cart-panel {
+        min-height: 360px;
+    }
+
+    .products-panel {
+        min-height: 420px;
     }
 
     .payment-panel {
-        min-height: 600px;
+        min-height: auto;
         height: auto;
     }
 }

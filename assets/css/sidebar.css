@@ -333,3 +333,37 @@
 .dropdown-icon.rotate{
     transform:rotate(180deg);
 }
+
+/* =========================================
+   MOBILE OFF-CANVAS DRAWER
+========================================= */
+
+.sidebar-backdrop{
+    display:none;
+    position:fixed;
+    inset:0;
+    background:rgba(15,23,42,.45);
+    z-index:1150;
+}
+
+.sidebar-backdrop.show{
+    display:block;
+}
+
+body.sidebar-drawer-open{
+    overflow:hidden;
+}
+
+@media (max-width: 991.98px){
+
+    .sidebar{
+        transform:translateX(-100%);
+        transition:transform .3s ease;
+        z-index:1200;
+    }
+
+    .sidebar.mobile-open{
+        transform:translateX(0);
+    }
+
+}

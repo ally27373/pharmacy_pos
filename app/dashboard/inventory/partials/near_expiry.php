@@ -31,6 +31,8 @@ Products expiring within 30 days will appear here.
 
 <?php else: ?>
 
+<div class="near-expiry-table-wrap">
+
 <table class="table table-hover">
 
 <thead>
@@ -120,6 +122,12 @@ if($days <= 7){
 
 </table>
 
+</div>
+
 <?php endif; ?>
 
 </div>
+
+<style>
+.near-expiry-table-wrap { width: 100%; overflow-x: auto; border: 1px solid #e7ecef; border-radius: 10px; }
+</style>

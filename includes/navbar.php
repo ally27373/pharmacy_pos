@@ -3,6 +3,17 @@
 
 <nav class="navbar-custom">
 
+    <button
+        type="button"
+        class="sidebar-toggle"
+        id="sidebar-toggle"
+        aria-label="Open menu"
+        aria-expanded="false"
+        aria-controls="sidebar"
+    >
+        <i class="bi bi-list"></i>
+    </button>
+
     <div class="navbar-title">
         <h4>Dashboard</h4>
     </div>

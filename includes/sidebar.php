@@ -8,7 +8,7 @@ $isAdmin = $roleId === 1;
 $isCashier = $roleId === 2;
 ?>
 
-<aside class="sidebar">
+<aside class="sidebar" id="sidebar">
 
     <div class="sidebar-logo">
 
@@ -293,3 +293,5 @@ $isCashier = $roleId === 2;
     </ul>
 
 </aside>
+
+<div class="sidebar-backdrop" id="sidebar-backdrop"></div>

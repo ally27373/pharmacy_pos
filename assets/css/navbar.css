@@ -10,8 +10,31 @@
     box-shadow:0 3px 12px rgba(0,0,0,.05);
 }
 
+.sidebar-toggle{
+    display:none;
+    align-items:center;
+    justify-content:center;
+    width:40px;
+    height:40px;
+    border:none;
+    background:transparent;
+    color:#118d6d;
+    font-size:22px;
+    flex-shrink:0;
+    cursor:pointer;
+    margin-right:8px;
+}
+
+.navbar-title{
+    min-width:0;
+    overflow:hidden;
+}
+
 .navbar-title h4{
     margin:0;
+    overflow:hidden;
+    text-overflow:ellipsis;
+    white-space:nowrap;
 }
 
 .navbar-actions{
@@ -22,6 +45,10 @@
 
 .user-info{
     font-weight:600;
+    max-width:160px;
+    overflow:hidden;
+    text-overflow:ellipsis;
+    white-space:nowrap;
 }
 
 
@@ -44,4 +71,13 @@
 
 @media (max-width: 850px){
     .navbar-datetime{ display:none; }
+}
+
+@media (max-width: 991.98px){
+    .sidebar-toggle{ display:inline-flex; }
+}
+
+@media (max-width: 480px){
+    .navbar-custom{ padding:14px 16px; }
+    .user-info{ max-width:90px; }
 }
