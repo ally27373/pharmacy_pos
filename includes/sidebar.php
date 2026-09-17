@@ -297,3 +297,5 @@ $isCashier = $roleId === 2;
     </ul>
 
 </aside>
+
+<div class="sidebar-backdrop" id="sidebar-backdrop"></div>

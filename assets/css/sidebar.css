@@ -235,3 +235,36 @@
 .dropdown-icon.rotate{
     transform:rotate(180deg);
 }
+
+/* ================= UI FIX PACK - Phase 2 (mobile off-canvas, <=900px) =================
+   Desktop (>900px) is untouched: sidebar stays fixed, content keeps its margin. */
+.sidebar-backdrop{
+    display:none;
+}
+@media (max-width: 900px){
+    .sidebar{
+        transform:translateX(-105%);
+        transition:transform .3s ease;
+        width:min(280px, 84vw);
+    }
+    body.sidebar-open .sidebar{
+        transform:translateX(0);
+    }
+    .sidebar-backdrop{
+        display:block;
+        position:fixed;
+        inset:0;
+        background:rgba(15,23,42,.5);
+        opacity:0;
+        visibility:hidden;
+        transition:opacity .3s ease, visibility .3s ease;
+        z-index:999;
+    }
+    body.sidebar-open .sidebar-backdrop{
+        opacity:1;
+        visibility:visible;
+    }
+    body.sidebar-open{
+        overflow:hidden;
+    }
+}

@@ -3,6 +3,16 @@
 
 <nav class="navbar-custom">
 
+    <button
+        type="button"
+        class="navbar-hamburger"
+        id="navbar-hamburger"
+        aria-label="Open navigation menu"
+        aria-expanded="false"
+    >
+        <i class="bi bi-list"></i>
+    </button>
+
     <div class="navbar-title">
         <h4>Dashboard</h4>
     </div>
