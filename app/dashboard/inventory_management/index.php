@@ -417,9 +417,13 @@ class="form-control">
 id="edit_category_id"
 class="form-select">
 
-<option value="">
-Loading...
-</option>
+<option value="">Select Category</option>
+
+<?php foreach ($categories as $category): ?>
+    <option value="<?= (int) $category['category_id'] ?>">
+        <?= htmlspecialchars($category['category_name']) ?>
+    </option>
+<?php endforeach; ?>
 
 </select>
 
@@ -433,9 +437,13 @@ Loading...
 id="edit_type_id"
 class="form-select">
 
-<option value="">
-Loading...
-</option>
+<option value="">Select Type</option>
+
+<?php foreach ($types as $type): ?>
+    <option value="<?= (int) $type['type_id'] ?>">
+        <?= htmlspecialchars($type['type_name']) ?>
+    </option>
+<?php endforeach; ?>
 
 </select>
 
