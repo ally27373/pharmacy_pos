@@ -174,8 +174,8 @@ const fields = [
         formData.append("is_test_data", get("is_test_data")?.checked ? "1" : "0");
 
         const result = await fetchJson("ajax/save_product.php", { method: "POST", body: formData });
-        alert(`✅ ${result.message || "Product added successfully!"}`);
         bootstrap.Modal.getInstance(addModal)?.hide();
+        NxToast.flash(`✅ Added "${get("product_name")?.value || "product"}" — ${result.message || "Product added successfully!"}`, "success");
         window.location.href = window.location.pathname + "?page=1&limit=20";
     } catch (error) {
         showAlert(error.message, "danger");
@@ -247,7 +247,7 @@ updateProductButton?.addEventListener("click", async function () {
         formData.append("is_test_data", get("edit_is_test_data")?.checked ? "1" : "0");
 
         const result = await fetchJson("ajax/update_product.php", { method: "POST", body: formData });
-        alert(`✅ ${result.message || "Product updated successfully!"}`);
+        NxToast.flash(`✅ Updated "${get("edit_product_name")?.value || "product"}" — ${result.message || "Product updated successfully!"}`, "success");
         window.location.reload();
     } catch (error) {
         // Hide the modal first so the error is visible instead of
@@ -264,10 +264,12 @@ updateProductButton?.addEventListener("click", async function () {
    DELETE PRODUCT
 ========================= */
 let deleteProductId = null;
+let deleteProductName = "";
 
 document.querySelectorAll(".delete-product").forEach(button => {
     button.addEventListener("click", () => {
         deleteProductId = button.dataset.product;
+        deleteProductName = button.dataset.name || "";
         document.getElementById("delete-product-name").textContent = button.dataset.name || "";
         new bootstrap.Modal(document.getElementById("deleteProductModal")).show();
     });
@@ -285,7 +287,7 @@ document.getElementById("confirm-delete-product")?.addEventListener("click", asy
     try {
         const result = await fetchJson("ajax/delete_product.php", { method: "POST", body: formData });
         bootstrap.Modal.getInstance(document.getElementById("deleteProductModal"))?.hide();
-        alert(`🗑 ${result.message || "Product deleted successfully!"}`);
+        NxToast.flash(`🗑 Deleted "${deleteProductName || "product"}" — ${result.message || "Product deleted successfully!"}`, "success");
         window.location.reload();
     } catch (error) {
         // Hide the modal first so the error is visible instead of
@@ -327,7 +329,7 @@ document.getElementById("confirm-cleanup-test-product")?.addEventListener("click
         });
 
         bootstrap.Modal.getInstance(document.getElementById("testDataCleanupModal"))?.hide();
-        alert(`🧹 ${result.message || "Test data cleaned up successfully!"}`);
+        NxToast.flash(`🧹 Cleaned up "${document.getElementById("cleanup-test-product-name")?.textContent || "test product"}" — ${result.message || "Test data cleaned up successfully!"}`, "success");
         window.location.reload();
     } catch (error) {
         showAlert(error.message, "danger");
@@ -444,7 +446,7 @@ document.getElementById("save-stock")?.addEventListener("click", async function 
 
         const result = await fetchJson("ajax/save_stock.php", { method: "POST", body: formData });
         bootstrap.Modal.getInstance(stockModal)?.hide();
-        showAlert(result.message || "Stock adjustment saved successfully.");
+        NxToast.flash(`📦 ${result.message || "Stock adjustment saved successfully."}`, "success");
         setTimeout(() => window.location.reload(), 700);
     } catch (error) {
         showAlert(error.message, "danger");
