@@ -186,7 +186,7 @@ require_once '../../../includes/header.php';
                                 <?php foreach ($logs as $log): ?>
                                     <tr>
                                         <td>
-                                            <?= htmlspecialchars(date('M d, Y h:i A', strtotime($log['created_at']))) ?>
+                                            <?= htmlspecialchars(toPhTime($log['created_at'] ?? null, 'M d, Y h:i A')) ?>
                                         </td>
                                         <td>
                                             <strong><?= htmlspecialchars($log['username']) ?></strong>

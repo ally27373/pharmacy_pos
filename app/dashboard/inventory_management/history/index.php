@@ -248,9 +248,9 @@ require_once '../../../../includes/header.php';
     ); ?>"
 
     data-date="<?= htmlspecialchars(
-        date(
-            'Y-m-d',
-            strtotime($item['created_at'])
+        toPhTime(
+            $item['created_at'] ?? null,
+            'Y-m-d'
         )
     ); ?>">
 
@@ -358,8 +358,10 @@ require_once '../../../../includes/header.php';
 
     $historyDate =
         new DateTime(
-            $item['created_at']
+            $item['created_at'] ?? 'now',
+            new DateTimeZone('UTC')
         );
+    $historyDate->setTimezone(new DateTimeZone('Asia/Manila'));
 
     ?>
 

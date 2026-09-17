@@ -8,6 +8,8 @@
 
 declare(strict_types=1);
 
+date_default_timezone_set('UTC');
+
 class Database
 {
     private string $host;
@@ -63,6 +65,10 @@ class Database
                     ]
                 );
 
+                // Keep the DB session in UTC so TIMESTAMP values are
+                // stored/read consistently on any server.
+                $this->connection->exec("SET time_zone = '+00:00'");
+
             } catch (PDOException $e) {
 
                 die(
@@ -76,4 +82,28 @@ class Database
 
         return $this->connection;
     }
+}
+
+if (!function_exists('toPhTime')) {
+
+    /**
+     * Format a UTC datetime string for Philippine display (UTC+8).
+     * Defined here as well so pages that load the database layer
+     * directly (without session.php) still have it.
+     */
+    function toPhTime(?string $utcDateTime, string $format = 'M d, Y h:i A'): string
+    {
+        if ($utcDateTime === null || trim($utcDateTime) === '') {
+            return 'N/A';
+        }
+
+        try {
+            $dt = new DateTime($utcDateTime, new DateTimeZone('UTC'));
+            $dt->setTimezone(new DateTimeZone('Asia/Manila'));
+            return $dt->format($format);
+        } catch (Throwable $e) {
+            return 'N/A';
+        }
+    }
+
 }

@@ -45,7 +45,7 @@ $header = $details[0];
 
 <p><strong>Transaction:</strong> <?= $header['transaction_number']; ?></p>
 
-<p><strong>Date:</strong> <?= date("M d, Y h:i A", strtotime($header['created_at'])); ?></p>
+<p><strong>Date:</strong> <?= htmlspecialchars(toPhTime($header['created_at'] ?? null, "M d, Y h:i A")); ?></p>
 
 <hr>
 

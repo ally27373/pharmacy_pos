@@ -90,8 +90,8 @@ require_once '../../../includes/header.php';
                         <tr class="sales-row">
                             <td><?= htmlspecialchars($transaction['transaction_number']) ?></td>
                             <td><?= htmlspecialchars($transaction['invoice_number']) ?></td>
-                            <td><?= date('m/d/Y', strtotime($transaction['sale_date'])) ?></td>
-                            <td><?= date('h:i A', strtotime($transaction['sale_time'])) ?></td>
+                            <td><?= htmlspecialchars(toPhTime($transaction['sale_date'] ?? null, 'm/d/Y')) ?></td>
+                            <td><?= htmlspecialchars(toPhTime($transaction['sale_time'] ?? null, 'h:i A')) ?></td>
                             <td><?= htmlspecialchars($transaction['payment_method']) ?></td>
                             <td>
                                 <span class="status-paid">
