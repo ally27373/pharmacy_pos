@@ -20,6 +20,14 @@ $filters = [
     'account_status' => $_GET['account_status'] ?? '',
 ];
 
+/*
+ |--------------------------------------------------------------------------
+ | Account status options (defined here so the Status filter always has
+ | options, even outside create/edit mode).
+ |--------------------------------------------------------------------------
+ */
+$statuses = ['Active', 'Inactive', 'Locked'];
+
 $currentPage = max(1, (int)($_GET['page'] ?? 1));
 
 $message = '';
@@ -403,14 +411,6 @@ require_once '../../../includes/header.php';
                                     name="account_status"
                                     class="form-select"
                                 >
-
-                                    <?php
-                                    $statuses = [
-                                        'Active',
-                                        'Inactive',
-                                        'Locked'
-                                    ];
-                                    ?>
 
                                     <?php foreach ($statuses as $status): ?>
 
