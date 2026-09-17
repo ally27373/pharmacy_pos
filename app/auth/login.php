@@ -206,7 +206,7 @@ require_once '../../includes/header.php';
 
                                     id="togglePassword">
 
-                                    <i class="bi bi-eye"></i>
+                                    <i class="bi bi-eye-slash"></i>
 
                                 </button>
 

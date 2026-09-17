@@ -38,16 +38,16 @@ document.addEventListener("DOMContentLoaded", function () {
 
             togglePassword.addEventListener("click", function () {
 
-                // Single source of truth for show/hide:
-                // hidden (password) -> click reveals plaintext + shows eye-slash;
-                // visible (text) -> click masks + shows eye.
-                const isHidden = passwordInput.type === "password";
+            // Icon reflects the CURRENT state (state convention):
+            // hidden (password) -> eye-slash; visible (text) -> eye.
+            // Clicking always flips to the opposite state.
+            const isHidden = passwordInput.type === "password";
 
-                passwordInput.type = isHidden ? "text" : "password";
+            passwordInput.type = isHidden ? "text" : "password";
 
-                this.innerHTML = isHidden
-                    ? '<i class="bi bi-eye-slash"></i>'
-                    : '<i class="bi bi-eye"></i>';
+            this.innerHTML = isHidden
+                ? '<i class="bi bi-eye"></i>'
+                : '<i class="bi bi-eye-slash"></i>';
 
             });
 
