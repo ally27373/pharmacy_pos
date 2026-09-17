@@ -13,3 +13,14 @@
     .main-content{ margin-left:0; width:100%; }
     .dashboard-content{ padding:16px; }
 }
+
+/* ============ UI FIX PACK - tables consistency (no theme changes) ============
+   Shared helpers: keep ID columns on one line, standard status pills,
+   slightly tighter sales-table cells so wide tables fit without scrolling. */
+.nowrap-cell{white-space:nowrap;}
+.status-pill{display:inline-block;padding:5px 12px;border-radius:30px;font-size:12px;font-weight:600;white-space:nowrap;}
+.status-paid{background:#d1fae5;color:#065f46;}
+.status-pending{background:#fef3c7;color:#92400e;}
+.status-failed{background:#fee2e2;color:#991b1b;}
+.status-refunded{background:#e0e7ff;color:#3730a3;}
+.sales-table th,.sales-table td{padding:12px 10px;}
