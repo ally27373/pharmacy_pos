@@ -62,7 +62,7 @@ if(empty($billing))
 
 <p>
 <strong>Date:</strong>
-<?= $billing['payment_date']; ?>
+<?= toPhTime($billing['payment_date'] ?? null, "M d, Y h:i A"); ?>
 </p>
 
 <hr>

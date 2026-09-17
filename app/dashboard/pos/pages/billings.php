@@ -96,7 +96,7 @@ require_once '../../../includes/header.php';
                             <td>₱<?= number_format((float) $billing['amount_paid'], 2) ?></td>
                             <td>₱<?= number_format((float) $billing['change_amount'], 2) ?></td>
                             <td><?= htmlspecialchars($billing['payment_status']) ?></td>
-                            <td><?= htmlspecialchars($billing['payment_date']) ?></td>
+                            <td><?= htmlspecialchars(toPhTime($billing['payment_date'] ?? null, 'M d, Y h:i A')) ?></td>
                             <td>
                                 <button
                                     type="button"
