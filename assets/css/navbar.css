@@ -77,21 +77,3 @@
 @media (max-width: 900px){
     .navbar-hamburger{ display:block; }
 }
-
-/* ================= UI - floating utilities (no top bar) =================
-   Bell + hamburger float above content. Double-class selectors beat the
-   single-class base rules regardless of stylesheet order. */
-.notification-wrapper.floating-bell{
-    position:fixed;
-    top:16px;
-    right:16px;
-    z-index:1050;
-}
-.navbar-hamburger.floating-hamburger{
-    position:fixed;
-    top:16px;
-    left:16px;
-    z-index:1050;
-    background:#fff;
-    box-shadow:0 4px 12px rgba(0,0,0,.12);
-}
