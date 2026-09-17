@@ -29,20 +29,29 @@ document.addEventListener("DOMContentLoaded", function () {
 
     if (togglePassword && passwordInput) {
 
-        togglePassword.addEventListener("click", function () {
+        // Guard against double-binding if this script is ever included
+        // twice: two handlers would cancel each other and the toggle
+        // would appear stuck or reversed.
+        if (!togglePassword.dataset.toggleBound) {
 
-            // Single source of truth for show/hide:
-            // hidden (password) -> click reveals plaintext + shows eye-slash;
-            // visible (text) -> click masks + shows eye.
-            const isHidden = passwordInput.type === "password";
+            togglePassword.dataset.toggleBound = "1";
 
-            passwordInput.type = isHidden ? "text" : "password";
+            togglePassword.addEventListener("click", function () {
 
-            this.innerHTML = isHidden
-                ? '<i class="bi bi-eye-slash"></i>'
-                : '<i class="bi bi-eye"></i>';
+                // Single source of truth for show/hide:
+                // hidden (password) -> click reveals plaintext + shows eye-slash;
+                // visible (text) -> click masks + shows eye.
+                const isHidden = passwordInput.type === "password";
 
-        });
+                passwordInput.type = isHidden ? "text" : "password";
+
+                this.innerHTML = isHidden
+                    ? '<i class="bi bi-eye-slash"></i>'
+                    : '<i class="bi bi-eye"></i>';
+
+            });
+
+        }
 
     }
 
