@@ -60,20 +60,3 @@
     }
     .navbar-datetime{ margin-right:10px; }
 }
-
-/* ================= UI FIX PACK - Phase 2 (mobile hamburger) =================
-   Button lives in navbar.php; visible on mobile only. Desktop unchanged. */
-.navbar-hamburger{
-    display:none;
-    border:none;
-    background:transparent;
-    font-size:26px;
-    line-height:1;
-    color:#118d6d;
-    cursor:pointer;
-    padding:4px 8px;
-    border-radius:8px;
-}
-@media (max-width: 900px){
-    .navbar-hamburger{ display:block; }
-}
