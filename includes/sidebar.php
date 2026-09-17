@@ -37,13 +37,9 @@ $isCashier = $roleId === 2;
 
                 <a href="#" class="submenu-toggle">
 
-                    <span class="menu-left">
+                    <i class="bi bi-speedometer2"></i>
 
-                        <i class="bi bi-speedometer2"></i>
-
-                        <span>Dashboard</span>
-
-                    </span>
+                    <span>Dashboard</span>
 
                     <i class="bi bi-chevron-down dropdown-icon"></i>
 
