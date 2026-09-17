@@ -546,6 +546,7 @@ Close
 </button>
 
 <button
+type="button"
 class="btn btn-warning"
 id="update-product">
 

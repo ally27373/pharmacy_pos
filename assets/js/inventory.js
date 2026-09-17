@@ -23,13 +23,28 @@ function applyInventoryFilters(resetPage = true) {
 
 searchInput?.addEventListener("input", () => {
     clearTimeout(inventorySearchTimer);
-    inventorySearchTimer = setTimeout(() => applyInventoryFilters(true), 350);
+    inventorySearchTimer = setTimeout(() => {
+        try { sessionStorage.setItem("inventory_search_focus", "1"); } catch (e) {}
+        applyInventoryFilters(true);
+    }, 700);
 });
 categoryFilter?.addEventListener("change", () => applyInventoryFilters(true));
 typeFilter?.addEventListener("change", () => applyInventoryFilters(true));
 resetFilterButton?.addEventListener("click", () => {
     window.location.href = window.location.pathname + "?page=1&limit=20";
 });
+
+// After a filter reload triggered from the search box, restore focus
+// (and caret at end) so typing can continue without re-clicking.
+(function restoreInventorySearchFocus() {
+    let restore = null;
+    try { restore = sessionStorage.getItem("inventory_search_focus"); } catch (e) {}
+    if (!restore || !searchInput) return;
+    try { sessionStorage.removeItem("inventory_search_focus"); } catch (e) {}
+    searchInput.focus();
+    const end = searchInput.value.length;
+    try { searchInput.setSelectionRange(end, end); } catch (e) {}
+})();
 
 function showAlert(message, type = "success") {
     const container = document.getElementById("inventory-alert");
