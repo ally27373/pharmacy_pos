@@ -9,8 +9,7 @@ class AuditLog
     private PDO $conn;
 
     private const ACTION_TYPES = [
-        'CREATE', 'UPDATE', 'DELETE', 'LOGIN', 'LOGOUT',
-        'SALE', 'VOID', 'APPROVE', 'REJECT', 'IMPORT', 'EXPORT'
+        'CREATE', 'UPDATE', 'DELETE', 'IMPORT', 'EXPORT'
     ];
 
     public function __construct()
