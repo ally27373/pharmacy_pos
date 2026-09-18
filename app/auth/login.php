@@ -72,7 +72,7 @@ require_once '../../includes/header.php';
 
                 <h5 class="pharmacy-name">
 
-                    NICA XANDRA PHARMACY
+                    NICA X4NDRA PHARMACY
 
                 </h5>
 
