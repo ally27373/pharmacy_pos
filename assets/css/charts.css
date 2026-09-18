@@ -189,18 +189,9 @@
 
 }
 
-@media (max-width: 480px){
-
-    .chart-select{
-        flex:1 1 100%;
-        min-width:0;
-    }
-
-}
-
 .chart-select{
 
-    height:38px;
+    height:44px;
 
     min-width:110px;
 
@@ -252,9 +243,9 @@
 
 .chart-menu-button{
 
-    width:38px;
+    width:44px;
 
-    height:38px;
+    height:44px;
 
     border:1px solid #d9e2ec;
 
@@ -500,4 +491,103 @@ BEST / LEAST SELLING PANEL
     display: block;
     width: 100% !important;
     height: 100% !important;
+}
+
+/* ==========================================
+   CHART-HEADER FILTER FORMS
+   Used by demand_chart.php / fast_moving.php:
+   a <form> wrapping a month + year <select> pair
+   inside .chart-controls. Without this the two
+   selects only rely on inline-block text flow and
+   can force horizontal overflow on narrow screens.
+========================================== */
+.chart-controls form{
+    display:flex;
+    align-items:center;
+    flex-wrap:wrap;
+    gap:8px;
+}
+
+/* ==========================================
+   CHART YEAR FILTER (Sales Performance)
+   Used by sales_chart.php's icon + label + select
+   control. Mirrors .chart-select visually so both
+   controls read as one design language.
+========================================== */
+.chart-filter-wrapper{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    flex-wrap:wrap;
+    color:#6b7280;
+    font-size:13px;
+}
+
+.chart-filter-wrapper i{
+    color:#118d6d;
+    font-size:15px;
+}
+
+.chart-filter{
+    height:44px;
+    min-width:110px;
+    padding:0 14px;
+    border:1px solid #d9e2ec;
+    border-radius:8px;
+    background:#fff;
+    font-size:13px;
+    font-weight:500;
+    color:#374151;
+    cursor:pointer;
+    transition:.25s;
+}
+
+.chart-filter:hover{
+    border-color:#118d6d;
+}
+
+.chart-filter:focus{
+    outline:none;
+    border-color:#118d6d;
+    box-shadow:0 0 0 3px rgba(17,141,109,.15);
+}
+
+/* ==========================================
+   CHART CONTROLS — RESPONSIVE
+   Breakpoints follow the shared 1200/992/768/480
+   convention used across the mobile pass.
+========================================== */
+@media (max-width: 768px){
+
+    .chart-header h4{
+        font-size:18px;
+    }
+
+    .chart-menu-dropdown{
+        width:180px;
+    }
+
+}
+
+@media (max-width: 480px){
+
+    .chart-select,
+    .chart-filter{
+        flex:1 1 100%;
+        min-width:0;
+        width:100%;
+    }
+
+    .chart-controls form{
+        width:100%;
+    }
+
+    .chart-filter-wrapper{
+        width:100%;
+    }
+
+    .chart-menu{
+        margin-left:auto;
+    }
+
 }

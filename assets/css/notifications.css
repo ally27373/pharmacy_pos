@@ -3,13 +3,17 @@
 ========================================================== */
 
 .notification-wrapper{
-    position:relative;
+    /* Positioning context intentionally lives on the parent
+       .navbar-actions (navbar.css) instead of here, so
+       .notification-panel anchors to the navbar's right edge
+       rather than this narrower wrapper box — see the comment
+       on .navbar-actions for why. */
 }
 
 .notification-button{
     position:relative;
-    width:42px;
-    height:42px;
+    width:44px;
+    height:44px;
     border:1px solid #e5e7eb;
     border-radius:50%;
     background:#fff;
@@ -59,6 +63,7 @@
     border-radius:16px;
     box-shadow:0 16px 40px rgba(15,23,42,.18);
     overflow:hidden;
+    z-index:var(--z-notification-panel,1120);
 }
 
 .notification-panel[hidden]{
@@ -202,6 +207,7 @@
 .notification-list{
     max-height:355px;
     overflow-y:auto;
+    -webkit-overflow-scrolling:touch;
     padding:8px;
 }
 
@@ -328,8 +334,37 @@
     .notification-summary{
         grid-template-columns:repeat(2,1fr);
     }
+}
+
+/* =========================================================
+   PHONE: full-width notification sheet
+
+   Below 480px the dropdown-style panel (anchored to the bell
+   via .navbar-actions) no longer has enough room and can get
+   clipped by the viewport edge. Switch to a fixed, near-full-
+   width sheet instead, positioned just under the navbar.
+========================================================= */
+@media (max-width:480px){
 
     .notification-panel{
-        right:-8px;
+        position:fixed;
+        top:76px;
+        left:12px;
+        right:12px;
+        width:auto;
+        max-width:none;
+        max-height:calc(100vh - 96px);
+        display:flex;
+        flex-direction:column;
+    }
+
+    .notification-list{
+        flex:1 1 auto;
+        max-height:none;
+    }
+
+    .notification-refresh{
+        width:40px;
+        height:40px;
     }
 }

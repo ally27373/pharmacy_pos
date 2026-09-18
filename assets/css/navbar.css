@@ -2,7 +2,7 @@
     position:sticky;
     top:0;
     background:#fff;
-    z-index:1100;
+    z-index:var(--z-navbar,1100);
     padding:18px 30px;
     display:flex;
     justify-content:space-between;
@@ -38,6 +38,13 @@
 }
 
 .navbar-actions{
+    /* Positioning context for .notification-panel (see
+       notifications.css) so the dropdown anchors near the
+       navbar's true right edge instead of the notification
+       bell's own (narrower) wrapper box, which sits to the
+       left of .user-info and previously let the panel overflow
+       the viewport on narrower screens. */
+    position:relative;
     display:flex;
     align-items:center;
     gap:18px;
@@ -74,10 +81,18 @@
 }
 
 @media (max-width: 991.98px){
-    .sidebar-toggle{ display:inline-flex; }
+    .sidebar-toggle{
+        display:inline-flex;
+        /* Bump to a full 44x44 touch target now that the
+           button is the primary way to open the drawer. */
+        width:44px;
+        height:44px;
+    }
 }
 
 @media (max-width: 480px){
     .navbar-custom{ padding:14px 16px; }
     .user-info{ max-width:90px; }
+    .navbar-actions{ gap:12px; }
+    .navbar-title h4{ font-size:1.05rem; }
 }

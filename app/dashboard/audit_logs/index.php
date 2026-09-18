@@ -42,7 +42,7 @@ $queryForPagination = $filters;
 require_once '../../../includes/header.php';
 ?>
 
-<link rel="stylesheet" href="/assets/css/dashboard.css">
+<link rel="stylesheet" href="/assets/css/dashboard-shell.css">
 <link rel="stylesheet" href="/assets/css/sidebar.css">
 <link rel="stylesheet" href="/assets/css/navbar.css">
 <link rel="stylesheet" href="/assets/css/audit_logs.css">
@@ -161,7 +161,7 @@ require_once '../../../includes/header.php';
                     </div>
                 </div>
 
-                <div class="table-responsive">
+                <div class="table-responsive-wrap">
                     <table class="table audit-table">
                         <thead>
                             <tr>

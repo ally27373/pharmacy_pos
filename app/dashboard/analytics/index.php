@@ -41,7 +41,8 @@ $dashboardData = $dashboardController->getDashboardData($period);
 
 
 
-<link rel="stylesheet" href="/assets/css/dashboard.css">
+<link rel="stylesheet" href="/assets/css/dashboard-shell.css">
+<link rel="stylesheet" href="/assets/css/dashboard-widgets.css">
 <link rel="stylesheet" href="/assets/css/sidebar.css">
 <link rel="stylesheet" href="/assets/css/navbar.css">
 <link rel="stylesheet" href="/assets/css/charts.css">

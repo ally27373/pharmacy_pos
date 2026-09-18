@@ -1,0 +1,103 @@
+/* =====================================================
+   DASHBOARD SHELL
+   Shared by every dashboard/module page: base reset,
+   the sidebar + content frame, and generic table/badge
+   primitives. Owned by the App Shell & Navigation workflow.
+   (Split out of the old dashboard.css so module-specific
+   widget styling — analytics/inventory dashboard cards,
+   grids, forecast panels — can evolve independently in
+   dashboard-widgets.css without touching this file.)
+===================================================== */
+
+/* ===== Reset ===== */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Poppins', sans-serif;
+    background: #f4f7fb;
+}
+
+/* ===== Dashboard Layout ===== */
+.dashboard-wrapper {
+    display: flex;
+    min-height: 100vh;
+}
+
+/* ===== Main Content ===== */
+.main-content {
+    margin-left: 260px;
+    width: calc(100% - 260px);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    background: #f5f7fb;
+}
+
+/* ===== Dashboard Body ===== */
+.dashboard-content {
+    flex: 1;
+    padding: 25px;
+    overflow: auto;
+}
+
+/* =====================================================
+   GENERIC TABLE / BADGE PRIMITIVES
+===================================================== */
+.table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.table th {
+    background: #f8fafc;
+    font-weight: 600;
+    padding: 12px;
+    font-size: 14px;
+}
+
+.table td {
+    padding: 12px;
+    border-top: 1px solid #edf2f7;
+    vertical-align: middle;
+}
+
+.table tr:hover {
+    background: #f9fafb;
+}
+
+.badge {
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+/* =====================================================
+   RESPONSIVE TABLE UTILITY
+   Wrap any wide table in <div class="table-responsive-wrap">
+   to get horizontal scroll containment + a fade hint instead
+   of forcing the whole page to overflow on narrow screens.
+===================================================== */
+.table-responsive-wrap {
+    width: 100%;
+    max-width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
+.table-responsive-wrap > table,
+.table-responsive-wrap > .table {
+    min-width: 640px;
+}
+
+/* ===== Mobile shell (sidebar collapses to off-canvas drawer) ===== */
+@media (max-width: 991.98px) {
+    .main-content {
+        margin-left: 0;
+        width: 100%;
+    }
+}

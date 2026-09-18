@@ -22,12 +22,12 @@
 
 .inventory-history-card .search-box {
     min-width: 260px;
-    min-height: 42px;
+    min-height: 44px;
 }
 
 .history-filter {
     width: 180px;
-    min-height: 42px;
+    min-height: 44px;
 }
 
 
@@ -267,7 +267,7 @@
 }
 
 .history-date-filter {
-    min-height: 42px;
+    min-height: 44px;
     padding: 8px 12px;
 
     border: 1px solid #dee2e6;
@@ -290,7 +290,7 @@
 }
 
 #clear-history-filters {
-    min-height: 42px;
+    min-height: 44px;
 
     white-space: nowrap;
 }
@@ -326,4 +326,28 @@
 .inventory-history-card .inventory-pagination {
     margin-top: 16px;
     padding: 16px 2px 2px;
+}
+
+/* =========================================
+   PHONE (<=480px)
+   The history table only has 6 columns (vs. inventory's 10),
+   so horizontal scroll via .table-responsive-wrap stays usable —
+   no card layout needed here. Just tighten a few widths so the
+   scroll area starts closer to the viewport width.
+========================================= */
+@media (max-width: 480px) {
+    .inventory-history-card {
+        margin-top: 14px;
+    }
+
+    .history-remarks {
+        max-width: 140px;
+    }
+
+    .history-date-filter,
+    .inventory-history-card .search-box,
+    .history-filter,
+    #clear-history-filters {
+        font-size: 16px;
+    }
 }

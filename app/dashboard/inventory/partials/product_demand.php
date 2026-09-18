@@ -148,8 +148,8 @@ $chartValues = array_map(static fn($r) => round((float) $r['selected_month_units
 .product-demand-month-heading span { display:block; margin-top:2px; font-size:12px; color:#8a94a6; }
 .product-demand-chart-container { position:relative; width:100%; height:230px; margin-bottom:14px; }
 .product-demand-chart-container canvas { width:100% !important; height:100% !important; }
-.product-demand-table-wrap { overflow-x:auto; }
-.product-demand-table { width:100%; border-collapse:collapse; font-size:.86rem; }
+.product-demand-table-wrap { overflow-x:auto; -webkit-overflow-scrolling: touch; }
+.product-demand-table { width:100%; min-width:680px; border-collapse:collapse; font-size:.86rem; }
 .product-demand-table th, .product-demand-table td { padding:9px 8px; border-bottom:1px solid #e5e7eb; text-align:left; vertical-align:middle; }
 .product-demand-table th { font-weight:700; white-space:nowrap; }
 .product-demand-table tbody tr:hover { background:#f8fafc; }
@@ -166,6 +166,7 @@ $chartValues = array_map(static fn($r) => round((float) $r['selected_month_units
 .product-demand-pagination .pagination-info { font-size:.78rem; color:#6b7280; }
 .product-demand-pagination .pagination-controls { display:flex; align-items:center; gap:10px; }
 .product-demand-pagination .pagination-page { min-width:82px; text-align:center; font-size:.78rem; color:#4b5563; }
+.product-demand-pagination button { min-height:44px; padding:8px 14px; }
 .product-demand-pagination button:disabled { opacity:.5; cursor:not-allowed; }
 @media (max-width:768px) { .product-demand-header { align-items:flex-start; flex-direction:column; } .product-demand-header .chart-controls { width:100%; justify-content:flex-start; } .product-demand-pagination { flex-direction:column; align-items:stretch; } .product-demand-pagination .pagination-info { text-align:center; } .product-demand-pagination .pagination-controls { justify-content:center; } }
 </style>

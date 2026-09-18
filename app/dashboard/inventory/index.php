@@ -9,7 +9,8 @@ require_once "../../Controllers/DashboardController.php";
 $dashboardController=new DashboardController();
 $dashboardData=$dashboardController->getDashboardData();
 ?>
-<link rel="stylesheet" href="/assets/css/dashboard.css">
+<link rel="stylesheet" href="/assets/css/dashboard-shell.css">
+<link rel="stylesheet" href="/assets/css/dashboard-widgets.css">
 <link rel="stylesheet" href="/assets/css/charts.css?v=<?php echo time(); ?>">
 <link rel="stylesheet" href="/assets/css/inventory.css">
 <link rel="stylesheet" href="/assets/css/sidebar.css">

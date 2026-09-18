@@ -36,7 +36,7 @@ require_once '../../../../includes/header.php';
 ?>
 
 <link rel="stylesheet"
-      href="/assets/css/dashboard.css">
+      href="/assets/css/dashboard-shell.css">
 
 <link rel="stylesheet"
       href="/assets/css/sidebar.css">
@@ -156,7 +156,7 @@ require_once '../../../../includes/header.php';
 
                 <!-- HISTORY TABLE -->
 
-                <div class="table-responsive">
+                <div class="table-responsive table-responsive-wrap">
 
                     <table class="sales-table inventory-history-table">
 

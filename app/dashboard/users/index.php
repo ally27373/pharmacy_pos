@@ -100,7 +100,7 @@ require_once '../../../includes/header.php';
 
 <link
     rel="stylesheet"
-    href="/assets/css/dashboard.css"
+    href="/assets/css/dashboard-shell.css"
 >
 
 <link
@@ -815,7 +815,7 @@ require_once '../../../includes/header.php';
 
                     <!-- TABLE -->
 
-                    <div class="table-responsive mt-4">
+                    <div class="table-responsive-wrap mt-4">
 
                         <table class="table user-table align-middle">
 

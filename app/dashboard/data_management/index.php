@@ -13,7 +13,7 @@ $page = 'data_management';
 require_once '../../../includes/header.php';
 ?>
 
-<link rel="stylesheet" href="/assets/css/dashboard.css">
+<link rel="stylesheet" href="/assets/css/dashboard-shell.css">
 <link rel="stylesheet" href="/assets/css/sidebar.css">
 <link rel="stylesheet" href="/assets/css/navbar.css">
 <link rel="stylesheet" href="/assets/css/data_management.css">

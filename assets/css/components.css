@@ -1,0 +1,13 @@
+/* =======================================================
+   SHARED COMPONENT STYLES
+   Pharmacy POS System
+
+   Reserved for small, reusable UI components shared across
+   multiple pages (buttons, chips, empty-states, etc). Not
+   currently linked from any page — add a <link> where needed
+   before relying on rules placed here.
+
+   See assets/css/style.css for breakpoint and z-index
+   conventions, and assets/css/dashboard-shell.css for the
+   shared dashboard wrapper/table/badge primitives.
+======================================================= */

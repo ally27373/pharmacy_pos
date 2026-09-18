@@ -64,4 +64,3 @@ require_once '../../../includes/header.php';
 <script src="/assets/js/pos.js"></script>
 
 <?php require_once '../../../includes/footer.php'; ?>
-```

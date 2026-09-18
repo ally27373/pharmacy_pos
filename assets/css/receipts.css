@@ -12,6 +12,8 @@ body{
 
     width:300px;
 
+    max-width:100%;
+
     margin:auto;
 
 }
@@ -45,4 +47,30 @@ hr{
 
     margin:10px 0;
 
+}
+
+/* =====================================
+   VERY NARROW PHONES
+   Guards against the fixed-width receipt
+   overflowing viewports narrower than
+   ~340px (300px receipt + body padding),
+   and keeps long medicine names from
+   forcing horizontal overflow.
+===================================== */
+@media (max-width: 380px) {
+
+    body{
+        padding:12px;
+    }
+
+    .receipt table{
+        table-layout:fixed;
+    }
+
+    .receipt th,
+    .receipt td{
+        padding:4px;
+        font-size:12px;
+        word-break:break-word;
+    }
 }

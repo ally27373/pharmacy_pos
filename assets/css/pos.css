@@ -67,6 +67,8 @@
 
     flex:1;
 
+    min-height:0;
+
     overflow-y:auto;
 }
 
@@ -152,6 +154,115 @@
 
     padding:12px;
 
+}
+
+/* =====================================
+   CART ITEM CONTROLS
+   (renderCart() in pos.js generates these
+   elements; they previously had no styling
+   at all, which made the quantity stepper
+   and remove button tiny, inconsistent,
+   default-browser-button hit targets.)
+===================================== */
+
+.cart-placeholder td{
+
+    text-align:center;
+
+    padding:40px 12px;
+
+    color:#9aa0a6;
+
+}
+
+.cart-placeholder p{
+
+    margin:8px 0 2px;
+
+    font-weight:600;
+
+    color:#6b7280;
+
+}
+
+.qty-controls{
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    gap:8px;
+
+}
+
+.qty-btn{
+
+    width:32px;
+
+    height:32px;
+
+    display:inline-flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    border:1px solid #dcdcdc;
+
+    background:#f5f5f5;
+
+    border-radius:8px;
+
+    font-size:18px;
+
+    line-height:1;
+
+    cursor:pointer;
+}
+
+.qty-btn:active{
+
+    background:#e9e9e9;
+}
+
+.qty-value{
+
+    min-width:22px;
+
+    text-align:center;
+
+    font-weight:600;
+}
+
+.remove-btn{
+
+    width:36px;
+
+    height:36px;
+
+    display:inline-flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    border:none;
+
+    background:transparent;
+
+    color:#dc3545;
+
+    border-radius:8px;
+
+    cursor:pointer;
+}
+
+.remove-btn:hover,
+.remove-btn:active{
+
+    background:#fdecea;
 }
 
 /* =====================================
@@ -599,5 +710,198 @@
     .payment-panel {
         min-height: auto;
         height: auto;
+    }
+
+    /*
+     * The payment panel no longer scrolls internally on mobile (the
+     * whole page scrolls instead), so let it size to its content.
+     */
+    .payment-form {
+        overflow-y: visible;
+        /* Reserve room so the fixed Complete Sale bar below never
+           covers the last summary row. */
+        padding-bottom: 84px;
+    }
+
+    /*
+     * Most important mobile fix: Complete Sale becomes a full-width
+     * bar pinned to the bottom of the viewport, so the cashier never
+     * has to scroll past the product list/payment form to reach it.
+     * Safe at this breakpoint because .main-content is full width
+     * with no persistent sidebar offset below 992px.
+     */
+    .complete-sale {
+        position: fixed;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        width: 100%;
+        height: 56px;
+        min-height: 56px;
+        margin: 0;
+        border-radius: 0;
+        z-index: 1010;
+        box-shadow: 0 -4px 14px rgba(0,0,0,.12);
+    }
+
+    /* Larger tap targets for repeated cart interactions. */
+    .qty-btn,
+    .remove-btn {
+        width: 44px;
+        height: 44px;
+        font-size: 20px;
+    }
+}
+
+/* =====================================================
+   PHONE POLISH (<=576px)
+   Search/filter bar stacks and the product picker table
+   becomes a list of compact, tappable cards instead of a
+   horizontally-scrolling table — tapping "Add" while
+   scrolling sideways is a bad checkout workflow.
+   ===================================================== */
+@media (max-width: 576px) {
+
+    .products-header {
+        grid-template-columns: 1fr;
+        gap: 10px;
+    }
+
+    .products-table {
+        display: block;
+        width: 100%;
+        min-width: 0;
+    }
+
+    .products-table thead {
+        display: none;
+    }
+
+    .products-table tbody {
+        display: block;
+        width: 100%;
+    }
+
+    .products-table tr {
+        display: block;
+        width: 100%;
+    }
+
+    .products-table tr.product-row {
+        display: flex;
+        flex-direction: column;
+        border: 1px solid #e8e8e8;
+        border-radius: 10px;
+        margin-bottom: 10px;
+        padding: 12px;
+        box-shadow: 0 2px 6px rgba(0,0,0,.05);
+    }
+
+    .products-table td {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 10px;
+        padding: 3px 0;
+        border: none;
+        white-space: normal;
+        font-size: 13px;
+        color: #555;
+    }
+
+    .products-table td::before {
+        content: attr(data-label);
+        font-weight: 600;
+        color: #8a8f98;
+        font-size: 11px;
+        text-transform: uppercase;
+        letter-spacing: .02em;
+    }
+
+    /* Placeholder rows ("No products found.", loading spinner)
+       don't use the card styling — keep them centered. */
+    .products-table td[colspan] {
+        display: block;
+        text-align: center;
+    }
+
+    .products-table td[colspan]::before {
+        content: none;
+    }
+
+    /* Name — prominent, own line, no inline label. */
+    .products-table td:nth-child(2) {
+        order: 1;
+        display: block;
+        font-size: 16px;
+        font-weight: 700;
+        color: #1f2937;
+        padding: 0 0 4px;
+    }
+
+    .products-table td:nth-child(2)::before {
+        content: none;
+    }
+
+    /* Unit price — prominent, directly under the name. */
+    .products-table td:nth-child(6) {
+        order: 2;
+        font-size: 15px;
+        font-weight: 700;
+        color: #118d6d;
+        padding-bottom: 6px;
+        border-bottom: 1px dashed #eee;
+        margin-bottom: 4px;
+    }
+
+    /* Secondary details, smaller and below the name/price. */
+    .products-table td:nth-child(7) { order: 3; }
+    .products-table td:nth-child(5) { order: 4; }
+    .products-table td:nth-child(1) { order: 5; }
+    .products-table td:nth-child(3) { order: 6; }
+    .products-table td:nth-child(4) { order: 7; }
+
+    /* Add — full-width, own row, touch-friendly. */
+    .products-table td:last-child {
+        order: 8;
+        display: block;
+        padding-top: 8px;
+    }
+
+    .products-table td:last-child::before {
+        content: none;
+    }
+
+    .products-table .add-product {
+        width: 100%;
+        min-height: 44px;
+        font-size: 14px;
+    }
+}
+
+/* =====================================================
+   SMALL PHONE POLISH (<=480px)
+   ===================================================== */
+@media (max-width: 480px) {
+
+    .cart-panel h2,
+    .payment-panel h2 {
+        padding: 12px 14px;
+        font-size: 18px;
+    }
+
+    .cart-table th,
+    .cart-table td {
+        padding: 8px 6px;
+        font-size: 13px;
+    }
+
+    /* Use individual sides (not the shorthand) so this doesn't
+       clobber the padding-bottom reserved for the fixed Complete
+       Sale bar at the 850px breakpoint above. */
+    .payment-form {
+        padding-left: 14px;
+        padding-right: 14px;
+        padding-top: 14px;
     }
 }

@@ -142,50 +142,50 @@ $limit       = (int) $pagination['limit'];
                         ) ?>"
                     >
 
-                        <td>
+                        <td data-label="Code">
                             <?= htmlspecialchars(
                                 $product['barcode']
                             ) ?>
                         </td>
 
-                        <td>
+                        <td data-label="Name">
                             <?= htmlspecialchars(
                                 $product['product_name']
                             ) ?>
                         </td>
 
-                        <td>
+                        <td data-label="Type">
                             <?= htmlspecialchars(
                                 $product['type_name']
                             ) ?>
                         </td>
 
-                        <td>
+                        <td data-label="Category">
                             <?= htmlspecialchars(
                                 $product['category_name']
                             ) ?>
                         </td>
 
-                        <td>
+                        <td data-label="Qty">
                             <?= htmlspecialchars(
                                 $product['quantity']
                             ) ?>
                         </td>
 
-                        <td>
+                        <td data-label="Price">
                             ₱<?= number_format(
                                 (float) $product['selling_price'],
                                 2
                             ) ?>
                         </td>
 
-                        <td>
+                        <td data-label="Status">
                             <?= htmlspecialchars(
                                 $product['product_status']
                             ) ?>
                         </td>
 
-                        <td>
+                        <td data-label="Add">
 
                             <button
                                 type="button"

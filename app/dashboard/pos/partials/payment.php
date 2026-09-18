@@ -15,6 +15,7 @@
     <input
         id="cash-input"
         type="number"
+        inputmode="decimal"
         min="0"
         step="0.01"
         class="form-control"
@@ -44,6 +45,7 @@
                 <input
                     id="discount-input"
                     type="number"
+                    inputmode="decimal"
                     min="0"
                     step="0.01"
                     class="form-control"

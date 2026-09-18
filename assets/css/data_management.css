@@ -223,6 +223,14 @@
 
     padding: 10px 16px;
 
+    min-height: 44px;
+
+    display: inline-flex;
+
+    align-items: center;
+
+    justify-content: center;
+
     font-size: 14px;
 
     font-weight: 600;
@@ -289,6 +297,14 @@
     border-radius: 8px;
 
     padding: 9px 15px;
+
+    min-height: 44px;
+
+    display: inline-flex;
+
+    align-items: center;
+
+    justify-content: center;
 
     font-size: 14px;
 
@@ -357,14 +373,42 @@
 
         width: 100%;
 
-        justify-content: center;
-
     }
 
 
     .export-buttons {
 
         flex-direction: column;
+
+    }
+
+}
+
+@media (max-width: 480px) {
+
+    .data-management-card {
+
+        padding: 16px;
+
+    }
+
+
+    .data-card-content h3 {
+
+        font-size: 18px;
+
+    }
+
+
+    .data-card-icon {
+
+        width: 42px;
+
+        height: 42px;
+
+        min-width: 42px;
+
+        font-size: 19px;
 
     }
 

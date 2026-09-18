@@ -65,6 +65,7 @@ $_GET['mode']
 
             <select
                 id="bestMonth"
+                class="chart-select"
                 onchange="updateBestSeller()">
 
 <?php
@@ -92,6 +93,7 @@ value="<?= $m ?>"
 
             <select
                 id="bestYear"
+                class="chart-select"
                 onchange="updateBestSeller()">
 
 <?php

@@ -129,5 +129,6 @@ if($days <= 7){
 </div>
 
 <style>
-.near-expiry-table-wrap { width: 100%; overflow-x: auto; border: 1px solid #e7ecef; border-radius: 10px; }
+.near-expiry-table-wrap { width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch; border: 1px solid #e7ecef; border-radius: 10px; }
+.near-expiry-table-wrap table { min-width: 480px; }
 </style>

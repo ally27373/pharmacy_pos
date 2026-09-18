@@ -84,7 +84,17 @@ plugins:{
 
 legend:{
 
-position:'bottom'
+position:'bottom',
+
+labels:{
+
+boxWidth:12,
+
+padding:10,
+
+font:{size:11}
+
+}
 
 }
 

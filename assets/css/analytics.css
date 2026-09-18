@@ -1,0 +1,97 @@
+/* =====================================================
+   ANALYTICS DASHBOARD — PAGE HEADER
+   Layout for the title/subtitle/period-filter row
+   rendered by app/dashboard/analytics/partials/filters.php.
+   These classes (.dashboard-header, .dashboard-title,
+   .dashboard-subtitle, .dashboard-actions, .dashboard-filter)
+   are unique to the Analytics Dashboard and had no CSS
+   anywhere in the project before this pass, so the mobile
+   fixes here also establish the (minimal) base layout.
+   Owned by the Analytics & Inventory Dashboards workflow.
+===================================================== */
+
+.dashboard-header{
+    display:flex;
+    align-items:flex-start;
+    justify-content:space-between;
+    flex-wrap:wrap;
+    gap:16px;
+    margin-bottom:6px;
+}
+
+.dashboard-title{
+    margin:0;
+    font-size:26px;
+    font-weight:700;
+    color:#1f2937;
+}
+
+.dashboard-subtitle{
+    margin:6px 0 0;
+    font-size:14px;
+    color:#6b7280;
+}
+
+.dashboard-actions{
+    display:flex;
+    align-items:center;
+    flex-wrap:wrap;
+    gap:10px;
+}
+
+.dashboard-filter{
+    height:44px;
+    min-width:160px;
+    padding:0 16px;
+    border:1px solid #d9e2ec;
+    border-radius:8px;
+    background:#fff;
+    font-size:14px;
+    font-weight:500;
+    color:#374151;
+    cursor:pointer;
+    transition:.25s;
+}
+
+.dashboard-filter:hover{
+    border-color:#118d6d;
+}
+
+.dashboard-filter:focus{
+    outline:none;
+    border-color:#118d6d;
+    box-shadow:0 0 0 3px rgba(17,141,109,.15);
+}
+
+/* ==========================================
+   RESPONSIVE — 1200 / 992 / 768 / 480
+========================================== */
+@media (max-width: 768px){
+
+    .dashboard-header{
+        flex-direction:column;
+        align-items:stretch;
+    }
+
+    .dashboard-actions{
+        width:100%;
+    }
+
+}
+
+@media (max-width: 480px){
+
+    .dashboard-title{
+        font-size:21px;
+    }
+
+    .dashboard-subtitle{
+        font-size:13px;
+    }
+
+    .dashboard-filter{
+        width:100%;
+        min-width:0;
+    }
+
+}

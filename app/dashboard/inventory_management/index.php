@@ -36,7 +36,7 @@ require_once '../../../includes/header.php';
 
 ?>
 
-<link rel="stylesheet" href="/assets/css/dashboard.css">
+<link rel="stylesheet" href="/assets/css/dashboard-shell.css">
 <link rel="stylesheet" href="/assets/css/sidebar.css">
 <link rel="stylesheet" href="/assets/css/navbar.css">
 <link rel="stylesheet" href="/assets/css/inventory.css">
@@ -169,7 +169,7 @@ require_once '../../../includes/header.php';
 
                             <td class="col-index"><?= (($currentPage - 1) * $limit) + $index + 1 ?></td>
 
-                            <td class="product-cell">
+                            <td class="product-cell" data-label="Product">
                                 <div class="product-name">
                                     <?= htmlspecialchars($product['product_name'] ?? 'Unnamed Product') ?>
                                 </div>
@@ -180,34 +180,34 @@ require_once '../../../includes/header.php';
                                 <?php endif; ?>
                             </td>
 
-                            <td class="barcode-cell">
+                            <td class="barcode-cell" data-label="Barcode">
                                 <?= htmlspecialchars($product['barcode'] ?? 'N/A') ?>
                             </td>
 
-                            <td><?= htmlspecialchars($product['type_name'] ?? 'N/A') ?></td>
-                            <td><?= htmlspecialchars($product['category_name'] ?? 'N/A') ?></td>
+                            <td data-label="Type"><?= htmlspecialchars($product['type_name'] ?? 'N/A') ?></td>
+                            <td data-label="Category"><?= htmlspecialchars($product['category_name'] ?? 'N/A') ?></td>
 
-                            <td class="text-end">
+                            <td class="text-end" data-label="Qty">
                                 <span class="quantity-value <?= $quantity <= 0 ? 'quantity-zero' : '' ?>">
                                     <?= $quantity ?> pcs
                                 </span>
                             </td>
 
-                            <td class="money-cell text-end">
+                            <td class="money-cell text-end" data-label="Unit Cost">
                                 ₱<?= number_format((float) ($product['unit_cost'] ?? 0), 2) ?>
                             </td>
 
-                            <td class="money-cell text-end selling-price">
+                            <td class="money-cell text-end selling-price" data-label="Selling Price">
                                 ₱<?= number_format((float) ($product['selling_price'] ?? 0), 2) ?>
                             </td>
 
-                            <td>
+                            <td data-label="Status">
                                 <span class="inventory-status <?= $statusClass ?>">
                                     <?= htmlspecialchars($status) ?>
                                 </span>
                             </td>
 
-                            <td class="action-cell">
+                            <td class="action-cell" data-label="Actions">
                                 <div class="inventory-actions">
                                     <button
                                         type="button"
@@ -297,7 +297,7 @@ class="modal fade"
 id="productModal"
 tabindex="-1">
 
-<div class="modal-dialog modal-lg">
+<div class="modal-dialog modal-lg modal-fullscreen-sm-down">
 
 <div class="modal-content">
 
@@ -334,7 +334,7 @@ class="modal fade"
 id="editProductModal"
 tabindex="-1">
 
-<div class="modal-dialog modal-xl">
+<div class="modal-dialog modal-xl modal-fullscreen-sm-down">
 
 <div class="modal-content">
 
@@ -575,7 +575,7 @@ Update Product
 <!-- Add Product Modal -->
 <div class="modal fade" id="addProductModal" tabindex="-1">
 
-    <div class="modal-dialog modal-xl">
+    <div class="modal-dialog modal-xl modal-fullscreen-sm-down">
 
         <div class="modal-content">
 
@@ -863,7 +863,7 @@ Update Product
 
 <div class="modal fade" id="deleteProductModal" tabindex="-1">
 
-    <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-dialog modal-dialog-centered modal-fullscreen-sm-down">
 
         <div class="modal-content">
 

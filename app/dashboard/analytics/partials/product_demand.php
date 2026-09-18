@@ -79,8 +79,8 @@ $trainingEnd = $metadata['training_end'] ?? null;
 </div>
 
 <style>
-.product-demand-table-wrap { overflow-x: auto; }
-.product-demand-table { width: 100%; border-collapse: collapse; font-size: 0.86rem; }
+.product-demand-table-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+.product-demand-table { width: 100%; min-width: 560px; border-collapse: collapse; font-size: 0.86rem; }
 .product-demand-table th, .product-demand-table td { padding: 10px 8px; border-bottom: 1px solid #e5e7eb; text-align: left; vertical-align: middle; }
 .product-demand-table th { font-weight: 700; white-space: nowrap; }
 .product-demand-name { min-width: 180px; font-weight: 600; }

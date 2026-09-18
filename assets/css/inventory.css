@@ -356,6 +356,26 @@
         align-items: flex-start;
         gap: 10px;
     }
+
+    .inventory-reset-btn {
+        min-height: 44px;
+        padding: 8px 10px;
+        display: inline-flex;
+        align-items: center;
+    }
+}
+
+/* Bigger tap targets for the row-action icon buttons once the layout
+   gets tight (table still scrolls horizontally in this range). */
+@media (max-width: 768px) {
+    .inventory-actions {
+        gap: 8px;
+    }
+
+    .inventory-actions .btn {
+        width: 40px;
+        height: 40px;
+    }
 }
 
 /* =========================================
@@ -410,5 +430,160 @@
 
     .inventory-pagination .pagination-controls {
         justify-content: center;
+    }
+
+    .inventory-pagination .btn-sm {
+        min-height: 44px;
+        padding: 0 16px;
+        display: inline-flex;
+        align-items: center;
+    }
+}
+
+/* =========================================
+   PHONE (<=480px) — CARD-PER-ROW TABLE
+   The product table has 10 columns including a row of
+   action icon buttons, which is too dense for horizontal
+   scroll to remain usable on a phone. Below this breakpoint
+   each <tr> becomes a stacked "card" and each <td> shows its
+   column name (via data-label, set in index.php) as a caption.
+========================================= */
+@media (max-width: 480px) {
+    .dashboard-content {
+        padding: 16px 10px;
+    }
+
+    .inventory-card {
+        padding: 12px;
+        border-radius: 12px;
+    }
+
+    .page-header h2 {
+        font-size: 24px;
+    }
+
+    .inventory-search,
+    .inventory-filter {
+        /* 16px prevents iOS Safari from auto-zooming the page on focus */
+        font-size: 16px;
+    }
+
+    .inventory-table-wrap {
+        overflow-x: visible;
+        border: none;
+        border-radius: 0;
+    }
+
+    .inventory-table {
+        display: block;
+        width: 100%;
+        min-width: 0;
+    }
+
+    .inventory-table thead {
+        display: none;
+    }
+
+    .inventory-table tbody {
+        display: block;
+        width: 100%;
+    }
+
+    .inventory-table tbody tr {
+        display: block;
+        background: #fff;
+        border: 1px solid #e7ecef;
+        border-radius: 12px;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, .05);
+        margin-bottom: 12px;
+        overflow: hidden;
+    }
+
+    .inventory-table tbody tr:last-child {
+        margin-bottom: 0;
+    }
+
+    .inventory-table tbody td {
+        display: block;
+        width: 100%;
+        padding: 10px 14px;
+        border-bottom: 1px solid #f1f3f5;
+        background: transparent;
+    }
+
+    /* Bootstrap's .text-end utility is !important; win it back so the
+       label/value pair reads left-to-right like every other card row. */
+    .inventory-table tbody td:not(.inventory-empty) {
+        text-align: left !important;
+    }
+
+    .inventory-table tbody td:last-child {
+        border-bottom: 0;
+    }
+
+    .inventory-table tbody td.col-index {
+        display: none;
+    }
+
+    .inventory-table tbody td[data-label]::before {
+        content: attr(data-label);
+        display: block;
+        margin-bottom: 4px;
+        color: #9aa6b2;
+        font-size: 11px;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: .04em;
+    }
+
+    .inventory-actions {
+        justify-content: flex-start;
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+
+    .inventory-actions .btn {
+        width: 44px;
+        height: 44px;
+    }
+}
+
+/* =========================================
+   MODALS — full-screen sheets on phones
+   (Add/Edit Product, Product & Batch view, Delete confirm)
+========================================= */
+@media (max-width: 576px) {
+    #productModal .modal-body,
+    #editProductModal .modal-body,
+    #addProductModal .modal-body,
+    #stockModal .modal-body {
+        max-height: calc(100vh - 130px);
+        overflow-y: auto;
+    }
+
+    #productModal .form-control,
+    #productModal .form-select,
+    #editProductModal .form-control,
+    #editProductModal .form-select,
+    #addProductModal .form-control,
+    #addProductModal .form-select,
+    #stockModal .form-control,
+    #stockModal .form-select {
+        min-height: 44px;
+        font-size: 16px;
+    }
+
+    #productModal .modal-footer .btn,
+    #editProductModal .modal-footer .btn,
+    #addProductModal .modal-footer .btn,
+    #deleteProductModal .modal-footer .btn,
+    #stockModal .modal-footer .btn,
+    #productModal .btn-close,
+    #editProductModal .btn-close,
+    #addProductModal .btn-close,
+    #deleteProductModal .btn-close,
+    #stockModal .btn-close {
+        min-height: 44px;
+        min-width: 44px;
     }
 }

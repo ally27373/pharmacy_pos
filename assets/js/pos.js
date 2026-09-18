@@ -544,14 +544,14 @@ function renderProductRows(products)
 
     productsTableBody.innerHTML = products.map(product => `
         <tr class="product-row">
-            <td>${escapeHtml(product.barcode)}</td>
-            <td>${escapeHtml(product.product_name)}</td>
-            <td>${escapeHtml(product.type_name)}</td>
-            <td>${escapeHtml(product.category_name)}</td>
-            <td>${escapeHtml(product.quantity)}</td>
-            <td>₱${Number(product.selling_price || 0).toFixed(2)}</td>
-            <td>${escapeHtml(product.product_status)}</td>
-            <td>
+            <td data-label="Code">${escapeHtml(product.barcode)}</td>
+            <td data-label="Name">${escapeHtml(product.product_name)}</td>
+            <td data-label="Type">${escapeHtml(product.type_name)}</td>
+            <td data-label="Category">${escapeHtml(product.category_name)}</td>
+            <td data-label="Qty">${escapeHtml(product.quantity)}</td>
+            <td data-label="Price">₱${Number(product.selling_price || 0).toFixed(2)}</td>
+            <td data-label="Status">${escapeHtml(product.product_status)}</td>
+            <td data-label="Add">
                 <button
                     type="button"
                     class="btn btn-success btn-sm add-product"

@@ -1,7 +1,8 @@
 <?php
 // ======================================================
 // HEADER
-// Shared by all authentication pages
+// Shared by every page (auth + dashboard) — includes the
+// mobile viewport meta tag every responsive rule depends on.
 // ======================================================
 ?>
 

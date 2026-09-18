@@ -1,0 +1,105 @@
+/* =======================================================
+   GLOBAL STYLESHEET
+   Pharmacy POS System
+   Loaded on every page via includes/header.php
+
+   This file documents conventions shared by ALL five mobile-
+   responsiveness workstreams (app shell, dashboard widgets,
+   POS/billing, inventory, reports/analytics) so pages built
+   in parallel stay consistent, plus a small set of genuinely
+   global, cross-cutting utility classes.
+
+   Page/module-specific responsive rules belong in that
+   module's own stylesheet, not here.
+======================================================= */
+
+
+/* ===========================================================
+   BREAKPOINT CONVENTION
+
+   Every stylesheet in this project should use max-width media
+   queries anchored to these four widths. CSS custom properties
+   cannot be referenced inside @media conditions, so the values
+   below are documentation of the agreed convention — copy the
+   raw px value into your own @media rule:
+
+     max-width: 1200px   -> small desktop / laptop
+     max-width: 992px    -> tablet landscape (sidebar becomes
+                             an off-canvas drawer below this)
+     max-width: 768px    -> tablet portrait
+     max-width: 480px     -> phone
+
+   (Existing legacy media queries at other widths, e.g. 850px
+   or 600px, may still exist in older stylesheets — prefer one
+   of the four widths above for any NEW rule.)
+=========================================================== */
+
+:root{
+
+    --bp-desktop:1200px;
+    --bp-tablet-landscape:992px;
+    --bp-tablet-portrait:768px;
+    --bp-phone:480px;
+
+    /* Minimum recommended touch target for any interactive
+       element (buttons, links, form controls) on mobile. */
+    --touch-target-min:44px;
+
+    /* =====================================================
+       APP SHELL Z-INDEX SCALE
+
+       Keep new overlays (modals, toasts, popovers, etc.) at or
+       above --z-modal so they always layer above the sidebar
+       drawer/backdrop and the notification panel defined by
+       the app shell (includes/sidebar.php, includes/navbar.php).
+       ===================================================== */
+    --z-navbar:1100;
+    --z-notification-panel:1120;
+    --z-sidebar-backdrop:1150;
+    --z-sidebar-drawer:1200;
+    --z-modal:1300;
+    --z-toast:1400;
+
+}
+
+
+/* ===========================================================
+   CROSS-CUTTING UTILITIES
+=========================================================== */
+
+/* Guarantees a minimum 44x44 touch target for any custom
+   interactive element. Add alongside a component's own class,
+   e.g. <button class="icon-btn u-touch-target">. */
+.u-touch-target{
+    min-width:var(--touch-target-min);
+    min-height:var(--touch-target-min);
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+}
+
+/* Generic horizontal-scroll containment for wide, non-table
+   content (carousels, chip rows, toolbars, etc). For tables,
+   use .table-responsive-wrap from dashboard-shell.css instead
+   so the scroll-container contract stays consistent. */
+.u-scroll-x{
+    overflow-x:auto;
+    -webkit-overflow-scrolling:touch;
+}
+
+/* Visibility helpers keyed to the shared breakpoints above. */
+@media (max-width:768px){
+    .u-hide-tablet-down{ display:none !important; }
+}
+
+@media (min-width:769px){
+    .u-show-tablet-down-only{ display:none !important; }
+}
+
+@media (max-width:480px){
+    .u-hide-phone{ display:none !important; }
+}
+
+@media (min-width:481px){
+    .u-show-phone-only{ display:none !important; }
+}

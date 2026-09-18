@@ -1,6 +1,6 @@
 <h2>POS Terminal</h2>
 
-<div class="cart-table">
+<div class="cart-table-wrapper">
     <table class="cart-table">
 
 <thead>

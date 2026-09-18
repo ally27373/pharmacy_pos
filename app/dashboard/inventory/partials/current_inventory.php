@@ -166,8 +166,8 @@ $inventoryPageSize = 5;
     font-weight: 700;
     white-space: nowrap;
 }
-.current-inventory-table-wrap { width: 100%; overflow-x: auto; border: 1px solid #e7ecef; border-radius: 10px; }
-.current-inventory-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+.current-inventory-table-wrap { width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch; border: 1px solid #e7ecef; border-radius: 10px; }
+.current-inventory-table { width: 100%; min-width: 600px; border-collapse: collapse; font-size: 13px; }
 .current-inventory-table th,
 .current-inventory-table td { padding: 11px 12px; border-bottom: 1px solid #edf1f3; text-align: left; vertical-align: middle; }
 .current-inventory-table th { background: #118d6d; color: #fff; font-weight: 700; white-space: nowrap; }
@@ -181,8 +181,8 @@ $inventoryPageSize = 5;
 .current-inventory-batch-panel { padding: 15px 18px 17px 82px; border-bottom: 1px solid #dfe8e4; }
 .batch-panel-title { display: flex; justify-content: space-between; gap: 12px; margin-bottom: 9px; color: #374151; font-size: 12px; }
 .batch-panel-title span { color: #7b8794; }
-.batch-table-wrap { overflow-x: auto; }
-.batch-detail-table { width: 100%; border-collapse: collapse; font-size: 12px; background: #fff; border: 1px solid #e3e9e6; border-radius: 8px; overflow: hidden; }
+.batch-table-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+.batch-detail-table { width: 100%; min-width: 520px; border-collapse: collapse; font-size: 12px; background: #fff; border: 1px solid #e3e9e6; border-radius: 8px; overflow: hidden; }
 .batch-detail-table th, .batch-detail-table td { padding: 9px 10px; border-bottom: 1px solid #edf1f3; text-align: left; }
 .batch-detail-table th { background: #f0f6f3; color: #4b5563; font-weight: 700; }
 .batch-detail-table tr:last-child td { border-bottom: 0; }
@@ -209,6 +209,7 @@ $inventoryPageSize = 5;
     color: #118d6d;
     border-radius: 7px;
     padding: 7px 10px;
+    min-height: 44px;
     font-size: 12px;
     font-weight: 600;
     cursor: pointer;

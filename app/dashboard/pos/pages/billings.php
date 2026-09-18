@@ -29,7 +29,7 @@ $pagination = $result['pagination'] ?? [
 require_once '../../../includes/header.php';
 ?>
 
-<link rel="stylesheet" href="/assets/css/dashboard.css">
+<link rel="stylesheet" href="/assets/css/dashboard-shell.css">
 <link rel="stylesheet" href="/assets/css/sidebar.css">
 <link rel="stylesheet" href="/assets/css/navbar.css">
 <link rel="stylesheet" href="/assets/css/sales.css">
@@ -61,7 +61,7 @@ require_once '../../../includes/header.php';
             <?php endif; ?>
         </form>
 
-        <div class="table-responsive">
+        <div class="table-responsive table-responsive-wrap">
             <table class="sales-table">
                 <thead>
                     <tr>
