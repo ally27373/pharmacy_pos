@@ -2,7 +2,11 @@
     position:sticky;
     top:0;
     background:#fff;
-    z-index:var(--z-navbar,1100);
+    /* Must stay above --z-sidebar-drawer (1200) so the hamburger
+       toggle and notification bell remain clickable while the
+       mobile off-canvas drawer is open — see the z-index scale
+       comment in style.css for why. */
+    z-index:var(--z-navbar,1210);
     padding:18px 30px;
     display:flex;
     justify-content:space-between;

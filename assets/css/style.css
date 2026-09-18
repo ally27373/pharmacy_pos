@@ -48,15 +48,29 @@
     /* =====================================================
        APP SHELL Z-INDEX SCALE
 
+       The top navbar (--z-navbar) is deliberately the HIGHEST
+       layer below modals/toasts: it's a persistent app bar that
+       must stay clickable (hamburger toggle, notification bell)
+       even while the off-canvas drawer is open. .sidebar and
+       .navbar-custom both span the full page width/height on
+       mobile and .dashboard-wrapper/.main-content create no
+       stacking context between them, so whichever has the
+       higher number physically paints over — and captures taps
+       from — the other wherever their boxes overlap (the
+       top-left corner, i.e. the toggle button itself). Keeping
+       the drawer/backdrop below the navbar means the drawer
+       visually slides out from underneath the app bar instead
+       of burying the only control that closes it.
+
        Keep new overlays (modals, toasts, popovers, etc.) at or
-       above --z-modal so they always layer above the sidebar
-       drawer/backdrop and the notification panel defined by
-       the app shell (includes/sidebar.php, includes/navbar.php).
+       above --z-modal so they always layer above everything
+       defined by the app shell (includes/sidebar.php,
+       includes/navbar.php).
        ===================================================== */
-    --z-navbar:1100;
-    --z-notification-panel:1120;
     --z-sidebar-backdrop:1150;
     --z-sidebar-drawer:1200;
+    --z-navbar:1210;
+    --z-notification-panel:1120;
     --z-modal:1300;
     --z-toast:1400;
 
