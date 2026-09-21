@@ -8,9 +8,9 @@ class DataManagementController
 {
     private DataManagement $dataManagement;
 
-    public function __construct()
+    public function __construct(?DataManagement $dataManagement = null)
     {
-        $this->dataManagement = new DataManagement();
+        $this->dataManagement = $dataManagement ?? new DataManagement();
     }
 
     public function exportInventory(): array
