@@ -126,10 +126,11 @@ class AuthMiddleware
 | Data Management Access
 |--------------------------------------------------------------------------
 |
-| Administrators and Cashiers may access Data Management.
+| Administrator-only access.
 |
-| Cashiers are intentionally limited to the actions exposed by the
-| Data Management interface, currently dataset viewing/exporting.
+| The Data Management module (dataset viewing/exporting) is surfaced only
+| under the Administrator-only navigation section (see includes/sidebar.php)
+| and is not exposed to Cashier accounts anywhere in the app.
 |
 |--------------------------------------------------------------------------
 */

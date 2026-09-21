@@ -106,7 +106,7 @@ public function login(array $data): array
             return [
                 'success' => false,
                 'message' => 'Your account is currently ' .
-                    strtolower((string)$user['account_status']) .
+                    strtolower((string)($user['account_status'] ?? 'Inactive')) .
                     '. Please contact an Administrator.'
             ];
         }

@@ -134,3 +134,81 @@ Suite: `& "C:\xampp\php\php.exe" vendor\bin\phpunit --testsuite AuthUsers`
   and `test_login_fails_with_same_generic_message_when_password_is_wrong`).
   This matches the code's own apparent intent (identical message string in
   both branches) — no defect found here.
+
+---
+
+## Dev team resolution
+
+Branch: `dev/auth-users` (based on `test-team/auth-users`).
+
+### DEFECT-1: valid — fixed
+
+- **Verdict**: Valid. Reproduced exactly as described: baseline run showed
+  `AuthControllerTest::test_login_treats_missing_account_status_as_inactive`
+  failing with the broken message `'Your account is currently . Please
+  contact an Administrator.'` plus a PHP `Undefined array key
+  "account_status"` warning at `app/Controllers/AuthController.php:109`.
+- **Fix**: `app/Controllers/AuthController.php:109` — added the same
+  `?? 'Inactive'` fallback already used in the guard condition two lines
+  above (line 105) to the message-building code:
+  `strtolower((string)($user['account_status'] ?? 'Inactive'))`. No other
+  line in `login()` was touched.
+- **Result**: `test_login_treats_missing_account_status_as_inactive` now
+  passes with no PHP warning triggered.
+
+### DEFECT-2: rejected as a code defect — downgraded to documentation bug
+
+- **Verdict**: The access-control logic (`dataManagement()` denying
+  everyone except role_id 1) is correct and was **not** changed. The doc
+  comment above it was the stale/wrong side, not the code. Evidence
+  gathered before making this call:
+  - `includes/sidebar.php` renders the "Data Management" nav link
+    (`href="/app/dashboard/data_management/index.php"`, lines 210-223)
+    inside a block explicitly commented `ADMIN-ONLY MODULES` (line 150),
+    gated by `<?php if ($isAdmin): ?>` (line 148) — `$isAdmin = $roleId ===
+    1`. There is no Cashier-reachable route to this page anywhere in the
+    app.
+  - The same file declares `$isCashier = $roleId === 2;` (line 8) but
+    **greps show it is never referenced anywhere else in the entire
+    codebase** — i.e. Cashier-specific UI for this module was declared as
+    a variable but never actually wired up to anything.
+  - `git log --follow` on both `app/Middleware/AuthMiddleware.php` and
+    `includes/sidebar.php` shows the doc comment ("Administrators and
+    Cashiers may access Data Management") and the admin-only sidebar
+    gating (plus the unused `$isCashier`) were **both present together in
+    the initial commit** (`79ec36b`), and the admin-only gating survived
+    unchanged through every later commit that touched `sidebar.php` —
+    including two commits specifically reworking the sidebar for
+    mobile/off-canvas UI (`7234011`, `511c74d`) that would have been a
+    natural place to also wire in Cashier access if that had been the
+    real intent. Nobody ever finished (or reverted) the Cashier-access
+    plan; the comment is a vestige of it.
+  - The only three call sites of `dataManagement()`
+    (`app/dashboard/data_management/index.php`,
+    `app/dashboard/data_management/ajax/export_sales.php`,
+    `app/dashboard/data_management/ajax/export_inventory.php`) are all
+    only reachable through that admin-gated sidebar link — none of them,
+    nor any JS/other UI, offer a Cashier-facing path into this module.
+  - This matches the "the comment is the one that's wrong" exception
+    called out in the dev-team brief: every call site / related UI
+    clearly and consistently treats Data Management as admin-only.
+- **Fix applied**: `app/Middleware/AuthMiddleware.php` — updated the doc
+  comment immediately above `dataManagement()` (previously read
+  "Administrators and Cashiers may access Data Management... Cashiers are
+  intentionally limited to...") to instead read "Administrator-only
+  access" and note that the module is only ever surfaced under the
+  admin-only nav section and is not exposed to Cashiers anywhere in the
+  app. The `if ((int) ($_SESSION['role_id'] ?? 0) !== 1)` check itself
+  was **not** changed, and `admin()` was **not** touched.
+- **Test disposition**: `tests/Unit/AuthUsers/AuthMiddlewareTest.php::test_dataManagement_allows_cashier_per_documented_intent`
+  was changed to `markTestSkipped()` with a comment explaining the
+  rejection and pointing back to this section, rather than deleted —
+  preserving the original pinning test for the record while accurately
+  reflecting that the underlying "defect" was a stale comment, not a code
+  bug.
+
+### Suite result after fixes
+
+`& "C:\xampp\php\php.exe" vendor\bin\phpunit --testsuite AuthUsers`:
+**82 tests, 81 passed, 1 skipped (DEFECT-2's rejected pinning test), 0
+failed, 0 warnings.** No other previously-passing test was affected.
