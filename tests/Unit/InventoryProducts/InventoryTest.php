@@ -1068,6 +1068,89 @@ final class InventoryTest extends TestCase
         self::assertSame('2020-01-15', $capturedStatusParams[':expiration_date']);
     }
 
+    public function testMixedExpiredAndValidBatchesAreNotMisclassifiedAsExpired(): void
+    {
+        // Direct coverage for the riskiest edge case in the DEFECT-1 fix: a
+        // product with BOTH an expired batch (qty > 0, past expiration) AND
+        // a still-valid batch (qty > 0, usable) must be reported by its
+        // usable stock only - never 'Expired' - even though
+        // expired_nearest_expiration is non-null. The fix guards this by
+        // only consulting expired_nearest_expiration when total_quantity
+        // (usable stock) is <= 0; here total_quantity is 3 (from the valid
+        // batch alone - the aggregate SQL's existing filter already
+        // excludes the expired batch's quantity from that sum), so the
+        // code must go straight to the reorder-level check and never look
+        // at expired_nearest_expiration at all.
+        $productSelect = $this->createStatementMock();
+        $productSelect->method('execute')->willReturn(true);
+        $productSelect->method('fetch')->willReturn(['product_id' => 1, 'unit_cost' => 2.0]);
+
+        $batchLock = $this->createStatementMock();
+        $batchLock->method('execute')->willReturn(true);
+        $batchLock->method('fetch')->willReturn([
+            'batch_id' => 60,
+            'quantity' => 2,
+            'batch_number' => 'B-VALID',
+            'unit_cost' => 2.0,
+        ]);
+
+        $batchUpdate = $this->createStatementMock();
+        $batchUpdate->method('execute')->willReturn(true);
+
+        $aggregate = $this->createStatementMock();
+        $aggregate->method('execute')->willReturn(true);
+        // Represents: Batch A (expired, qty 5, excluded from total_quantity
+        // and nearest_expiration by the pre-existing filter) sitting
+        // alongside Batch B (valid, qty 3 after this Stock In, included).
+        $aggregate->method('fetch')->willReturn([
+            'total_quantity' => 3,
+            'nearest_expiration' => '2027-06-01',
+            'nearest_batch' => 'B-VALID',
+            'latest_unit_cost' => 2.0,
+            'expired_nearest_expiration' => '2020-01-15',
+        ]);
+
+        $reorder = $this->createStatementMock();
+        $reorder->method('execute')->willReturn(true);
+        $reorder->method('fetchColumn')->willReturn(10); // 3 <= 10 -> Low Stock
+
+        $historyInsert = $this->createStatementMock();
+        $historyInsert->method('execute')->willReturn(true);
+
+        $capturedStatusParams = null;
+        $finalUpdate = $this->createStatementMock();
+        $finalUpdate->method('execute')->willReturnCallback(function (array $params) use (&$capturedStatusParams) {
+            $capturedStatusParams = $params;
+            return true;
+        });
+
+        $pdo = $this->pdoDispatching([
+            'SELECT product_id, unit_cost FROM products' => $productSelect,
+            'SELECT *' => $batchLock,
+            "batch_status = 'Active' WHERE batch_id" => $batchUpdate,
+            'VALUES (:product_id, :action_type, :quantity, :remarks)' => $historyInsert,
+            'AS total_quantity' => $aggregate,
+            'SELECT reorder_level' => $reorder,
+            'product_status = :product_status' => $finalUpdate,
+        ]);
+
+        $inventory = new Inventory($pdo);
+        $result = $inventory->adjustStock([
+            'product_id' => 1,
+            'action' => 'IN',
+            'quantity' => 1,
+            'batch_id' => 60,
+        ]);
+
+        self::assertTrue($result['success']);
+        self::assertNotNull($capturedStatusParams);
+        self::assertNotSame('Expired', $capturedStatusParams[':product_status']);
+        self::assertSame('Low Stock', $capturedStatusParams[':product_status']);
+        // The valid batch's own nearest expiration must be surfaced, not
+        // the unrelated expired batch's date, while usable stock remains.
+        self::assertSame('2027-06-01', $capturedStatusParams[':expiration_date']);
+    }
+
     // ------------------------------------------------------------------
     // updateProduct()
     // ------------------------------------------------------------------
