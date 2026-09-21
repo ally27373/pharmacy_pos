@@ -8,9 +8,9 @@ class ReportsController
 {
     private Reports $reports;
 
-    public function __construct()
+    public function __construct(?Reports $reports = null)
     {
-        $this->reports = new Reports();
+        $this->reports = $reports ?? new Reports();
     }
 
     public function getReportData(array $filters = []): array
