@@ -6,12 +6,18 @@ require_once __DIR__ . '/../Services/ForecastService.php';
 class Dashboard
 {
     private PDO $conn;
+    private ?\App\Services\ForecastService $forecastService;
+    private ?string $productDemandForecastFile;
 
-public function __construct()
+public function __construct(
+    ?PDO $conn = null,
+    ?\App\Services\ForecastService $forecastService = null,
+    ?string $productDemandForecastFile = null
+)
 {
-    $database = new Database();
-
-    $this->conn = $database->connect();
+    $this->conn = $conn ?? (new Database())->connect();
+    $this->forecastService = $forecastService;
+    $this->productDemandForecastFile = $productDemandForecastFile;
 }
 
 private function getDateCondition($period, $column = 'created_at')
@@ -1011,7 +1017,7 @@ public function exportSalesHistory()
 
 public function getForecastData()
 {
-    $forecastService = new \App\Services\ForecastService();
+    $forecastService = $this->forecastService ?? new \App\Services\ForecastService();
 
     $result = $forecastService->getForecast();
 
@@ -1024,13 +1030,15 @@ public function getForecastData()
 
 public function getProductDemandForecast(): array
 {
-    $file = __DIR__
+    $file = $this->productDemandForecastFile ?? (
+        __DIR__
         . DIRECTORY_SEPARATOR . '..'
         . DIRECTORY_SEPARATOR . '..'
         . DIRECTORY_SEPARATOR . 'sarima_forecasting'
         . DIRECTORY_SEPARATOR . 'outputs'
         . DIRECTORY_SEPARATOR . 'deployment'
-        . DIRECTORY_SEPARATOR . 'product_demand_forecast_30_day.json';
+        . DIRECTORY_SEPARATOR . 'product_demand_forecast_30_day.json'
+    );
 
     $file = realpath($file);
 

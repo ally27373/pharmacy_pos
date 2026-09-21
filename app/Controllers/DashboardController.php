@@ -5,10 +5,12 @@ require_once __DIR__ . '/../Models/Dashboard.php';
 class DashboardController
 {
     private Dashboard $dashboard;
+    private string $projectRoot;
 
-    public function __construct()
+    public function __construct(?Dashboard $dashboard = null, ?string $projectRoot = null)
     {
-        $this->dashboard = new Dashboard();
+        $this->dashboard = $dashboard ?? new Dashboard();
+        $this->projectRoot = $projectRoot ?? dirname(__DIR__, 2);
     }
 
     
@@ -195,7 +197,7 @@ public function getDemandAnalytics($year = null, $month = null)
 
 private function getAnnualForecastArtifact(): array
 {
-    $projectRoot = dirname(__DIR__, 2);
+    $projectRoot = $this->projectRoot;
 
     $timezone = new DateTimeZone('Asia/Manila');
     $currentYear = (new DateTimeImmutable('now', $timezone))->format('Y');

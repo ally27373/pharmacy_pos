@@ -11,10 +11,10 @@ class ForecastRefreshService
     private string $projectRoot;
     private string $sarimaRoot;
 
-    public function __construct(PDO $conn)
+    public function __construct(PDO $conn, ?string $projectRoot = null)
     {
         $this->conn = $conn;
-        $this->projectRoot = dirname(__DIR__, 2);
+        $this->projectRoot = $projectRoot ?? dirname(__DIR__, 2);
         $this->sarimaRoot = $this->projectRoot . DIRECTORY_SEPARATOR . 'sarima_forecasting';
     }
 
