@@ -9,9 +9,9 @@ class AuthController
 {
     private User $user;
 
-    public function __construct()
+    public function __construct(?User $user = null)
     {
-        $this->user = new User();
+        $this->user = $user ?? new User();
     }
 
     public function register(array $data): array

@@ -6,7 +6,7 @@ require_once __DIR__ . '/../Models/User.php';
 
 class AuthMiddleware
 {
-    public static function check(): void
+    public static function check(?User $userModel = null): void
     {
         if (session_status() === PHP_SESSION_NONE) {
             session_start();
@@ -31,7 +31,7 @@ class AuthMiddleware
         |--------------------------------------------------------------------------
         */
 
-        $userModel = new User();
+        $userModel = $userModel ?? new User();
 
         $user = $userModel->getById(
             (int) $_SESSION['user_id']
@@ -85,9 +85,9 @@ class AuthMiddleware
     |--------------------------------------------------------------------------
     */
 
-    public static function admin(): void
+    public static function admin(?User $userModel = null): void
     {
-        self::check();
+        self::check($userModel);
 
         if ((int) ($_SESSION['role_id'] ?? 0) !== 1) {
 
@@ -134,9 +134,9 @@ class AuthMiddleware
 |--------------------------------------------------------------------------
 */
 
-public static function dataManagement(): void
+public static function dataManagement(?User $userModel = null): void
 {
-    self::check();
+    self::check($userModel);
 
     if ((int) ($_SESSION['role_id'] ?? 0) !== 1) {
 

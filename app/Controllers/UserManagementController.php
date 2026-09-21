@@ -9,9 +9,9 @@ class UserManagementController
 {
     private UserManagement $users;
 
-    public function __construct()
+    public function __construct(?UserManagement $users = null)
     {
-        $this->users = new UserManagement();
+        $this->users = $users ?? new UserManagement();
     }
 
     public function index(array $filters, int $page = 1): array
