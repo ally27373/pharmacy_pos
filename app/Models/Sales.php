@@ -19,7 +19,6 @@ class Sales
         $page = max(1, $page);
         $limit = min(max(1, $limit), 100);
         $search = trim($search);
-        $offset = ($page - 1) * $limit;
 
         $where = ["s.transaction_status = 'Completed'"];
         $params = [];
@@ -52,6 +51,14 @@ class Sales
         $countStmt->execute();
         $total = (int) $countStmt->fetchColumn();
 
+        $totalPages = $total > 0 ? (int) ceil($total / $limit) : 0;
+
+        if ($totalPages > 0 && $page > $totalPages) {
+            $page = $totalPages;
+        }
+
+        $offset = ($page - 1) * $limit;
+
         $sql = "
             SELECT
                 s.sale_id,
@@ -79,11 +86,6 @@ class Sales
         $stmt->execute();
 
         $transactions = $stmt->fetchAll(PDO::FETCH_ASSOC);
-        $totalPages = $total > 0 ? (int) ceil($total / $limit) : 0;
-
-        if ($totalPages > 0 && $page > $totalPages) {
-            $page = $totalPages;
-        }
 
         return [
             'transactions' => $transactions,

@@ -136,16 +136,13 @@ final class SalesTest extends TestCase
     }
 
     /**
-     * Defect: when the requested page is beyond the last page, the code
-     * clamps the *reported* `page` value down to `total_pages` AFTER the
-     * paginated query already ran with the offset computed from the
-     * original, out-of-range page. This produces a response that claims
-     * to be showing a valid earlier page while actually returning the
-     * (empty) results of the out-of-range offset.
-     *
-     * See tests/Reports/DEFECTS_pos-sales-billing.md.
+     * Regression pin for DEFECT-2 (tests/Reports/DEFECTS_pos-sales-billing.md):
+     * when the requested page is beyond the last page, the page must be
+     * clamped to `total_pages` BEFORE the offset is computed/the paginated
+     * query runs, so the reported `page` and the actually-queried rows
+     * agree (mirrors the pattern in Reports::getReportData()).
      */
-    public function testGetAllSalesOutOfRangePageReportsClampedPageButOffsetIsStillWrong(): void
+    public function testGetAllSalesOutOfRangePageClampsOffsetBeforeQuerying(): void
     {
         $countStmt = $this->createStatementMock();
         $countStmt->method('fetchColumn')->willReturn(5); // only 5 rows total
@@ -156,8 +153,11 @@ final class SalesTest extends TestCase
             $bound[$k] = $v;
             return true;
         });
-        // The real DB would return 0 rows for an out-of-range OFFSET.
-        $dataStmt->method('fetchAll')->willReturn([]);
+        // With the offset correctly clamped, the DB would return page 1's
+        // rows (here just simulated as non-empty to show they'd be used).
+        $dataStmt->method('fetchAll')->willReturn([
+            ['sale_id' => 1, 'transaction_number' => 'TID-1'],
+        ]);
 
         $pdo = $this->pdoDispatching([
             'SELECT COUNT(*)' => $countStmt,
@@ -168,16 +168,16 @@ final class SalesTest extends TestCase
         // total=5, limit=20 => total_pages=1, but we ask for page 5.
         $result = $sales->getAllSales(5, 20);
 
-        // offset was computed from the ORIGINAL page (5-1)*20 = 80, before
-        // the page value below was clamped back down to 1.
-        $this->assertSame(80, $bound[':offset']);
+        // The offset must be recomputed from the CLAMPED page (1), i.e.
+        // (1-1)*20 = 0 — not the stale (5-1)*20 = 80 from the original
+        // out-of-range page.
+        $this->assertSame(0, $bound[':offset']);
 
-        // The pagination metadata now (misleadingly) claims we're on
-        // page 1 of a data set that has rows...
+        // The reported page and the actually-queried page now agree.
         $this->assertSame(1, $result['pagination']['page']);
-        // ...yet no transactions are returned, because the query used the
-        // stale, unclamped offset (80) instead of the offset for page 1.
-        $this->assertSame([], $result['transactions']);
+        $this->assertSame([
+            ['sale_id' => 1, 'transaction_number' => 'TID-1'],
+        ], $result['transactions']);
     }
 
     public function testGetSaleDetailsBindsSaleIdAndReturnsRows(): void

@@ -438,6 +438,8 @@ public function processSale(array $data): array
             $subtotal += $qty * $price;
         }
 
+        $subtotal = round($subtotal, 2);
+
         if ($discountType === 'percent') {
             if ($discountValue > 100) {
                 throw new Exception('Percentage discount cannot exceed 100%.');

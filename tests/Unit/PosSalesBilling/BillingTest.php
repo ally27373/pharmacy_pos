@@ -138,13 +138,13 @@ final class BillingTest extends TestCase
     }
 
     /**
-     * Same defect pattern as Sales::getAllSales(): the reported `page` is
-     * clamped to the last valid page only after the query already ran
-     * with the (stale, out-of-range) offset.
-     *
-     * See tests/Reports/DEFECTS_pos-sales-billing.md.
+     * Regression pin for DEFECT-3 (tests/Reports/DEFECTS_pos-sales-billing.md):
+     * same fix pattern as Sales::getAllSales() — the page must be clamped
+     * to the last valid page BEFORE the offset is computed/the paginated
+     * query runs, so the reported page and the actually-queried rows
+     * agree.
      */
-    public function testGetAllBillingsOutOfRangePageReportsClampedPageButOffsetIsStillWrong(): void
+    public function testGetAllBillingsOutOfRangePageClampsOffsetBeforeQuerying(): void
     {
         $countStmt = $this->createStatementMock();
         $countStmt->method('fetchColumn')->willReturn(3);
@@ -155,7 +155,11 @@ final class BillingTest extends TestCase
             $bound[$k] = $v;
             return true;
         });
-        $dataStmt->method('fetchAll')->willReturn([]);
+        // With the offset correctly clamped, the DB would return page 1's
+        // rows (simulated here as non-empty to show they'd be used).
+        $dataStmt->method('fetchAll')->willReturn([
+            ['payment_id' => 1, 'amount_paid' => 100.0],
+        ]);
 
         $pdo = $this->pdoDispatching([
             'SELECT COUNT(*)' => $countStmt,
@@ -166,9 +170,14 @@ final class BillingTest extends TestCase
         // total=3, limit=20 => total_pages=1, but page 4 is requested.
         $result = $billing->getAllBillings(4, 20);
 
-        $this->assertSame(60, $bound[':offset']); // (4-1)*20, computed before the clamp
-        $this->assertSame(1, $result['pagination']['page']); // clamped after the fact
-        $this->assertSame([], $result['billings']); // ...but still empty
+        // The offset must be recomputed from the CLAMPED page (1), i.e.
+        // (1-1)*20 = 0 — not the stale (4-1)*20 = 60 from the original
+        // out-of-range page.
+        $this->assertSame(0, $bound[':offset']);
+        $this->assertSame(1, $result['pagination']['page']);
+        $this->assertSame([
+            ['payment_id' => 1, 'amount_paid' => 100.0],
+        ], $result['billings']);
     }
 
     public function testGetBillingDetailsBindsPaymentIdAndReturnsRow(): void

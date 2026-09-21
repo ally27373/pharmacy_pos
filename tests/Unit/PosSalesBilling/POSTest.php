@@ -617,7 +617,7 @@ final class POSTest extends TestCase
         return $pdo;
     }
 
-    public function testProcessSaleSucceedsAndSubtotalIsNotRoundedUnlikeTotal(): void
+    public function testProcessSaleSucceedsAndSubtotalIsRoundedLikeTotal(): void
     {
         $salesInsertCalls = [];
         $paymentsInsertCalls = [];
@@ -668,16 +668,16 @@ final class POSTest extends TestCase
         $this->assertTrue($result['success']);
 
         // 0.1 + 0.2 is the textbook IEEE-754 example that does not add up
-        // to exactly 0.3 in floating point.
-        $rawFloatSum = 0.1 + 0.2;
-
-        $this->assertSame($rawFloatSum, $result['subtotal']);
+        // to exactly 0.3 in raw floating point — subtotal must be
+        // round()-ed to 2 decimals just like discount_amount/total_amount,
+        // so the noise never reaches the DB insert or the API response.
+        $this->assertSame(0.3, $result['subtotal']);
         $this->assertSame(0.0, $result['discount_amount']);
         $this->assertSame(0.3, $result['total_amount']);
 
-        // With a 0% discount, total should equal subtotal exactly — but
-        // total is round()-ed while subtotal never is, so they diverge.
-        $this->assertNotSame(
+        // With a 0% discount, total should equal subtotal exactly, since
+        // both are rounded the same way.
+        $this->assertSame(
             $result['subtotal'],
             $result['total_amount'],
             'subtotal and total_amount should represent the same amount when discount is 0'
@@ -686,9 +686,9 @@ final class POSTest extends TestCase
         $this->assertSame(0.7, $result['change_amount']);
         $this->assertMatchesRegularExpression('/^TID-\d{14}-\d{3}$/', $result['transaction_number']);
 
-        // The unrounded, float-noisy subtotal is exactly what gets bound
-        // into the INSERT ... sales statement too.
-        $this->assertSame($rawFloatSum, $salesInsertCalls[0][':subtotal']);
+        // The rounded subtotal (not the raw float-noisy sum) is what gets
+        // bound into the INSERT ... sales statement too.
+        $this->assertSame(0.3, $salesInsertCalls[0][':subtotal']);
         $this->assertSame(0.0, $salesInsertCalls[0][':discount']);
         $this->assertSame(0.3, $salesInsertCalls[0][':total']);
         $this->assertSame(7, $salesInsertCalls[0][':cashier_id']);

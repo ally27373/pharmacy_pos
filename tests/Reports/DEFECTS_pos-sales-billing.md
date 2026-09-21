@@ -130,3 +130,91 @@ the code until it's green again).
      reported here (e.g. PDO::lastInsertId()'s string|false return type
      vs. an int mock return value; PDOStatement mock dispatch markers
      that needed to be more specific). -->
+
+---
+
+## Dev team resolution
+
+Branch: `dev/pos-sales-billing` (based on `test-team/pos-sales-billing`).
+
+All three defects were reproduced by reading the code directly (per
+TESTING.md's dev-team workflow) and confirmed valid. Each was fixed with
+the smallest correct change, and the test that previously *demonstrated*
+the buggy behavior was rewritten to assert the correct behavior instead
+(a regression pin) — I additionally verified each pin empirically by
+temporarily reverting each production fix and confirming the
+corresponding test fails, then reapplying the fix.
+
+### DEFECT-1 — valid, fixed
+
+- **File/line**: `app/Models/POS.php`, `POS::processSale()`, immediately
+  after the cart-accumulation loop (was line ~439, now
+  `$subtotal = round($subtotal, 2);` inserted right after the loop, before
+  the discount calculations that consume `$subtotal`).
+- **Fix**: round `$subtotal` to 2 decimals at the same point the
+  convention is already established for the per-item `sale_items.subtotal`
+  (immediately after the final value is computed), so every downstream use
+  of `$subtotal` (discount math, the `sales` INSERT bind, and the
+  `subtotal` key in the returned/JSON-encoded response) now sees a
+  currency-clean value consistent with `discount_amount`/`total_amount`.
+- **Test**: `tests/Unit/PosSalesBilling/POSTest.php::testProcessSaleSucceedsAndSubtotalIsRoundedLikeTotal`
+  (renamed from `...SubtotalIsNotRoundedUnlikeTotal`; now asserts
+  `$result['subtotal'] === 0.3`, `$result['subtotal'] === $result['total_amount']`,
+  and `$salesInsertCalls[0][':subtotal'] === 0.3` — all of which fail
+  against the pre-fix code with `0.30000000000000004`).
+
+### DEFECT-2 — valid, fixed
+
+- **File/line**: `app/Models/Sales.php`, `Sales::getAllSales()`. The
+  `$offset = ($page - 1) * $limit;` line (was ~22, unconditional and
+  unclamped) was moved to after the count query and after the
+  `$totalPages` computation/clamp (now ~54-60), mirroring the correct
+  pattern already used in `Reports::getReportData()` (count → compute
+  `$totalPages` → clamp `$page` → compute `$offset` → run paginated
+  query). The stale post-query clamp block (previously ~84-87, after
+  `fetchAll()`) was removed since the clamp now happens before the query.
+- **Test**: `tests/Unit/PosSalesBilling/SalesTest.php::testGetAllSalesOutOfRangePageClampsOffsetBeforeQuerying`
+  (renamed from `...ReportsClampedPageButOffsetIsStillWrong`; now asserts
+  `:offset === 0` for a page-5-of-1 request, i.e. the offset is derived
+  from the clamped page 1, not the stale page 5, and that the returned
+  `transactions` reflect the (mocked) data for that clamped page).
+
+### DEFECT-3 — valid, fixed
+
+- **File/line**: `app/Models/Billings.php`, `Billing::getAllBillings()`.
+  Same fix as DEFECT-2, independently confirmed by reading the code: the
+  offset computation (was ~22) was moved to after the count query and
+  after the `$totalPages` computation/clamp (now ~55-61), and the stale
+  post-query clamp block (previously ~87-90) was removed.
+- **Test**: `tests/Unit/PosSalesBilling/BillingTest.php::testGetAllBillingsOutOfRangePageClampsOffsetBeforeQuerying`
+  (renamed from `...ReportsClampedPageButOffsetIsStillWrong`; asserts
+  `:offset === 0` for a page-4-of-1 request instead of the stale `60`).
+
+### `app/Controllers/process_sale.php` coverage assessment
+
+Confirmed accurate by independent read: the file is exactly
+
+```php
+require_once 'POSController.php';
+$controller = new POSController();
+$controller->processSale();
+```
+
+— a pure 3-statement delegation with no branching, validation, or
+transformation of its own. All of the logic the report attributes to
+"reads php://input, calls POSController::processSale()" (the
+`php://input` read, `json_decode`, the `400`/"Invalid request." early
+return, session handling, `cashier_id` injection, and the final
+`json_encode`/echo) actually lives inside `POSController::processSale()`
+(`app/Controllers/POSController.php`), which is exercised by the existing
+`POSControllerTest` suite. No logic was found in `process_sale.php` that
+isn't already a strict subset of what `POSControllerTest`/`POSTest`
+cover, so no bootstrap-specific test was added (out of scope for this
+pass, per instructions).
+
+### Suite status after fixes
+
+`& "C:\xampp\php\php.exe" vendor\bin\phpunit --testsuite PosSalesBilling`
+→ 48 tests, 196 assertions, all passing (same counts as baseline — three
+existing tests were adjusted in place to pin the fixes rather than adding
+net-new tests).
