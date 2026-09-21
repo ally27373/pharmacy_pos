@@ -987,16 +987,24 @@ final class InventoryTest extends TestCase
 
     public function testExpiredOnlyStockIsMisreportedAsOutOfStockInsteadOfExpired(): void
     {
-        // KNOWN DEFECT — see tests/Reports/DEFECTS_inventory-products.md
-        // (DEFECT-1). syncProductAggregate()'s aggregate query computes
+        // Pins DEFECT-1 — see tests/Reports/DEFECTS_inventory-products.md.
+        // Originally, syncProductAggregate()'s aggregate query computed
         // total_quantity and nearest_expiration under the SAME filter
         // "quantity > 0 AND (expiration_date IS NULL OR expiration_date >=
-        // CURDATE())". That means nearest_expiration can never be a past
-        // date - it is always NULL or >= today - so the 'Expired' branch
-        // below is unreachable. A product whose only remaining stock has
-        // expired ends up reported as plain 'Out of Stock' instead, hiding
-        // real expired stock sitting on the shelf. This mock reproduces
-        // exactly what that aggregate query returns for such a product.
+        // CURDATE())", so nearest_expiration could never be a past date and
+        // the 'Expired' branch was unreachable — a product whose only
+        // remaining stock had expired was reported as plain 'Out of Stock'.
+        //
+        // Dev team fix (app/Models/Inventory.php, syncProductAggregate()):
+        // added a separate `expired_nearest_expiration` aggregate, scoped to
+        // quantity>0 batches regardless of expiry, consulted only when
+        // total_quantity <= 0 (i.e. no *usable* stock remains). This mock
+        // now reproduces what the FIXED aggregate query returns for a
+        // product whose only quantity-bearing batch (batch 50, just
+        // replenished by this Stock In) has an expiration_date in the past:
+        // total_quantity stays 0 (that batch is not usable stock), but
+        // expired_nearest_expiration surfaces the past date so the code can
+        // tell "expired" apart from "never restocked".
         $productSelect = $this->createStatementMock();
         $productSelect->method('execute')->willReturn(true);
         $productSelect->method('fetch')->willReturn(['product_id' => 1, 'unit_cost' => 2.0]);
@@ -1020,6 +1028,7 @@ final class InventoryTest extends TestCase
             'nearest_expiration' => null,
             'nearest_batch' => null,
             'latest_unit_cost' => null,
+            'expired_nearest_expiration' => '2020-01-15',
         ]);
 
         $historyInsert = $this->createStatementMock();
@@ -1055,6 +1064,8 @@ final class InventoryTest extends TestCase
         // flagged 'Expired' (distinct from genuinely zero stock) so staff
         // know to write it off rather than simply reorder.
         self::assertSame('Expired', $capturedStatusParams[':product_status']);
+        // The actual expired date should be surfaced too, not left null.
+        self::assertSame('2020-01-15', $capturedStatusParams[':expiration_date']);
     }
 
     // ------------------------------------------------------------------

@@ -92,14 +92,14 @@ class Inventory
                 p.unit_cost,
                 p.selling_price,
                 p.manufacturing_date,
-                batch_totals.nearest_expiration_date AS expiration_date,
+                COALESCE(batch_totals.nearest_expiration_date, batch_totals.expired_nearest_expiration_date) AS expiration_date,
                 batch_totals.nearest_batch_number AS batch_number,
                 p.description,
                 p.is_test_data,
                 CASE
+                    WHEN COALESCE(batch_totals.batch_quantity, 0) <= 0
+                         AND batch_totals.expired_nearest_expiration_date IS NOT NULL THEN 'Expired'
                     WHEN COALESCE(batch_totals.batch_quantity, 0) <= 0 THEN 'Out of Stock'
-                    WHEN batch_totals.nearest_expiration_date IS NOT NULL
-                         AND batch_totals.nearest_expiration_date < CURDATE() THEN 'Expired'
                     WHEN COALESCE(batch_totals.batch_quantity, 0) <= COALESCE(p.reorder_level, 10) THEN 'Low Stock'
                     ELSE 'Available'
                 END AS product_status
@@ -131,7 +131,13 @@ class Inventory
                             ORDER BY pb.expiration_date IS NULL, pb.expiration_date ASC, pb.batch_id ASC
                             SEPARATOR ','
                         ), ',', 1
-                    ) AS nearest_batch_number
+                    ) AS nearest_batch_number,
+                    MIN(CASE
+                        WHEN pb.quantity > 0
+                             AND pb.expiration_date IS NOT NULL
+                             AND pb.expiration_date < CURDATE()
+                        THEN pb.expiration_date ELSE NULL END
+                    ) AS expired_nearest_expiration_date
                 FROM product_batches pb
                 GROUP BY pb.product_id
             ) batch_totals ON batch_totals.product_id = p.product_id
@@ -832,7 +838,12 @@ class Inventory
                         SEPARATOR ','
                     ), ',', 1
                 ) AS nearest_batch,
-                MAX(CASE WHEN quantity > 0 AND (expiration_date IS NULL OR expiration_date >= CURDATE()) THEN unit_cost ELSE NULL END) AS latest_unit_cost
+                MAX(CASE WHEN quantity > 0 AND (expiration_date IS NULL OR expiration_date >= CURDATE()) THEN unit_cost ELSE NULL END) AS latest_unit_cost,
+                MIN(CASE
+                    WHEN quantity > 0
+                         AND expiration_date IS NOT NULL
+                         AND expiration_date < CURDATE()
+                    THEN expiration_date ELSE NULL END) AS expired_nearest_expiration
             FROM product_batches
             WHERE product_id = :product_id
         ");
@@ -842,11 +853,26 @@ class Inventory
         $quantity = (int) ($aggregate['total_quantity'] ?? 0);
         $expiration = $aggregate['nearest_expiration'] ?? null;
         $batchNumber = $aggregate['nearest_batch'] ?? null;
+        // DEFECT-1 fix: total_quantity/nearest_expiration above are (by design)
+        // both scoped to non-expired, quantity>0 batches, so nearest_expiration
+        // can never itself be a past date. That's fine for "usable stock"
+        // accounting, but it means a product whose ONLY remaining physical
+        // stock has expired previously fell through to 'Out of Stock' below,
+        // indistinguishable from a product that was never restocked at all.
+        // expired_nearest_expiration is a separate signal, scoped to
+        // quantity>0 batches regardless of expiry, consulted only when there
+        // is no usable stock left (total_quantity <= 0).
+        $expiredExpiration = $aggregate['expired_nearest_expiration'] ?? null;
 
         if ($quantity <= 0) {
-            $status = 'Out of Stock';
-        } elseif ($expiration && strtotime($expiration) < strtotime(date('Y-m-d'))) {
-            $status = 'Expired';
+            if ($expiredExpiration) {
+                $status = 'Expired';
+                // Surface the expired batch's date instead of leaving it
+                // null, so staff can see what actually expired.
+                $expiration = $expiredExpiration;
+            } else {
+                $status = 'Out of Stock';
+            }
         } else {
             $productStmt = $this->conn->prepare("SELECT reorder_level FROM products WHERE product_id = :id");
             $productStmt->execute([':id' => $productId]);

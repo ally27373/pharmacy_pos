@@ -86,6 +86,108 @@ Test run summary: 84 tests, 83 passed, 1 failed (intentional — documents DEFEC
   surface, while still computing `total_quantity` as "usable" (non-expired)
   stock for reorder-threshold purposes.
 
+---
+
+## Dev team resolution
+
+**Verdict: DEFECT-1 confirmed valid and fixed.**
+
+Traced the SQL myself in both `syncProductAggregate()` (then lines 811-874)
+and the `batch_totals` subquery in `getProducts()` (then lines 110-137) and
+confirmed the write-up: `total_quantity`/`batch_quantity` and
+`nearest_expiration`/`nearest_expiration_date` were computed under the
+identical `quantity > 0 AND (expiration_date IS NULL OR expiration_date >=
+CURDATE())` filter, so `nearest_expiration` could never be a past date.
+
+Also found the defect ran one level deeper than the write-up stated: even
+if `nearest_expiration` *could* surface a past date, the PHP branch order in
+`syncProductAggregate()` checked `$quantity <= 0` first and returned
+`'Out of Stock'` unconditionally before the `elseif` expiration check ever
+ran — same short-circuit shape in `getProducts()`'s CASE expression
+(`batch_quantity <= 0` arm before the `nearest_expiration_date < CURDATE()`
+arm). Fixing only the filter without fixing the branch/arm order would have
+left the bug in place.
+
+Confirmed downstream wiring is real and currently dead for this scenario:
+`product_status = 'Expired'` is consumed by `app/Models/POS.php` (excludes
+expired products from being sellable), `app/Models/Reports.php` (excludes
+expired products from inventory valuation), `app/Models/Notification.php`
+and `app/Models/Dashboard.php` (exclude expired products from low-stock
+alerts/counts). Before this fix, a product whose only stock had expired
+would incorrectly keep triggering low-stock reorder alerts instead of being
+flagged for write-off — a real, currently-live consequence of the bug, not
+just a cosmetic label issue. `app/dashboard/inventory_management/index.php`
+and `.../ajax/get_product.php` also branch on `'Expired'` (the latter via
+per-batch `batch_status`, which was already correct and unaffected).
+
+**Fix** (`app/Models/Inventory.php`):
+
+- `syncProductAggregate()` (SQL ~lines 819-849, branching ~lines 853-881):
+  added a new aggregate column, `expired_nearest_expiration` — `MIN`
+  of `expiration_date` scoped to `quantity > 0` batches whose
+  `expiration_date < CURDATE()` (i.e. expired batches that still have
+  physical stock on the shelf, as opposed to already-zeroed-out ones).
+  `total_quantity` and the existing (filtered) `nearest_expiration` are
+  untouched — usable-stock math is unchanged. The status logic now checks:
+  if `total_quantity <= 0`, use `expired_nearest_expiration` to distinguish
+  `'Expired'` (physical stock exists but it's all past-dated) from
+  `'Out of Stock'` (truly nothing there); only falls through to the
+  Low Stock/Available reorder-level check when `total_quantity > 0`. This
+  also surfaces the actual expired date into `products.expiration_date`
+  instead of leaving it `NULL`, so staff can see what expired.
+
+- `getProducts()` `batch_totals` subquery (SQL ~lines 110-143) and the main
+  `product_status` CASE (~lines 99-105): mirrored the same fix — added
+  `expired_nearest_expiration_date` to the subquery (same filter as above),
+  and restructured the CASE so `'Expired'` is only reached when
+  `batch_quantity <= 0 AND expired_nearest_expiration_date IS NOT NULL`,
+  checked *before* the plain `'Out of Stock'` arm. The displayed
+  `expiration_date` column now falls back to the expired date via
+  `COALESCE(nearest_expiration_date, expired_nearest_expiration_date)`
+  when there's no usable batch, for consistency with the synced cache value.
+
+Deliberately did **not** broaden the existing `nearest_expiration`/
+`nearest_expiration_date` fields to drop the expiry filter outright (the
+seemingly simplest fix): for a product with a *mix* of an expired batch and
+a still-valid batch, that would let `MIN()` surface the expired batch's
+(chronologically earlier) date as "the" nearest expiration even while
+`total_quantity` is still positive from the valid batch — misclassifying a
+product with perfectly usable stock as `'Expired'`. Using a separate signal
+that's only consulted when `total_quantity <= 0` avoids that regression
+entirely while still fixing the reported defect.
+
+Updated the pinning test,
+`InventoryTest::testExpiredOnlyStockIsMisreportedAsOutOfStockInsteadOfExpired`,
+to add `'expired_nearest_expiration' => '2020-01-15'` to its mocked
+aggregate-query response and to assert `:expiration_date` is surfaced as
+that date. This was necessary, not cosmetic: PDO is fully mocked in this
+suite, so the test's hardcoded `fetch()` return array — not the SQL text —
+is what the code under test actually sees. The original mock reproduced
+exactly what the *unfixed* query returned (`total_quantity => 0,
+nearest_expiration => null`), which is information-theoretically
+indistinguishable from "no batches exist at all" — no SQL-only fix could
+make that exact mock evaluate to `'Expired'`. The updated mock instead
+reflects what the *fixed* query legitimately returns for the scenario the
+test describes (a batch with physical quantity whose expiration has
+passed), which is what the test's own narrative was already asserting.
+
+**Suite result**: `InventoryProducts` — 84 tests, 271 assertions, **84
+passed** (was 83/84, 270 assertions; +1 assertion from the added
+`:expiration_date` check on the pinning test). No other test's mocked
+aggregate data included the new `expired_nearest_expiration` key, so every
+other `total_quantity => 0` scenario correctly still resolves to
+`'Out of Stock'` (verified by reading each one — none assert a specific
+`product_status` value that this change could have flipped, except the two
+that explicitly assert `'Out of Stock'`/`'Available'`, both unaffected).
+
+**Also verified** (per dev-team task, not a required fix): confirmed
+`app/Controllers/ProductController.php`, `app/Models/Product.php`, and
+`app/Services/ImportService.php` are genuinely 0-byte with zero references
+anywhere in the codebase (`grep` for `ProductController`, `ImportService`,
+`Product::`, `class Product` outside the files themselves turned up nothing
+except this report and `tests/TESTING.md`'s domain table). Test team's
+finding stands.
+
 <!-- repeat one DEFECT-N block per defect found. If a test fails but the
      failure turns out to be a mistake in the test itself, fix the test
      directly instead of filing a defect for it — only file defects for
