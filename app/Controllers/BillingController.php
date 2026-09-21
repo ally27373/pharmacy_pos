@@ -6,9 +6,9 @@ class BillingController
 {
     private Billing $billing;
 
-    public function __construct()
+    public function __construct(?Billing $billing = null)
     {
-        $this->billing = new Billing();
+        $this->billing = $billing ?? new Billing();
     }
 
     public function getBillings(

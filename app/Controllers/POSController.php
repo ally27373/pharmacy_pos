@@ -6,9 +6,9 @@ class POSController
 {
     private POS $pos;
 
-    public function __construct()
+    public function __construct(?POS $pos = null)
     {
-        $this->pos = new POS();
+        $this->pos = $pos ?? new POS();
     }
 
     /*

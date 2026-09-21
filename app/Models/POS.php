@@ -6,10 +6,9 @@ class POS
 {
     private PDO $conn;
 
-    public function __construct()
+    public function __construct(?PDO $conn = null)
     {
-        $database = new Database();
-        $this->conn = $database->connect();
+        $this->conn = $conn ?? (new Database())->connect();
     }
 
 public function getAvailableProducts(
@@ -438,6 +437,8 @@ public function processSale(array $data): array
 
             $subtotal += $qty * $price;
         }
+
+        $subtotal = round($subtotal, 2);
 
         if ($discountType === 'percent') {
             if ($discountValue > 100) {

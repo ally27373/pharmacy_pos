@@ -6,10 +6,9 @@ class Billing
 {
     private PDO $conn;
 
-    public function __construct()
+    public function __construct(?PDO $conn = null)
     {
-        $database = new Database();
-        $this->conn = $database->connect();
+        $this->conn = $conn ?? (new Database())->connect();
     }
 
     public function getAllBillings(
@@ -20,7 +19,6 @@ class Billing
         $page = max(1, $page);
         $limit = min(max(1, $limit), 100);
         $search = trim($search);
-        $offset = ($page - 1) * $limit;
 
         $where = [];
         $params = [];
@@ -54,6 +52,14 @@ class Billing
         $countStmt->execute();
         $total = (int) $countStmt->fetchColumn();
 
+        $totalPages = $total > 0 ? (int) ceil($total / $limit) : 0;
+
+        if ($totalPages > 0 && $page > $totalPages) {
+            $page = $totalPages;
+        }
+
+        $offset = ($page - 1) * $limit;
+
         $sql = "
             SELECT
                 p.payment_id,
@@ -83,11 +89,6 @@ class Billing
         $stmt->execute();
 
         $billings = $stmt->fetchAll(PDO::FETCH_ASSOC);
-        $totalPages = $total > 0 ? (int) ceil($total / $limit) : 0;
-
-        if ($totalPages > 0 && $page > $totalPages) {
-            $page = $totalPages;
-        }
 
         return [
             'billings' => $billings,
