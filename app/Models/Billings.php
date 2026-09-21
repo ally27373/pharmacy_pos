@@ -6,10 +6,9 @@ class Billing
 {
     private PDO $conn;
 
-    public function __construct()
+    public function __construct(?PDO $conn = null)
     {
-        $database = new Database();
-        $this->conn = $database->connect();
+        $this->conn = $conn ?? (new Database())->connect();
     }
 
     public function getAllBillings(

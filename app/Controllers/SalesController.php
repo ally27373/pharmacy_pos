@@ -6,9 +6,9 @@ class SalesController
 {
     private Sales $sales;
 
-    public function __construct()
+    public function __construct(?Sales $sales = null)
     {
-        $this->sales = new Sales();
+        $this->sales = $sales ?? new Sales();
     }
 
     public function getTransactions(
