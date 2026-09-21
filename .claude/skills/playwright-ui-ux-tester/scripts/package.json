@@ -1,0 +1,11 @@
+{
+    "name": "pharmacy-pos-ui-ux-tests",
+    "private": true,
+    "type": "module",
+    "description": "Playwright driver scripts for the playwright-ui-ux-tester skill. Not part of the deployed app.",
+    "dependencies": {
+        "playwright": "^1.63.0",
+        "pixelmatch": "^5.3.0",
+        "pngjs": "^7.0.0"
+    }
+}

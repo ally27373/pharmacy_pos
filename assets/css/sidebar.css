@@ -360,6 +360,14 @@ body.sidebar-drawer-open{
         transform:translateX(-100%);
         transition:transform .3s ease;
         z-index:var(--z-sidebar-drawer,1200);
+        /* navbar-custom paints above the drawer (see the z-index
+           scale note in style.css) so its toggle/bell stay
+           clickable while the drawer is open. Since both sit at
+           top:0, that would otherwise cover the sidebar's own
+           logo — push the drawer's content down by the navbar's
+           real height (set in sidebar.js) so it starts below the
+           bar instead of hidden behind it. */
+        padding-top:var(--navbar-height,76px);
         /* Sidebar is taller than the screen once every module
            link is expanded — let it scroll independently of the
            page behind the backdrop. */

@@ -1,5 +1,33 @@
 document.addEventListener("DOMContentLoaded", () => {
 
+    // The mobile drawer's own content (starting with the logo) sits
+    // flush at the top of .sidebar, but navbar-custom is deliberately
+    // painted above it (see the z-index scale note in style.css) so
+    // the hamburger toggle stays clickable while the drawer is open.
+    // Push the drawer's content down by the navbar's real rendered
+    // height so it starts below the bar instead of being hidden
+    // behind it. Measured (rather than hardcoded) because the
+    // navbar's height changes across breakpoints (e.g. the 480px
+    // padding reduction in navbar.css).
+    const navbarEl = document.querySelector(".navbar-custom");
+
+    if (navbarEl) {
+
+        const syncNavbarHeight = () => {
+            document.documentElement.style.setProperty(
+                "--navbar-height",
+                navbarEl.offsetHeight + "px"
+            );
+        };
+
+        syncNavbarHeight();
+        window.addEventListener("resize", syncNavbarHeight);
+
+        if (document.fonts && document.fonts.ready) {
+            document.fonts.ready.then(syncNavbarHeight);
+        }
+    }
+
     document.querySelectorAll(".submenu-toggle").forEach(button => {
 
         button.addEventListener("click", function(e){
