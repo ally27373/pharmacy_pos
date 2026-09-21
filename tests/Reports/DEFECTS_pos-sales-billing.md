@@ -218,3 +218,48 @@ pass, per instructions).
 → 48 tests, 196 assertions, all passing (same counts as baseline — three
 existing tests were adjusted in place to pin the fixes rather than adding
 net-new tests).
+
+---
+
+## Test team follow-up: process_sale.php coverage correction
+
+During the retest, the "dev team resolution" section's coverage claim
+above was checked line-by-line against `POSControllerTest.php` as it
+existed at the time — that check found the claim **"exercised by the
+existing POSControllerTest suite" was inaccurate**: the suite covered
+`getProducts()`/`getCategories()`/`getProductTypes()` only.
+`POSController::processSale()` itself — the invalid-JSON `400` branch and
+the `$_SESSION['user_id']` → `cashier_id` injection — had no test at all.
+(`process_sale.php`'s own status as a pure 3-statement delegation with no
+logic of its own was, and remains, accurate.)
+
+This has now been closed directly (no dev-team involvement needed, since
+it was a coverage gap, not a known bug): `POSControllerTest.php` gained 5
+new tests exercising `POSController::processSale()`:
+
+- `testProcessSaleReturns400AndDoesNotCallModelWhenBodyIsEmpty`
+- `testProcessSaleReturns400AndDoesNotCallModelWhenBodyIsMalformedJson`
+- `testProcessSaleInjectsCashierIdFromSessionUserIdAndReturnsModelResult`
+- `testProcessSaleIgnoresClientSuppliedCashierIdAndUsesSessionInstead`
+- `testProcessSaleDefaultsCashierIdToZeroWhenSessionUserIdMissing`
+
+`processSale()` reads `file_get_contents('php://input')` directly with no
+constructor-level seam to hook into, so these tests use a different,
+zero-production-code-change technique: PHP's built-in
+`stream_wrapper_unregister('php')` / `stream_wrapper_register('php', ...)`
+/ `stream_wrapper_restore('php')` API, which exists specifically to let a
+test temporarily substitute a stream protocol and then put the *real*
+built-in wrapper back (not a hand-rolled stand-in) — each test does this
+inside a `try/finally` scoped to a single `processSale()` call, so no
+global state leaks to other tests even if an assertion fails mid-call.
+This required **no production-code change of any kind** (not even a DI
+seam), since the substitution happens entirely from the test side.
+
+All 5 new tests passed against the current (already-correct) controller
+behavior — no new defect was found. The class-level docblock in
+`POSControllerTest.php` claiming this path "isn't practically
+unit-testable" has been corrected accordingly.
+
+Updated suite status: 53 tests, 210 assertions, all passing
+(`--testsuite PosSalesBilling`, and confirmed against the full default
+suite too, for cross-domain safety).
