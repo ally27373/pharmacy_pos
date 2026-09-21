@@ -8,9 +8,9 @@ class NotificationController
 {
     private Notification $notification;
 
-    public function __construct()
+    public function __construct(?Notification $notification = null)
     {
-        $this->notification = new Notification();
+        $this->notification = $notification ?? new Notification();
     }
 
     public function getNotifications(): array
