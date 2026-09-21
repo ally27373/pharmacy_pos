@@ -6,9 +6,9 @@ class InventoryController
 {
     private Inventory $inventory;
 
-    public function __construct()
+    public function __construct(?Inventory $inventory = null)
     {
-        $this->inventory = new Inventory();
+        $this->inventory = $inventory ?? new Inventory();
     }
 
     public function getProducts(

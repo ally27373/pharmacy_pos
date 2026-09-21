@@ -6,9 +6,9 @@ class InventoryHistoryController
 {
     private $historyModel;
 
-    public function __construct()
+    public function __construct(?InventoryHistory $historyModel = null)
     {
-        $this->historyModel = new InventoryHistory();
+        $this->historyModel = $historyModel ?? new InventoryHistory();
     }
 
     public function getHistory(
