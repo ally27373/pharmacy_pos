@@ -21,3 +21,14 @@ Thumbs.db
 
 
 deploy/deploy-to-xampp.ps1
+
+# Node (Playwright UI/UX tester skill)
+node_modules/
+
+# playwright-ui-ux-tester skill: local secrets/state, never commit
+.claude/skills/playwright-ui-ux-tester/local/test-credentials.json
+.claude/skills/playwright-ui-ux-tester/local/sessions/
+.claude/skills/playwright-ui-ux-tester/out/
+
+# playwright-ui-ux-tester skill: eval/benchmark scratch, not shipped with the skill
+.claude/skills/playwright-ui-ux-tester-workspace/
