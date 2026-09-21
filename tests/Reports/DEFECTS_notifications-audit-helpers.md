@@ -87,3 +87,56 @@ cases):
    + zeroed-summary shape on a caught `Throwable` — is a thin wrapper
    that is fully exercised indirectly through the `NotificationController`
    and `Notification` test coverage above.
+
+## Dev team findings
+
+Dev team validated: suite reproduces green in isolated worktree (48 tests,
+48 passed, 206 assertions, `dev/notifications-audit-helpers` branched from
+this branch). `git diff` of the five DI-seamed files
+(`app/Models/Notification.php`, `app/Controllers/NotificationController.php`,
+`app/Models/AuditLog.php`, `app/Controllers/AuditLogController.php`,
+`app/Services/AuditLogger.php`) against `main` confirms only the documented
+optional-constructor-param seams were applied - no other production
+behavior changed.
+
+Spot-checked fault-injection on 4 tests across 3 different files/layers to
+confirm the assertions are real (would fail on a real regression), each
+broken then reverted with `git status`/`git diff` clean afterward:
+
+- `AuditLogTest::test_create_rejects_an_action_type_outside_the_allow_list`
+  - added `'READ'` to `AuditLog::ACTION_TYPES` -> test went red
+  (`prepare()` was called when it should never have been). Reverted.
+- `AuditLogTest::test_get_logs_builds_where_clause_and_binds_every_filter`
+  - removed the `:action_type` param binding in
+  `AuditLog::buildFilterQuery()` while leaving the WHERE fragment -> test
+  went red (`null` bound instead of `'CREATE'`). Reverted.
+- `NotificationTest::test_low_stock_row_reports_remaining_units_in_details`
+  - changed the low-stock message text in
+  `Notification::getLiveNotifications()` from `'Low stock'` to
+  `'Low stock alert'` -> test went red. Reverted.
+- `AuditLoggerTest::test_log_returns_false_when_session_user_id_is_zero`
+  - loosened `AuditLogger::log()`'s guard from `$userId <= 0` to
+  `$userId < 0` -> test went red (`create()` was called once instead of
+  never). Reverted.
+
+All four confirmed the tests catch real regressions rather than being
+tautological/no-op.
+
+Confirmed both non-defect notes independently:
+- `app/Helpers/Validator.php` is 0 bytes in
+  `test-team/notifications-audit-helpers`
+  (`git show ...:app/Helpers/Validator.php | wc -c` -> `0`) and in the dev
+  worktree; a repo-wide grep for `Validator` under `app/` finds no
+  references anywhere (no class defined, nothing instantiates it).
+- `app/Controllers/get_notifications.php` unconditionally constructs
+  `new NotificationController()` (no seam) and its `catch (Throwable $e)`
+  cannot actually catch a DB connection failure: `Database::connect()` in
+  `app/config/database.php` calls `die()` directly inside its own
+  `catch (PDOException $e)` block rather than rethrowing, so a connection
+  failure terminates the process before `get_notifications.php`'s own
+  try/catch ever sees it. Confirmed by reading `app/config/database.php`
+  lines 44-84.
+
+No defects found or fixed. No production-code changes made (all
+fault-injection edits above were reverted; working tree is clean per
+`git status`/`git diff`).
