@@ -378,7 +378,7 @@ class="form-control">
 
 <div class="col-md-6 mb-3">
 
-<label>Barcode</label>
+<label>Barcode <span class="text-muted small">(optional — leave blank to auto-assign an internal code)</span></label>
 
 <input
 type="text"
@@ -615,12 +615,13 @@ Update Product
 
                         <div class="col-md-6 mb-3">
 
-                            <label>Barcode</label>
+                            <label>Barcode <span class="text-muted small">(optional — scan or type the printed barcode; leave blank if the product has none and we'll assign an internal code)</span></label>
 
                             <input
                                 type="text"
                                 id="barcode"
-                                class="form-control">
+                                class="form-control"
+                                placeholder="Scan or type barcode">
 
                         </div>
 

@@ -253,6 +253,32 @@ class Inventory
         return (int) $this->conn->lastInsertId();
     }
 
+    private function barcodeExists(string $barcode, ?int $excludeProductId = null): bool
+    {
+        $sql = "SELECT product_id FROM products WHERE barcode = :barcode";
+        $params = [':barcode' => $barcode];
+
+        if ($excludeProductId !== null) {
+            $sql .= " AND product_id <> :exclude_product_id";
+            $params[':exclude_product_id'] = $excludeProductId;
+        }
+
+        $stmt = $this->conn->prepare($sql . " LIMIT 1");
+        $stmt->execute($params);
+
+        return $stmt->fetchColumn() !== false;
+    }
+
+    /**
+     * Used when staff don't have the product's real manufacturer barcode on hand yet
+     * (common for the client's unlabeled/repackaged stock). Staff can still scan/type
+     * the real barcode in later via Edit Product once it's known.
+     */
+    private function generateFallbackBarcode(int $productId): string
+    {
+        return 'INT-' . str_pad((string) $productId, 6, '0', STR_PAD_LEFT);
+    }
+
     public function saveProduct(array $data): array
     {
         try {
@@ -268,8 +294,12 @@ class Inventory
             $receivedDate = trim((string) ($data['received_date'] ?? '')) ?: date('Y-m-d');
             $isTestData = !empty($data['is_test_data']) ? 1 : 0;
 
-            if ($barcode === '' || $productName === '' || $categoryId <= 0 || $typeId <= 0) {
+            if ($productName === '' || $categoryId <= 0 || $typeId <= 0) {
                 throw new InvalidArgumentException('Please complete the required product fields.');
+            }
+
+            if ($barcode !== '' && $this->barcodeExists($barcode)) {
+                throw new InvalidArgumentException('This barcode is already used by another product.');
             }
 
             if ($quantity > 0 && !$batchNumber) {
@@ -287,6 +317,11 @@ class Inventory
                 $data['supplier_id'] ?? null
             );
 
+            // barcode is NOT NULL + UNIQUE; when the real barcode isn't known yet, insert a
+            // collision-safe placeholder and swap in a product_id-based fallback code once we
+            // have the product_id (see below), instead of blocking product creation on it.
+            $barcodeForInsert = $barcode !== '' ? $barcode : 'TEMP-' . bin2hex(random_bytes(8));
+
             $stmt = $this->conn->prepare("
                 INSERT INTO products (
                     barcode, product_name, generic_name, brand_name, category_id, type_id, supplier_id,
@@ -299,7 +334,7 @@ class Inventory
                 )
             ");
             $stmt->execute([
-                ':barcode' => $barcode,
+                ':barcode' => $barcodeForInsert,
                 ':product_name' => $productName,
                 ':generic_name' => trim((string) ($data['generic_name'] ?? '')) ?: null,
                 ':brand_name' => trim((string) ($data['brand_name'] ?? '')) ?: null,
@@ -316,6 +351,12 @@ class Inventory
             ]);
 
             $productId = (int) $this->conn->lastInsertId();
+
+            if ($barcode === '') {
+                $barcode = $this->generateFallbackBarcode($productId);
+                $barcodeUpdate = $this->conn->prepare("UPDATE products SET barcode = :barcode WHERE product_id = :product_id");
+                $barcodeUpdate->execute([':barcode' => $barcode, ':product_id' => $productId]);
+            }
 
             if ($quantity > 0) {
                 $this->upsertBatch($productId, $batchNumber, $expiration, $quantity, $unitCost, $receivedDate, $data['source_reference'] ?? null);
@@ -341,6 +382,7 @@ class Inventory
                 'success' => true,
                 'message' => 'Product added successfully.',
                 'product_id' => $productId,
+                'barcode' => $barcode,
             ];
         } catch (Throwable $e) {
             if ($this->conn->inTransaction()) {
@@ -460,6 +502,14 @@ class Inventory
                 throw new InvalidArgumentException('Invalid product.');
             }
 
+            $barcode = trim((string) ($data['barcode'] ?? ''));
+            if ($barcode !== '' && $this->barcodeExists($barcode, $productId)) {
+                throw new InvalidArgumentException('This barcode is already used by another product.');
+            }
+            if ($barcode === '') {
+                $barcode = $this->generateFallbackBarcode($productId);
+            }
+
             $this->conn->beginTransaction();
 
             $supplierId = $this->resolveSupplierId(
@@ -487,7 +537,7 @@ class Inventory
             ");
             $stmt->execute([
                 ':product_id' => $productId,
-                ':barcode' => trim((string) ($data['barcode'] ?? '')),
+                ':barcode' => $barcode,
                 ':product_name' => trim((string) ($data['product_name'] ?? '')),
                 ':generic_name' => trim((string) ($data['generic_name'] ?? '')) ?: null,
                 ':brand_name' => trim((string) ($data['brand_name'] ?? '')) ?: null,

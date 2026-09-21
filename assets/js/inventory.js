@@ -132,7 +132,6 @@ saveProductButton?.addEventListener("click", async () => {
         const quantity = Number(get("quantity")?.value || 0);
 const fields = [
     ["product_name", "Product Name"],
-    ["barcode", "Barcode"],
     ["category_id", "Category"],
     ["type_id", "Product Type"],
     ["supplier_name", "Supplier"],
@@ -173,9 +172,11 @@ const fields = [
         ].forEach(id => formData.append(id, get(id)?.value || ""));
         formData.append("is_test_data", get("is_test_data")?.checked ? "1" : "0");
 
+        const typedBarcode = get("barcode")?.value.trim() || "";
         const result = await fetchJson("ajax/save_product.php", { method: "POST", body: formData });
         bootstrap.Modal.getInstance(addModal)?.hide();
-        NxToast.flash(`✅ Added "${get("product_name")?.value || "product"}" — ${result.message || "Product added successfully!"}`, "success");
+        const barcodeNote = (!typedBarcode && result.barcode) ? ` No barcode entered — assigned "${result.barcode}".` : "";
+        NxToast.flash(`✅ Added "${get("product_name")?.value || "product"}" — ${result.message || "Product added successfully!"}${barcodeNote}`, "success");
         window.location.href = window.location.pathname + "?page=1&limit=20";
     } catch (error) {
         showAlert(error.message, "danger");

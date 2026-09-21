@@ -7,7 +7,7 @@ header('Content-Type: application/json');
 try {
     $controller = new InventoryController();
 
-    $required = ['barcode', 'product_name', 'category_id', 'type_id', 'quantity', 'unit_cost', 'selling_price'];
+    $required = ['product_name', 'category_id', 'type_id', 'quantity', 'unit_cost', 'selling_price'];
     foreach ($required as $field) {
         if (!isset($_POST[$field]) || trim((string) $_POST[$field]) === '') {
             throw new InvalidArgumentException('Please complete all required product fields.');
