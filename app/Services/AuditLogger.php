@@ -10,7 +10,8 @@ class AuditLogger
         string $actionType,
         string $moduleName,
         string $description,
-        ?int $recordId = null
+        ?int $recordId = null,
+        ?AuditLog $auditLog = null
     ): bool {
         if (session_status() === PHP_SESSION_NONE) {
             session_start();
@@ -27,7 +28,7 @@ class AuditLogger
         $userAgent = $_SERVER['HTTP_USER_AGENT'] ?? null;
 
         try {
-            $auditLog = new AuditLog();
+            $auditLog = $auditLog ?? new AuditLog();
 
             return $auditLog->create(
                 $userId,

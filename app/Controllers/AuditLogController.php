@@ -8,9 +8,9 @@ class AuditLogController
 {
     private AuditLog $auditLog;
 
-    public function __construct()
+    public function __construct(?AuditLog $auditLog = null)
     {
-        $this->auditLog = new AuditLog();
+        $this->auditLog = $auditLog ?? new AuditLog();
     }
 
     public function getLogs(array $filters = [], int $page = 1, int $perPage = 25): array
