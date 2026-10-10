@@ -123,6 +123,9 @@ addModal?.addEventListener("shown.bs.modal", () => {
 
 const saveProductButton = document.getElementById("save-product");
 saveProductButton?.addEventListener("click", async () => {
+    // === CONFIRMATION ===
+    if (!confirm("Confirm save new product?\n\nThis will add the product to inventory.")) return;
+
     const button = saveProductButton;
     button.disabled = true;
     button.innerHTML = `<span class="spinner-border spinner-border-sm me-2"></span>Saving...`;
@@ -229,6 +232,13 @@ document.querySelectorAll(".edit-product").forEach(button => {
 
 const updateProductButton = document.getElementById("update-product");
 updateProductButton?.addEventListener("click", async function () {
+    // === CONFIRMATION ===
+    if (!confirm("Confirm update product?\n\nThis will save changes to the product details.")) {
+        this.disabled = false;
+        this.innerHTML = `<i class="bi bi-floppy-fill me-2"></i>Update Product`;
+        return;
+    }
+
     const button = this;
     button.disabled = true;
     button.innerHTML = `<span class="spinner-border spinner-border-sm me-2"></span>Updating...`;
@@ -277,18 +287,23 @@ document.querySelectorAll(".delete-product").forEach(button => {
 });
 
 document.getElementById("confirm-delete-product")?.addEventListener("click", async function () {
+    // === CONFIRMATION ===
+    if (!confirm(`Confirm archive product "${deleteProductName || 'this product'}"?\n\nThis will archive the product (not permanently delete).`)) {
+        return;
+    }
+
     if (!deleteProductId) return;
     const button = this;
     const originalHtml = button.innerHTML;
     button.disabled = true;
-    button.innerHTML = `<span class="spinner-border spinner-border-sm me-2"></span>Deleting...`;
+    button.innerHTML = `<span class="spinner-border spinner-border-sm me-2"></span>Archiving...`;
     const formData = new FormData();
     formData.append("product_id", deleteProductId);
 
     try {
         const result = await fetchJson("ajax/delete_product.php", { method: "POST", body: formData });
         bootstrap.Modal.getInstance(document.getElementById("deleteProductModal"))?.hide();
-        NxToast.flash(`🗑 Deleted "${deleteProductName || "product"}" — ${result.message || "Product deleted successfully!"}`, "success");
+        NxToast.flash(`📦 Archived "${deleteProductName || "product"}" — ${result.message || "Product archived successfully!"}`, "success");
         window.location.reload();
     } catch (error) {
         // Hide the modal first so the error is visible instead of
@@ -314,6 +329,9 @@ document.querySelectorAll(".cleanup-test-product").forEach(button => {
 });
 
 document.getElementById("confirm-cleanup-test-product")?.addEventListener("click", async () => {
+    // === CONFIRMATION ===
+    if (!confirm("Confirm clean up test data?\n\nThis will remove all test records for this product.")) return;
+
     if (!cleanupTestProductId) return;
 
     const button = document.getElementById("confirm-cleanup-test-product");
@@ -412,6 +430,12 @@ document.querySelectorAll(".stock-product").forEach(button => {
 });
 
 document.getElementById("save-stock")?.addEventListener("click", async function () {
+    // === CONFIRMATION ===
+    const actionLabel = stockAction.value === "IN" ? "Stock In" : "Stock Out";
+    if (!confirm(`Confirm ${actionLabel} adjustment?\n\nQuantity: ${document.getElementById("stock_quantity")?.value || 0}`)) {
+        return;
+    }
+
     const button = this;
     const action = stockAction.value;
     const quantity = Number(document.getElementById("stock_quantity").value || 0);

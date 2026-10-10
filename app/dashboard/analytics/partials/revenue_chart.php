@@ -32,7 +32,7 @@ foreach ($dashboardData['revenue_by_category'] as $row){
 
 <div class="empty-chart">
 
-    <i class="bi bi-pie-chart"></i>
+    <i class="bi bi-bar-chart-fill"></i>
 
     <h5>No Revenue Yet</h5>
 
@@ -61,7 +61,9 @@ const revenueChart = document.getElementById("revenueChart");
 
 new Chart(revenueChart,{
 
-type:"doughnut",
+type:"bar",
+
+indexAxis:"y",
 
 data:{
 
@@ -71,7 +73,19 @@ datasets:[{
 
 data:<?= json_encode($data); ?>,
 
-borderWidth:2
+backgroundColor:[
+
+"#118d6d","#e63946","#fb8500","#ffb703","#07b5cf",
+
+"#9b59b6","#adb5bd","#457b9d","#e63946"
+
+],
+
+borderWidth:0,
+
+borderRadius:4,
+
+barThickness:20
 
 }]
 
@@ -87,15 +101,19 @@ plugins:{
 
 legend:{
 
-position:"bottom",
+display:false
 
-labels:{
+},
 
-boxWidth:12,
+tooltip:{
+
+backgroundColor:"#1a2230",
 
 padding:10,
 
-font:{size:11}
+cornerRadius:6,
+
+font:{size:12}
 
 }
 

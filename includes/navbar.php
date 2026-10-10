@@ -101,10 +101,12 @@
                 </div>
 
                 <div class="notification-panel-footer">
+                    <?php if ((int) ($_SESSION['role_id'] ?? 0) === 1): ?>
                     <a href="/app/dashboard/inventory_management/index.php" class="notification-inventory-link">
                         <i class="bi bi-box-seam me-1"></i>
                         Open Inventory Management
                     </a>
+                    <?php endif; ?>
                 </div>
             </div>
 

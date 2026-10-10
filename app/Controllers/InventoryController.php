@@ -61,9 +61,19 @@ class InventoryController
         return $this->inventory->updateProduct($data);
     }
 
-    public function deleteProduct(int $productId): array
+    public function archiveProduct(int $productId): array
     {
-        return $this->inventory->deleteProduct($productId);
+        return $this->inventory->archiveProduct($productId);
+    }
+
+    public function unarchiveProduct(int $productId): array
+    {
+        return $this->inventory->unarchiveProduct($productId);
+    }
+
+    public function deleteArchivedProduct(int $productId): array
+    {
+        return $this->inventory->deleteArchivedProduct($productId);
     }
 
     public function cleanupTestProduct(int $productId): array

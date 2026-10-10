@@ -741,6 +741,33 @@ public function getQuantityByCategory()
         ->fetchAll(PDO::FETCH_ASSOC);
 }
 
+public function getInventoryBatches(): array
+{
+    $sql = "
+        SELECT
+            pb.product_id,
+            pb.batch_id,
+            pb.batch_number,
+            pb.quantity,
+            pb.expiration_date,
+            pb.batch_status,
+            pb.received_date,
+            pb.unit_cost
+        FROM product_batches pb
+        ORDER BY pb.product_id ASC, pb.batch_id ASC
+    ";
+    $batches = $this->conn->query($sql)->fetchAll(PDO::FETCH_ASSOC);
+    $grouped = [];
+    foreach ($batches as $batch) {
+        $productId = (int) $batch['product_id'];
+        if (!isset($grouped[$productId])) {
+            $grouped[$productId] = [];
+        }
+        $grouped[$productId][] = $batch;
+    }
+    return $grouped;
+}
+
 public function getInventoryProducts()
 {
     $sql = "

@@ -33,7 +33,7 @@ $header = $details[0];
 
 </head>
 
-<body onload="window.print()">
+<body>
 
 <div class="receipt">
 
@@ -89,6 +89,9 @@ $header = $details[0];
 
 <hr>
 
+<p><strong>Subtotal:</strong> ₱<?= number_format(($header['subtotal'] ?? 0), 2); ?></p>
+<p><strong>Discount:</strong> ₱<?= number_format(($header['discount_amount'] ?? 0), 2); ?></p>
+<p><strong>VAT:</strong> ₱<?= number_format(($header['vat_amount'] ?? 0), 2); ?></p>
 <p><strong>Total:</strong> ₱<?= number_format($header['total_amount'],2); ?></p>
 
 <p><strong>Payment:</strong> <?= $header['payment_method']; ?></p>
@@ -121,7 +124,44 @@ Get Well Soon!
 
 </center>
 
+<hr>
+
+<div style="text-align:center; padding: 10px 0;">
+
+<button onclick="confirmAndPrint()" style="padding: 10px 20px; font-size: 14px; cursor: pointer; background: #198754; color: white; border: none; border-radius: 4px;">
+
+<i class="bi bi-printer"></i> Confirm & Print Receipt
+
+</button>
+
 </div>
+
+</div>
+
+<script>
+
+function confirmAndPrint() {
+
+    if (confirm("Confirm print receipt?\n\nThis will send the receipt to the printer.")) {
+
+        if (typeof NxToast !== 'undefined') {
+            NxToast.show("🖨 Receipt sent to printer.", "success");
+        }
+        window.print();
+
+    }
+
+}
+
+// Optional: auto-focus for quick confirmation
+
+window.addEventListener('load', function() {
+
+    document.querySelector('button')?.focus();
+
+});
+
+</script>
 
 </body>
 </html>

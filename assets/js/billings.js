@@ -4,10 +4,16 @@ console.log("Billings JS Loaded");
    PRINT RECEIPT
 =========================== */
 function printReceipt(saleId) {
+    if (!confirm("Confirm print receipt?\n\nThis will open the receipt for printing.")) return;
+
     window.open(
         "/app/dashboard/pos/receipt.php?sale_id=" + encodeURIComponent(saleId),
         "_blank"
     );
+
+    if (typeof NxToast !== 'undefined') {
+        NxToast.show("🖨 Receipt opened for printing.", "info");
+    }
 }
 
 /* ===========================

@@ -144,6 +144,9 @@ $this->dashboard->getBestSellingProducts(
         'inventory_products' =>
             $this->dashboard->getInventoryProducts(),
 
+        'inventory_batches' =>
+            $this->dashboard->getInventoryBatches(),
+
         'near_expiry' =>
             $this->dashboard->getNearExpiryProducts(),
 

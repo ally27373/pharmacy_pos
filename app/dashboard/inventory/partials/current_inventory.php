@@ -14,6 +14,10 @@ $inventoryPageSize = 5;
                 Product-level quantity with batch details available on selection
             </p>
         </div>
+        <div class="current-inventory-search">
+            <i class="bi bi-search"></i>
+            <input type="text" id="current-inventory-search" placeholder="Search product or barcode..." autocomplete="off">
+        </div>
         <div class="current-inventory-total">
             <?= number_format(count($inventoryProducts)); ?> products
         </div>
@@ -157,6 +161,10 @@ $inventoryPageSize = 5;
 <style>
 .current-inventory-panel { width: 100%; }
 .current-inventory-header { margin-bottom: 14px; }
+.current-inventory-search { display: flex; align-items: center; gap: 8px; padding: 6px 12px; border: 1px solid #d9e2de; border-radius: 8px; background: #fff; max-width: 300px; font-size: 13px; color: #374151; }
+.current-inventory-search i { color: #118d6d; }
+.current-inventory-search input { border: none; outline: none; background: transparent; flex: 1; font-size: 13px; color: #374151; }
+.current-inventory-search input::placeholder { color: #9aa4a8; }
 .current-inventory-total {
     padding: 6px 10px;
     border-radius: 999px;
@@ -314,5 +322,24 @@ $inventoryPageSize = 5;
     });
 
     renderPage();
+
+    // Search functionality
+    var searchInput = document.getElementById('current-inventory-search');
+    if (searchInput) {
+        searchInput.addEventListener('input', function () {
+            var query = this.value.toLowerCase().trim();
+            productRows = Array.prototype.slice.call(document.querySelectorAll('.current-inventory-product-row'));
+            productRows.forEach(function (row) {
+                var name = (row.querySelector('.current-inventory-product-name')?.textContent || '').toLowerCase();
+                var barcode = (row.querySelector('.current-inventory-barcode')?.textContent || '').toLowerCase();
+                var visible = !query || name.includes(query) || barcode.includes(query);
+                row.hidden = !visible;
+                var batchRow = document.getElementById('inventory-batches-' + row.getAttribute('data-product-id'));
+                if (batchRow) batchRow.hidden = true;
+            });
+            currentPage = 1;
+            renderPage();
+        });
+    }
 })();
 </script>

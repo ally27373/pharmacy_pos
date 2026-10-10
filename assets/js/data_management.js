@@ -24,6 +24,9 @@ function showMessage(type, text) {
 async function downloadCsv(button, endpoint, label) {
     if (!button) return;
 
+    // === CONFIRMATION ===
+    if (!confirm(`Confirm export ${label} dataset?\n\nThis will download the CSV file.`)) return;
+
     const originalHtml = button.innerHTML;
     button.disabled = true;
     button.innerHTML = `
@@ -67,10 +70,18 @@ async function downloadCsv(button, endpoint, label) {
         link.remove();
         URL.revokeObjectURL(url);
 
-        showMessage('success', `${label} dataset exported successfully.`);
+        if (typeof NxToast !== 'undefined') {
+            NxToast.show(`📥 ${label} dataset exported successfully.`, "success");
+        } else {
+            showMessage('success', `${label} dataset exported successfully.`);
+        }
     } catch (error) {
         console.error(`${label} export error:`, error);
-        showMessage('danger', error.message || `${label} export failed.`);
+        if (typeof NxToast !== 'undefined') {
+            NxToast.show(`❌ ${error.message || label + ' export failed.'}`, "danger");
+        } else {
+            showMessage('danger', error.message || `${label} export failed.`);
+        }
     } finally {
         button.disabled = false;
         button.innerHTML = originalHtml;

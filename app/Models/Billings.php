@@ -72,7 +72,11 @@ class Billing
                 p.change_amount,
                 p.reference_number,
                 p.payment_status,
-                p.payment_date
+                p.payment_date,
+                s.subtotal,
+                s.discount_amount,
+                s.vat_amount,
+                s.total_amount
             FROM payments p
             INNER JOIN sales s ON p.sale_id = s.sale_id
             {$whereSql}
@@ -117,6 +121,10 @@ class Billing
                 p.payment_date,
                 s.sale_id,
                 s.transaction_number,
+                s.subtotal,
+                s.discount_amount,
+                s.vat_amount,
+                s.total_amount,
                 CONCAT('INV-', LPAD(s.sale_id,6,'0')) AS invoice_number
             FROM payments p
             INNER JOIN sales s ON p.sale_id = s.sale_id

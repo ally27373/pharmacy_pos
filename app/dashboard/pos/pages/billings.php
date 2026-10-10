@@ -68,6 +68,9 @@ require_once '../../../includes/header.php';
                         <th>Transaction</th>
                         <th>Invoice</th>
                         <th>Method</th>
+                        <th>Subtotal</th>
+                        <th>Discount</th>
+                        <th>VAT</th>
                         <th>Amount Due</th>
                         <th>Paid</th>
                         <th>Change</th>
@@ -92,6 +95,9 @@ require_once '../../../includes/header.php';
                             <td><?= htmlspecialchars($billing['transaction_number']) ?></td>
                             <td><?= htmlspecialchars($billing['invoice_number']) ?></td>
                             <td><?= htmlspecialchars($billing['payment_method']) ?></td>
+                            <td>₱<?= number_format((float) ($billing['subtotal'] ?? 0), 2) ?></td>
+                            <td>₱<?= number_format((float) ($billing['discount_amount'] ?? 0), 2) ?></td>
+                            <td>₱<?= number_format((float) ($billing['vat_amount'] ?? 0), 2) ?></td>
                             <td>₱<?= number_format((float) $billing['amount_due'], 2) ?></td>
                             <td>₱<?= number_format((float) $billing['amount_paid'], 2) ?></td>
                             <td>₱<?= number_format((float) $billing['change_amount'], 2) ?></td>

@@ -210,6 +210,8 @@
     }
 
     function downloadReport(format) {
+        // === CONFIRMATION ===
+        if (!confirm(`Confirm download ${format.toUpperCase()} report?\n\nThis will generate and download the file.`)) return;
         const params = currentQuery(1);
         params.delete('page');
         params.delete('limit');
@@ -248,11 +250,19 @@
                 link.click();
                 link.remove();
                 URL.revokeObjectURL(objectUrl);
-                showMessage('success', `${format.toUpperCase()} report downloaded successfully.`);
+                if (typeof NxToast !== 'undefined') {
+                    NxToast.show(`📊 ${format.toUpperCase()} report downloaded successfully.`, "success");
+                } else {
+                    showMessage('success', `${format.toUpperCase()} report downloaded successfully.`);
+                }
             })
             .catch(error => {
                 console.error('Report export error:', error);
-                showMessage('danger', error.message || 'Report export failed.');
+                if (typeof NxToast !== 'undefined') {
+                    NxToast.show(`❌ ` + (error.message || 'Report export failed.'), "danger");
+                } else {
+                    showMessage('danger', error.message || 'Report export failed.');
+                }
             })
             .finally(() => {
                 button.disabled = false;

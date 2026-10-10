@@ -112,9 +112,14 @@ function setTopProducts(limit) {
 }
 
 function exportBestSellerCSV() {
+    if (!confirm("Confirm export best seller CSV?\n\nThis will download the CSV file.")) return;
 
     window.location.href =
         "/app/export/export_best_seller.php";
+
+    if (typeof NxToast !== 'undefined') {
+        NxToast.show("📥 Best seller CSV exported successfully.", "success");
+    }
 }
 
 function updateFastMoving(){

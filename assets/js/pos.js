@@ -366,6 +366,12 @@ async function completeSale()
         return;
     }
 
+    // === CONFIRMATION BEFORE PROCESSING SALE ===
+    if (!confirm("Confirm complete sale?\n\nThis will finalize the transaction and open the receipt for printing."))
+    {
+        return;
+    }
+
     /*
      * Open the receipt window while the cashier's click is still active.
      * This prevents browsers from treating the receipt as a blocked popup
@@ -452,6 +458,9 @@ async function completeSale()
             window.location.href = receiptUrl;
             return;
         }
+
+        // Toast notification for completed sale
+        NxToast.show(`✅ Sale completed — Total: ₱${total.toFixed(2)}`, "success");
 
         /*
          * Reset the POS for the next customer. The receipt is already open

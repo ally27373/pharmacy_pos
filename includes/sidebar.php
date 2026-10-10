@@ -202,6 +202,21 @@ $isCashier = $roleId === 2;
 
                     </li>
 
+                    <li>
+
+                        <a
+                            href="/app/dashboard/archive/index.php"
+                            class="<?= ($page == 'archive') ? 'active' : ''; ?>"
+                        >
+
+                            <i class="bi bi-archive-fill"></i>
+
+                            Archived Products
+
+                        </a>
+
+                    </li>
+
                 </ul>
 
             </li>

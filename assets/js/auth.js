@@ -86,7 +86,12 @@ document.addEventListener("DOMContentLoaded", function () {
 
     if (signupForm) {
 
-        signupForm.addEventListener("submit", function () {
+        signupForm.addEventListener("submit", function (e) {
+            // === CONFIRMATION ===
+            if (!confirm("Confirm create account?\n\nThis will register a new user account.")) {
+                e.preventDefault();
+                return false;
+            }
 
             const signupButton = document.querySelector(".login-btn");
 

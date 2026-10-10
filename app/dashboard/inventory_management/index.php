@@ -3,7 +3,7 @@
 require_once '../../../config/session.php';
 require_once '../../Middleware/AuthMiddleware.php';
 
-AuthMiddleware::check();
+AuthMiddleware::admin();
 
 $menu = "inventory_management";
 $page = "inventory_management";
@@ -242,9 +242,9 @@ require_once '../../../includes/header.php';
                                         class="btn btn-danger btn-sm delete-product"
                                         data-product="<?= (int) $product['product_id'] ?>"
                                         data-name="<?= htmlspecialchars($product['product_name'] ?? '') ?>"
-                                        title="Delete product"
-                                        aria-label="Delete product">
-                                        <i class="bi bi-trash-fill"></i>
+                                        title="Archive product"
+                                        aria-label="Archive product">
+                                        <i class="bi bi-archive-fill"></i>
                                     </button>
                                 </div>
                             </td>
@@ -872,9 +872,9 @@ Update Product
 
                 <h5 class="modal-title">
 
-                    <i class="bi bi-trash3-fill me-2"></i>
+                    <i class="bi bi-archive-fill me-2"></i>
 
-                    Delete Product
+                    Archive Product
 
                 </h5>
 
@@ -892,13 +892,13 @@ Update Product
 
                 <h4 class="mt-3">
 
-                    Are you sure?
+                    Archive this product?
 
                 </h4>
 
                 <p class="text-muted">
 
-                    This action cannot be undone.
+                    This will archive the product (soft delete). You can unarchive it later.
 
                 </p>
 
@@ -920,12 +920,12 @@ Update Product
                 </button>
 
                 <button
-                    class="btn btn-danger"
+                    class="btn btn-warning"
                     id="confirm-delete-product">
 
-                    <i class="bi bi-trash-fill me-2"></i>
+                    <i class="bi bi-archive-fill me-2"></i>
 
-                    Delete
+                    Archive
 
                 </button>
 

@@ -570,7 +570,13 @@ document.addEventListener("DOMContentLoaded", () => {
 
                 event.stopPropagation();
 
+                if (!confirm("Refresh notifications?\n\nThis will reload the latest alerts.")) return;
+
                 loadNotifications();
+
+                if (typeof NxToast !== 'undefined') {
+                    NxToast.show("🔄 Notifications refreshed.", "info");
+                }
 
             }
         );

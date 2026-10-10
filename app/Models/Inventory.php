@@ -49,7 +49,7 @@ class Inventory
             $params[':type'] = $type;
         }
 
-        $whereSql = $where ? 'WHERE ' . implode(' AND ', $where) : '';
+        $whereSql = $where ? 'WHERE ' . implode(' AND ', $where) . ' AND p.is_archived = 0' : 'WHERE p.is_archived = 0';
 
         $countSql = "
             SELECT COUNT(*)
@@ -163,6 +163,25 @@ class Inventory
                 'has_next' => $page < $totalPages,
             ],
         ];
+    }
+
+    public function getArchivedProducts(): array
+    {
+        $sql = "
+            SELECT
+                p.product_id,
+                p.product_name,
+                p.barcode,
+                pt.type_name,
+                c.category_name
+            FROM products p
+            INNER JOIN product_types pt ON p.type_id = pt.type_id
+            INNER JOIN categories c ON p.category_id = c.category_id
+            WHERE p.is_archived = 1
+            ORDER BY p.product_name ASC
+        ";
+        $stmt = $this->conn->query($sql);
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
     public function getProductDetails($id): ?array
@@ -576,7 +595,7 @@ class Inventory
         }
     }
 
-    public function deleteProduct(int $productId): array
+    public function archiveProduct(int $productId): array
     {
         try {
             if ($productId <= 0) {
@@ -592,29 +611,99 @@ class Inventory
                 throw new RuntimeException('Product not found.');
             }
 
+            if ((int) ($product['is_archived'] ?? 0) === 1) {
+                throw new RuntimeException('Product is already archived.');
+            }
+
+            $archive = $this->conn->prepare("UPDATE products SET is_archived = 1 WHERE product_id = :id");
+            $archive->execute([':id' => $productId]);
+
+            $this->conn->commit();
+            return ['success' => true, 'message' => 'Product archived successfully.'];
+        } catch (Throwable $e) {
+            if ($this->conn->inTransaction()) {
+                $this->conn->rollBack();
+            }
+            return ['success' => false, 'message' => $e->getMessage()];
+        }
+    }
+
+    public function unarchiveProduct(int $productId): array
+    {
+        try {
+            if ($productId <= 0) {
+                throw new InvalidArgumentException('Invalid product.');
+            }
+
+            $this->conn->beginTransaction();
+
+            $check = $this->conn->prepare("SELECT product_id, product_name FROM products WHERE product_id = :id FOR UPDATE");
+            $check->execute([':id' => $productId]);
+            $product = $check->fetch(PDO::FETCH_ASSOC);
+            if (!$product) {
+                throw new RuntimeException('Product not found.');
+            }
+
+            if ((int) ($product['is_archived'] ?? 0) !== 1) {
+                throw new RuntimeException('Product is not archived.');
+            }
+
+            $unarchive = $this->conn->prepare("UPDATE products SET is_archived = 0 WHERE product_id = :id");
+            $unarchive->execute([':id' => $productId]);
+
+            $this->conn->commit();
+            return ['success' => true, 'message' => 'Product unarchived successfully.'];
+        } catch (Throwable $e) {
+            if ($this->conn->inTransaction()) {
+                $this->conn->rollBack();
+            }
+            return ['success' => false, 'message' => $e->getMessage()];
+        }
+    }
+
+    public function deleteArchivedProduct(int $productId): array
+    {
+        try {
+            if ($productId <= 0) {
+                throw new InvalidArgumentException('Invalid product.');
+            }
+
+            $this->conn->beginTransaction();
+
+            $check = $this->conn->prepare("SELECT product_id, product_name, is_archived FROM products WHERE product_id = :id FOR UPDATE");
+            $check->execute([':id' => $productId]);
+            $product = $check->fetch(PDO::FETCH_ASSOC);
+            if (!$product) {
+                throw new RuntimeException('Product not found.');
+            }
+
+            if ((int) ($product['is_archived'] ?? 0) !== 1) {
+                throw new RuntimeException('Only archived products can be permanently deleted.');
+            }
+
             $sales = $this->conn->prepare("SELECT COUNT(*) FROM sale_items WHERE product_id = :id");
             $sales->execute([':id' => $productId]);
             if ((int) $sales->fetchColumn() > 0) {
-                throw new RuntimeException('This product cannot be deleted because it has sales history.');
+                throw new RuntimeException('This archived product has sales history and cannot be permanently deleted.');
             }
 
             $history = $this->conn->prepare("SELECT COUNT(*) FROM inventory_history WHERE product_id = :id");
             $history->execute([':id' => $productId]);
             if ((int) $history->fetchColumn() > 0) {
-                throw new RuntimeException('This product cannot be deleted because it has inventory history.');
+                throw new RuntimeException('This archived product has inventory history and cannot be permanently deleted.');
             }
 
             $batches = $this->conn->prepare("SELECT COUNT(*) FROM product_batches WHERE product_id = :id");
             $batches->execute([':id' => $productId]);
             if ((int) $batches->fetchColumn() > 0) {
-                throw new RuntimeException('This product cannot be deleted because it has batch inventory records.');
+                throw new RuntimeException('This archived product has batch inventory records and cannot be permanently deleted.');
             }
 
-            $delete = $this->conn->prepare("DELETE FROM products WHERE product_id = :id");
+            $delete = $this->conn->prepare("DELETE FROM products WHERE product_id = :id AND is_archived = 1");
             $delete->execute([':id' => $productId]);
 
             $this->conn->commit();
-            return ['success' => true, 'message' => 'Product deleted successfully.'];
+            return ['success' => true, 'message' => 'Archived product permanently deleted.'];
         } catch (Throwable $e) {
             if ($this->conn->inTransaction()) {
                 $this->conn->rollBack();
