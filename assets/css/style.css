@@ -77,6 +77,47 @@
 }
 
 
+/* =====================================================
+   BRIDGE BOOTSTRAP OVERLAYS ONTO THE SCALE ABOVE
+
+   Bootstrap hardcodes .modal-backdrop at 1050 and .modal
+   at 1055. Every layer the app shell defines sits above
+   1055 -- the navbar alone is 1210 -- so an open modal was
+   painted *underneath* the top app bar and the notification
+   bell. The modal looked broken on every page rather than
+   on one, because --z-modal was declared but never applied
+   to anything.
+
+   Re-point the Bootstrap values at the scale instead of
+   lowering the navbar: the navbar has to stay above the
+   off-canvas drawer (see the note above), so the modal is
+   the layer that moves.
+
+   The 10-15 step gaps mirror Bootstrap's own ordering so
+   backdrop < modal < popover < tooltip still holds.
+   ===================================================== */
+
+.modal-backdrop
+{
+    z-index:var(--z-modal,1300);
+}
+
+.modal
+{
+    z-index:calc(var(--z-modal,1300) + 10);
+}
+
+.popover
+{
+    z-index:calc(var(--z-modal,1300) + 20);
+}
+
+.tooltip
+{
+    z-index:calc(var(--z-modal,1300) + 30);
+}
+
+
 /* ===========================================================
    CROSS-CUTTING UTILITIES
 =========================================================== */
