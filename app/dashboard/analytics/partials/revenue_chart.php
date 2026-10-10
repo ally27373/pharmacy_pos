@@ -243,12 +243,10 @@ autoSkip:false,
 
 font:{size:11},
 
-callback:function(value,index,ticks){
+callback:function(value,index){
 
-var tick = ticks[index];
-
-var label = tick && tick.label != null
-    ? String(tick.label)
+var label = labels[index] != null
+    ? String(labels[index])
     : String(value);
 
 if (label.length <= 26 || label.indexOf(" ") === -1) {
