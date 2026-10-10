@@ -258,7 +258,7 @@ document
 
 
 const bestSellerData =
-<?= json_encode($data); ?>;
+<?= json_encode($data, JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT); ?>;
 
 const bestSellerChart =
 new Chart(bestSellerCtx,{
@@ -268,7 +268,7 @@ type:"bar",
 data:{
 
 labels:
-<?= json_encode($labels); ?>,
+<?= json_encode($labels, JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT); ?>,
 
 datasets:[{
 

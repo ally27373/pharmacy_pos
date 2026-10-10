@@ -229,10 +229,10 @@ foreach ($analyticsYears as $y):
 <script>
 
 const demandLabels =
-    <?= json_encode($labels); ?>;
+    <?= json_encode($labels, JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT); ?>;
 
 const demandValues =
-    <?= json_encode($demandData); ?>;
+    <?= json_encode($demandData, JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT); ?>;
 
 let demandChart;
 

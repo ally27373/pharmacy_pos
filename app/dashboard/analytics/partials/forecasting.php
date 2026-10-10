@@ -183,10 +183,10 @@ if ($legacySchema) {
                 }
 
                 const labels = <?= json_encode(['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec']); ?>;
-                const actual = <?= json_encode($actual); ?>;
-                const forecast = <?= json_encode($forecast); ?>;
-                const lower = <?= json_encode($lower); ?>;
-                const upper = <?= json_encode($upper); ?>;
+                const actual = <?= json_encode($actual, JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT); ?>;
+                const forecast = <?= json_encode($forecast, JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT); ?>;
+                const lower = <?= json_encode($lower, JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT); ?>;
+                const upper = <?= json_encode($upper, JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT); ?>;
 
                 window.forecastChartInstance = new Chart(canvas, {
                     type: 'line',
@@ -194,7 +194,7 @@ if ($legacySchema) {
                         labels,
                         datasets: [
                             {
-                                label: <?= json_encode($chartActualLabel); ?>,
+                                label: <?= json_encode($chartActualLabel, JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT); ?>,
                                 data: actual,
                                 borderColor: '#2563eb',
                                 backgroundColor: 'rgba(37,99,235,0.08)',
@@ -206,7 +206,7 @@ if ($legacySchema) {
                                 fill: false
                             },
                             {
-                                label: <?= json_encode($chartForecastLabel); ?>,
+                                label: <?= json_encode($chartForecastLabel, JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT); ?>,
                                 data: forecast,
                                 borderColor: '#159577',
                                 backgroundColor: 'rgba(21,149,119,0.08)',
