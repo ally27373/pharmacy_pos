@@ -3,6 +3,17 @@
 declare(strict_types=1);
 
 /*
+| Every amount below is cast with (float) before number_format(). Under
+| declare(strict_types=1) that cast is no longer optional: PDO hands back
+| DECIMAL columns as PHP strings, and number_format() rejects a string with
+| a TypeError. A TypeError is fatal, so it truncates the document mid-receipt
+| and the customer gets a receipt with the line items and no totals at all.
+|
+| Do not remove the casts when tidying this file. Same rule as
+| app/dashboard/pos/ajax/get_sale.php.
+*/
+
+/*
 | Path depths from /app/dashboard/pos:
 |   ../../../  -> project root   (config/ lives here)
 |   ../../     -> app/           (Middleware/ and Controllers/ live here)
@@ -70,6 +81,12 @@ $receiptAsset = static function (string $path): string {
 <link rel="stylesheet" href="<?= $receiptAsset('/assets/css/receipts.css') ?>">
 <link rel="stylesheet" href="<?= $receiptAsset('/assets/css/swal.css') ?>">
 
+<!-- The print button uses a bi-printer glyph. This page renders standalone
+     and never loads includes/header.php, so the icon font has to be pulled in
+     here or the button renders as bare text with an invisible icon. Same CDN
+     pin as header.php uses. -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
 <!-- This page renders standalone (no includes/header.php), so the
      SweetAlert2 bundle + NxSwal wrapper are loaded explicitly here. -->
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
@@ -122,7 +139,7 @@ $receiptAsset = static function (string $path): string {
 
 <td><?= $item['quantity']; ?></td><td><?= htmlspecialchars($item['batch_allocations'] ?? '—'); ?></td>
 
-<td>₱<?= number_format($item['subtotal'],2); ?></td>
+<td>₱<?= number_format((float) ($item['subtotal'] ?? 0), 2); ?></td>
 
 </tr>
 
@@ -134,9 +151,15 @@ $receiptAsset = static function (string $path): string {
 
 <hr>
 
-<p><strong>Subtotal:</strong> ₱<?= number_format(($header['subtotal'] ?? 0), 2); ?></p>
-<p><strong>Discount:</strong> ₱<?= number_format(($header['discount_amount'] ?? 0), 2); ?></p>
-<p><strong>Total:</strong> ₱<?= number_format($header['total_amount'],2); ?></p>
+<div class="receipt-totals">
+
+<p><span>Subtotal:</span> <span>₱<?= number_format((float) ($header['subtotal'] ?? 0), 2); ?></span></p>
+
+<p><span>Discount:</span> <span>₱<?= number_format((float) ($header['discount_amount'] ?? 0), 2); ?></span></p>
+
+<p class="receipt-grand-total"><span>Total:</span> <span>₱<?= number_format((float) ($header['total_amount'] ?? 0), 2); ?></span></p>
+
+</div>
 
 <p><strong>Payment:</strong> <?= $header['payment_method']; ?></p>
 
@@ -148,13 +171,13 @@ $receiptAsset = static function (string $path): string {
 
 <p><strong>Amount Paid:</strong>
 
-₱<?= number_format($header['amount_paid'],2); ?>
+₱<?= number_format((float) ($header['amount_paid'] ?? 0), 2); ?>
 
 </p>
 
 <p><strong>Change:</strong>
 
-₱<?= number_format($header['change_amount'],2); ?>
+₱<?= number_format((float) ($header['change_amount'] ?? 0), 2); ?>
 
 </p>
 
@@ -172,7 +195,7 @@ Get Well Soon!
 
 <div style="text-align:center; padding: 10px 0;">
 
-<button onclick="confirmAndPrint()" style="padding: 10px 20px; font-size: 14px; cursor: pointer; background: #198754; color: white; border: none; border-radius: 4px;">
+<button class="receipt-print-button" onclick="confirmAndPrint()" style="padding: 10px 20px; font-size: 14px; cursor: pointer; background: #198754; color: white; border: none; border-radius: 4px;">
 
 <i class="bi bi-printer"></i> Confirm & Print Receipt
 

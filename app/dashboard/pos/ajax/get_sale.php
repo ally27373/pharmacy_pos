@@ -3,6 +3,23 @@
 declare(strict_types=1);
 
 /*
+| MONEY VALUES MUST BE CAST, NOT COERCED
+|
+| declare(strict_types=1) above turns number_format()'s first parameter from
+| "anything numeric" into "a real float". PDO returns DECIMAL columns as
+| PHP strings ("38.00"), so passing one straight through raises
+|
+|     TypeError: number_format(): Argument #1 ($num) must be of type float
+|
+| That is a fatal, not a warning: it kills the response mid-document, so the
+| browser gets a truncated 500 and the caller reports it as a generic load
+| failure. Every amount below therefore goes through (float) first. The same
+| trap applies to app/dashboard/pos/receipt.php.
+|
+| Do not remove the casts when tidying these files.
+*/
+
+/*
 | Path depths from /app/dashboard/pos/ajax:
 |   ../../../../  -> project root   (config/ lives here)
 |   ../../../     -> app/           (Middleware/ and Controllers/ live here)
@@ -117,9 +134,9 @@ $header = $items[0];
 
 <td><?= htmlspecialchars($item['batch_allocations'] ?? '—'); ?></td>
 
-<td>₱<?= number_format($item['unit_price'],2); ?></td>
+<td>₱<?= number_format((float) ($item['unit_price'] ?? 0), 2); ?></td>
 
-<td>₱<?= number_format($item['subtotal'],2); ?></td>
+<td>₱<?= number_format((float) ($item['subtotal'] ?? 0), 2); ?></td>
 
 </tr>
 
@@ -135,7 +152,7 @@ $header = $items[0];
 
 Total:
 
-₱<?= number_format($header['total_amount'],2); ?>
+₱<?= number_format((float) ($header['total_amount'] ?? 0), 2); ?>
 
 </h4>
 
