@@ -58,13 +58,17 @@ $fastLimit = $_GET['fast_limit'] ?? 5;
         /*
         |--------------------------------------------------------------------------
         | ANALYTICS CHARTS
-        | Temporary default periods
-        | These will receive their own filters later
+        |
+        | revenue_by_category and monthly_sales share the `sales_year`
+        | selector so the two panels can be read against each other.
+        | The remaining charts still fall back to fixed windows.
         |--------------------------------------------------------------------------
         */
 
         'revenue_by_category' =>
-            $this->dashboard->getRevenueByCategory('30days'),
+            $this->dashboard->getRevenueByCategory(
+                $_GET['sales_year'] ?? date('Y')
+            ),
 
         'monthly_sales'
     => $this->dashboard->getMonthlySales(

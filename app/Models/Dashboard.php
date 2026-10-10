@@ -379,14 +379,49 @@ public function getAnalyticsYears(): array
 }
 
 
-public function getRevenueByCategory($period = '7days')
+public function getRevenueByCategory($year = null)
 {
-    $where = $this->getDateCondition($period, 's.created_at');
+    $year = $year ?? date('Y');
 
+    /*
+     * Two corrections against the original query, both so this panel
+     * reconciles with the Sales Performance chart sitting next to it.
+     *
+     * 1. Period. It was hardcoded to a rolling 30 days while
+     *    getMonthlySales() reads a whole calendar year, so the two
+     *    panels could never be compared. Both now honour the same
+     *    `sales_year` selector.
+     *
+     * 2. Discount. sales.discount_amount is a sale-level peso discount,
+     *    not a per-line one. Summing sale_items.subtotal on its own
+     *    reports gross line revenue and overstates every sale that took
+     *    a discount. sl.line_subtotal exposes each sale's line total so
+     *    the discount can be prorated across that sale's lines by value;
+     *    the category totals then sum to exactly the total_amount that
+     *    getMonthlySales() reports, with only the split between
+     *    categories being proportional.
+     *
+     * Products that are archived stay in scope on purpose: a sale is a
+     * historical fact and must not vanish from revenue because the item
+     * was archived later.
+     */
     $sql = "
         SELECT
             c.category_name,
-            COALESCE(SUM(si.subtotal), 0) AS revenue
+
+            ROUND(
+                COALESCE(
+                    SUM(
+                        si.subtotal - COALESCE(
+                            s.discount_amount * si.subtotal
+                                / NULLIF(sl.line_subtotal, 0),
+                            0
+                        )
+                    ),
+                    0
+                ),
+                2
+            ) AS revenue
 
         FROM categories c
 
@@ -399,9 +434,21 @@ public function getRevenueByCategory($period = '7days')
         INNER JOIN sales s
             ON si.sale_id = s.sale_id
 
+        INNER JOIN (
+            SELECT
+                sale_id,
+                SUM(subtotal) AS line_subtotal
+
+            FROM sale_items
+
+            GROUP BY sale_id
+        ) sl
+            ON sl.sale_id = si.sale_id
+
         WHERE
             s.transaction_status = 'Completed'
-            AND $where
+
+            AND YEAR(s.created_at) = :year
 
         GROUP BY
             c.category_id,
@@ -410,9 +457,13 @@ public function getRevenueByCategory($period = '7days')
         ORDER BY revenue DESC
     ";
 
-    return $this->conn
-        ->query($sql)
-        ->fetchAll(PDO::FETCH_ASSOC);
+    $stmt = $this->conn->prepare($sql);
+
+    $stmt->execute([
+        ':year' => $year
+    ]);
+
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
 
 public function getMonthlySales($year = null)

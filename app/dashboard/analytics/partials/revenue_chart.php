@@ -11,6 +11,9 @@
 
 <?php
 
+$currentYear =
+    $_GET['sales_year'] ?? date('Y');
+
 $labels = [];
 $data = [];
 
@@ -48,7 +51,43 @@ if (!is_string($revenueDataJson) || $revenueDataJson === '') {
 
 <div class="dashboard-panel">
 
-    <h4>Revenue by Category</h4>
+    <div class="chart-header">
+
+        <h4>Revenue by Category</h4>
+
+        <div class="chart-filter-wrapper">
+
+    <i class="bi bi-calendar3"></i>
+
+    <span>Year</span>
+
+    <select
+        class="chart-filter"
+        onchange="changeSalesYear(this.value)"
+    >
+    <?php
+$analyticsYears = $dashboardData['analytics_years'] ?? [date('Y')];
+
+foreach ($analyticsYears as $year):
+?>
+
+            <option
+                value="<?= $year; ?>"
+                <?= $currentYear == $year
+                    ? 'selected'
+                    : ''; ?>
+            >
+
+                <?= $year; ?>
+
+            </option>
+
+        <?php endforeach; ?>
+
+    </select>
+
+</div>
+    </div>
 
 <?php if(array_sum($data)==0): ?>
 
@@ -167,6 +206,86 @@ padding:10,
 cornerRadius:6,
 
 font:{size:12}
+
+}
+
+},
+
+scales:{
+
+x:{
+
+beginAtZero:true,
+
+ticks:{
+
+callback:function(value){
+
+return value >= 1000
+    ? (value / 1000) + "k"
+    : value;
+
+}
+
+}
+
+},
+
+y:{
+
+ticks:{
+
+maxRotation:0,
+
+minRotation:0,
+
+autoSkip:false,
+
+font:{size:11},
+
+callback:function(value,index,ticks){
+
+var tick = ticks[index];
+
+var label = tick && tick.label != null
+    ? String(tick.label)
+    : String(value);
+
+if (label.length <= 26 || label.indexOf(" ") === -1) {
+
+    return label;
+
+}
+
+var lines = [""];
+
+var words = label.split(" ");
+
+for (var i = 0; i < words.length; i++){
+
+var current = lines[lines.length - 1];
+
+var candidate = current
+    ? current + " " + words[i]
+    : words[i];
+
+if (current && candidate.length > 26){
+
+lines.push(words[i]);
+
+} else {
+
+lines[lines.length - 1] = candidate;
+
+}
+
+}
+
+return lines;
+
+}
+
+}
 
 }
 
