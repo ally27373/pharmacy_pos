@@ -398,6 +398,15 @@ function kpiPeriodLabel(period)
 
 function kpiRenderBody(payload)
 {
+    /*
+     * metric arrives nested inside detail, alongside rows/total/page. It was
+     * read as payload.metric, which is undefined, so every branch below fell
+     * through to the sales table: the "Items Sold" card rendered product rows
+     * through the sales cell formatter and came out as blank cells, 0, and
+     * a row of dashes. period is the only key the endpoint puts at the top
+     * level, which is why the period line still rendered correctly and hid
+     * the mistake. Read it from detail like rows and total.
+     */
     const detail = payload.detail || {};
     const rows = detail.rows || [];
 
@@ -406,7 +415,7 @@ function kpiRenderBody(payload)
     const periodLine =
         `<p class="text-body-secondary small mb-3">${kpiEscape(kpiPeriodLabel(payload.period))}</p>`;
 
-    if (payload.metric === "items") {
+    if (detail.metric === "items") {
 
         body.innerHTML = periodLine + kpiTable(
             ["Product", "Category", "Qty Sold", "Times Sold", "Revenue"],
@@ -422,7 +431,7 @@ function kpiRenderBody(payload)
      * it shows payment status rather than repeating the identical money
      * columns.
      */
-    if (payload.metric === "transactions") {
+    if (detail.metric === "transactions") {
 
         body.innerHTML = periodLine + kpiTable(
             ["Transaction", "Date", "Cashier", "Items", "Amount", "Status"],
@@ -433,7 +442,7 @@ function kpiRenderBody(payload)
         return;
     }
 
-    const isGrowth = payload.metric === "growth";
+    const isGrowth = detail.metric === "growth";
 
     body.innerHTML =
         (isGrowth ? kpiGrowthSummary(detail.growth) : "")
