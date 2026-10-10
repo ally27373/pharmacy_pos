@@ -123,3 +123,6 @@ nbproject/
 .claude/skills/playwright-ui-ux-tester/baselines/**/*.png
 # Eval/benchmark scratch, not shipped with the skill:
 .claude/skills/playwright-ui-ux-tester-workspace/
+
+# OpenChamber local artifacts
+.openchamber/
