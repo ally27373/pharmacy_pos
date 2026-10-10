@@ -129,7 +129,7 @@ document.addEventListener("DOMContentLoaded", () => {
         try {
 
             const response = await fetch(
-                "/app/Controllers/get_notifications.php",
+                "/app/dashboard/notifications/ajax/get_notifications.php",
                 {
                     method: "GET",
                     headers: {

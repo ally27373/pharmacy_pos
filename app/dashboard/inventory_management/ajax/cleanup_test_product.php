@@ -1,24 +1,25 @@
 <?php
 
+declare(strict_types=1);
+
+require_once __DIR__ . '/../../../../config/session.php';
+require_once __DIR__ . '/../../../Middleware/AuthMiddleware.php';
+
+header('Content-Type: application/json; charset=utf-8');
+
+/*
+|--------------------------------------------------------------------------
+| Access control
+|--------------------------------------------------------------------------
+|
+| Test-data cleanup is an Administrator-only destructive operation.
+|
+*/
+AuthMiddleware::requireAdminApi();
+
 require_once __DIR__ . '/../../../Controllers/InventoryController.php';
 
-header('Content-Type: application/json');
-
-if (session_status() === PHP_SESSION_NONE) {
-    session_start();
-}
-
 try {
-    // Test-data cleanup is an Admin-only destructive operation.
-    if ((int) ($_SESSION['role_id'] ?? 0) !== 1) {
-        http_response_code(403);
-        echo json_encode([
-            'status' => 'error',
-            'message' => 'Only an administrator can clean up test data.',
-        ]);
-        exit;
-    }
-
     $productId = (int) ($_POST['product_id'] ?? 0);
     $controller = new InventoryController();
     $result = $controller->cleanupTestProduct($productId);

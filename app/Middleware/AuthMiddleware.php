@@ -176,6 +176,128 @@ public static function dataManagement(?User $userModel = null): void
 
     /*
     |--------------------------------------------------------------------------
+    | API access control
+    |--------------------------------------------------------------------------
+    |
+    | admin() and dataManagement() render an HTML page when they refuse,
+    | which is wrong for an ajax/ endpoint: fetch() would follow the
+    | redirect and inject a whole login page into a modal, and a JSON
+    | endpoint would answer with HTML under a JSON content type.
+    |
+    | These are the JSON-native equivalents. They validate the same chain
+    | check() does -- session present, user still exists, account still
+    | Active -- before applying a role rule, so an endpoint guarded by
+    | them cannot be reached with a stale or deleted account either.
+    |
+    */
+
+    private static function denyApi(int $status, string $message): never
+    {
+        if (!headers_sent()) {
+
+            http_response_code($status);
+
+            header(
+                'Content-Type: application/json; charset=utf-8'
+            );
+
+        }
+
+        echo json_encode([
+            'status' => 'error',
+            'message' => $message
+        ]);
+
+        exit;
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | Any signed-in account (Admin or Cashier)
+    |--------------------------------------------------------------------------
+    */
+
+    public static function requireAuthenticatedApi(?User $userModel = null): void
+    {
+        if (session_status() === PHP_SESSION_NONE) {
+
+            session_start();
+
+        }
+
+        if (!isset($_SESSION['user_id'])) {
+
+            self::denyApi(
+                401,
+                'Authentication is required.'
+            );
+
+        }
+
+        $userModel = $userModel ?? new User();
+
+        $user = $userModel->getById(
+            (int) $_SESSION['user_id']
+        );
+
+        if (!$user) {
+
+            self::destroySession();
+
+            self::denyApi(
+                401,
+                'Your account is no longer available. Please sign in again.'
+            );
+
+        }
+
+        if (($user['account_status'] ?? 'Inactive') !== 'Active') {
+
+            self::destroySession();
+
+            self::denyApi(
+                403,
+                'Your account is no longer active.'
+            );
+
+        }
+
+        /*
+        | Refresh the cached role so a role change made while the user was
+        | signed in takes effect on the very next request rather than the
+        | next page load.
+        */
+
+        $_SESSION['username'] = $user['username'];
+
+        $_SESSION['role_id'] = (int) $user['role_id'];
+
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | Administrator-only API access
+    |--------------------------------------------------------------------------
+    */
+
+    public static function requireAdminApi(?User $userModel = null): void
+    {
+        self::requireAuthenticatedApi($userModel);
+
+        if ((int) ($_SESSION['role_id'] ?? 0) !== 1) {
+
+            self::denyApi(
+                403,
+                'Administrator access is required.'
+            );
+
+        }
+
+    }
+
+
+    /*
+    |--------------------------------------------------------------------------
     | Destroy authenticated session
     |--------------------------------------------------------------------------
     */

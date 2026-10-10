@@ -245,4 +245,150 @@ final class AuthMiddlewareTest extends TestCase
             'See tests/Reports/DEFECTS_auth-users.md "Dev team resolution".'
         );
     }
+
+    // --------------------------------------------------------------
+    // API guards: requireAuthenticatedApi() / requireAdminApi()
+    // --------------------------------------------------------------
+
+    public function test_requireAuthenticatedApi_allows_active_cashier(): void
+    {
+        $_SESSION['user_id'] = 2;
+
+        $userModel = $this->createMock(User::class);
+        $userModel->method('getById')->with(2)->willReturn([
+            'user_id' => 2,
+            'username' => 'cashier1',
+            'role_id' => 2,
+            'account_status' => 'Active',
+        ]);
+
+        AuthMiddleware::requireAuthenticatedApi($userModel);
+
+        $this->assertSame(2, $_SESSION['role_id']);
+    }
+
+    public function test_requireAdminApi_allows_active_administrator(): void
+    {
+        $_SESSION['user_id'] = 1;
+
+        $userModel = $this->createMock(User::class);
+        $userModel->method('getById')->with(1)->willReturn([
+            'user_id' => 1,
+            'username' => 'admin',
+            'role_id' => 1,
+            'account_status' => 'Active',
+        ]);
+
+        AuthMiddleware::requireAdminApi($userModel);
+
+        $this->assertSame(1, $_SESSION['role_id']);
+    }
+
+    /**
+     * The API guards must refresh the cached role, not trust whatever the
+     * session was seeded with. An administrator demoted to Cashier while
+     * signed in has to lose admin access on the next request rather than at
+     * the next login.
+     */
+    public function test_requireAdminApi_refreshes_role_from_the_database(): void
+    {
+        $_SESSION['user_id'] = 3;
+        $_SESSION['role_id'] = 1; // stale: session still claims admin
+
+        $userModel = $this->createMock(User::class);
+        $userModel->method('getById')->willReturn([
+            'user_id' => 3,
+            'username' => 'demoted',
+            'role_id' => 2,
+            'account_status' => 'Active',
+        ]);
+
+        $this->expectOutputString('');
+        $this->expectOutputRegex('/Administrator access is required/');
+
+        AuthMiddleware::requireAdminApi($userModel);
+
+        $this->assertSame(2, $_SESSION['role_id']);
+    }
+
+    public function test_requireAdminApi_denies_cashier_with_json_403(): void
+    {
+        $body = $this->buildFixtureScript('requireAdminApi', ['user_id' => 2], [
+            'user_id' => 2,
+            'username' => 'cashier1',
+            'role_id' => 2,
+            'account_status' => 'Active',
+        ]);
+        $result = $this->runFixtureScript($body);
+
+        $this->assertStringNotContainsString('REACHED_END', $result['stdout']);
+        $this->assertStringContainsString('Administrator access is required', $result['stdout']);
+    }
+
+    /**
+     * The reason these exist separately from admin(): an ajax endpoint must
+     * answer with JSON. A redirect to the login page would have fetch()
+     * follow it and inject a whole HTML login form into a modal.
+     */
+    public function test_requireAdminApi_denies_missing_session_without_redirecting(): void
+    {
+        $body = $this->buildFixtureScript('requireAdminApi', [], false);
+        $result = $this->runFixtureScript($body);
+
+        $this->assertStringNotContainsString('REACHED_END', $result['stdout']);
+        $this->assertStringNotContainsString('Location:', $result['stdout']);
+        $this->assertStringNotContainsString('<!doctype html>', $result['stdout']);
+        $this->assertStringContainsString('Authentication is required', $result['stdout']);
+    }
+
+    public function test_requireAuthenticatedApi_denies_missing_session(): void
+    {
+        $body = $this->buildFixtureScript('requireAuthenticatedApi', [], false);
+        $result = $this->runFixtureScript($body);
+
+        $this->assertStringNotContainsString('REACHED_END', $result['stdout']);
+        $this->assertStringContainsString('Authentication is required', $result['stdout']);
+    }
+
+    public function test_requireAuthenticatedApi_denies_deleted_user(): void
+    {
+        $body = $this->buildFixtureScript('requireAuthenticatedApi', ['user_id' => 999], false);
+        $result = $this->runFixtureScript($body);
+
+        $this->assertStringNotContainsString('REACHED_END', $result['stdout']);
+        $this->assertStringContainsString('no longer available', $result['stdout']);
+    }
+
+    /**
+     * Replaces the hand-rolled $_SESSION['role_id'] checks these endpoints
+     * used to carry. Those never confirmed the account still existed or was
+     * still Active, so a deactivated admin kept access until the session
+     * happened to expire.
+     */
+    public function test_requireAdminApi_denies_deactivated_administrator(): void
+    {
+        $body = $this->buildFixtureScript('requireAdminApi', ['user_id' => 1], [
+            'user_id' => 1,
+            'username' => 'former_admin',
+            'role_id' => 1,
+            'account_status' => 'Inactive',
+        ]);
+        $result = $this->runFixtureScript($body);
+
+        $this->assertStringNotContainsString('REACHED_END', $result['stdout']);
+        $this->assertStringContainsString('no longer active', $result['stdout']);
+    }
+
+    public function test_requireAuthenticatedApi_allows_cashier_in_subprocess(): void
+    {
+        $body = $this->buildFixtureScript('requireAuthenticatedApi', ['user_id' => 2], [
+            'user_id' => 2,
+            'username' => 'cashier1',
+            'role_id' => 2,
+            'account_status' => 'Active',
+        ]);
+        $result = $this->runFixtureScript($body);
+
+        $this->assertStringContainsString('REACHED_END', $result['stdout']);
+    }
 }

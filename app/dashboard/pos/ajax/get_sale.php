@@ -1,10 +1,30 @@
 <?php
 
+declare(strict_types=1);
+
+/*
+| Path depths from /app/dashboard/pos/ajax:
+|   ../../../../  -> project root   (config/ lives here)
+|   ../../../     -> app/           (Middleware/ and Controllers/ live here)
+*/
+
+require_once __DIR__ . '/../../../../config/session.php';
+require_once __DIR__ . '/../../../Middleware/AuthMiddleware.php';
+
+header('Content-Type: text/html; charset=utf-8');
+
+/*
+| Receipts belong to whichever account rang the sale up, so this requires a
+| signed-in account rather than the Administrator role. Without a guard any
+| visitor could enumerate ?id= and read every transaction.
+*/
+AuthMiddleware::requireAuthenticatedApi();
+
 require_once __DIR__ . '/../../../Controllers/SalesController.php';
 
 $controller = new SalesController();
 
-$saleId = $_GET['id'] ?? 0;
+$saleId = (int) ($_GET['id'] ?? 0);
 
 $items = $controller->getSaleDetails($saleId);
 

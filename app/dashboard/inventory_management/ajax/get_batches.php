@@ -1,8 +1,25 @@
 <?php
 
-require_once __DIR__ . '/../../../Controllers/InventoryController.php';
+declare(strict_types=1);
 
-header('Content-Type: application/json');
+require_once __DIR__ . '/../../../../config/session.php';
+require_once __DIR__ . '/../../../Middleware/AuthMiddleware.php';
+
+header('Content-Type: application/json; charset=utf-8');
+
+/*
+|--------------------------------------------------------------------------
+| Access control
+|--------------------------------------------------------------------------
+|
+| Inventory Management is Administrator-only. Guarding the page that
+| renders these forms is not enough: a form is not a control, so any
+| signed-in account -- including a Cashier -- could POST straight here.
+|
+*/
+AuthMiddleware::requireAdminApi();
+
+require_once __DIR__ . '/../../../Controllers/InventoryController.php';
 
 try {
     $productId = (int) ($_GET['product_id'] ?? 0);

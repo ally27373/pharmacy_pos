@@ -7,16 +7,17 @@ require_once __DIR__ . '/../../../Middleware/AuthMiddleware.php';
 
 header('Content-Type: application/json; charset=utf-8');
 
-// Permanent deletion is destructive and Administrator-only. Guard before
-// the model runs so an unauthenticated POST cannot delete inventory.
-if ((int) ($_SESSION['role_id'] ?? 0) !== 1) {
-    http_response_code(403);
-    echo json_encode([
-        'status' => 'error',
-        'message' => 'Administrator access is required to delete archived products.',
-    ]);
-    exit;
-}
+/*
+|--------------------------------------------------------------------------
+| Access control
+|--------------------------------------------------------------------------
+|
+| Permanent deletion is destructive and Administrator-only. This replaces
+| a hand-rolled $_SESSION['role_id'] check, which never confirmed the
+| account still existed or was still Active before allowing a delete.
+|
+*/
+AuthMiddleware::requireAdminApi();
 
 require_once __DIR__ . '/../../../Controllers/InventoryController.php';
 

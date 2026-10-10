@@ -7,17 +7,19 @@ require_once __DIR__ . '/../../../Middleware/AuthMiddleware.php';
 
 header('Content-Type: application/json; charset=utf-8');
 
-// Archive is an Administrator-only module: reject non-admins before the
-// request ever reaches the model. AuthMiddleware echoes an HTML page on
-// failure, so this must run before any JSON is emitted.
-if ((int) ($_SESSION['role_id'] ?? 0) !== 1) {
-    http_response_code(403);
-    echo json_encode([
-        'status' => 'error',
-        'message' => 'Administrator access is required to manage archived products.',
-    ]);
-    exit;
-}
+/*
+|--------------------------------------------------------------------------
+| Access control
+|--------------------------------------------------------------------------
+|
+| Archive is an Administrator-only module. This replaces a hand-rolled
+| $_SESSION['role_id'] check: that one never confirmed the account still
+| existed or was still Active, so a deactivated admin kept access until
+| the session expired. requireAdminApi() runs the same validation chain
+| as the page guard and answers with JSON rather than an HTML page.
+|
+*/
+AuthMiddleware::requireAdminApi();
 
 require_once __DIR__ . '/../../../Controllers/InventoryController.php';
 

@@ -13,18 +13,14 @@ header('Content-Type: application/json; charset=utf-8');
 |--------------------------------------------------------------------------
 |
 | The Analytics Dashboard is Administrator-only, and this endpoint exposes
-| the same figures it does. AuthMiddleware::admin() echoes an HTML page on
-| failure, so the role is checked here instead and rejected as JSON.
+| the same figures it does. admin() is not usable here: it echoes an HTML
+| page on failure, so a refused request would answer a JSON caller with
+| markup. This was a hand-rolled role check before AuthMiddleware grew the
+| JSON-native guards; it now uses requireAdminApi(), which also re-checks
+| that the account still exists and is still Active.
 |
 */
-if (!isset($_SESSION['user_id']) || (int) ($_SESSION['role_id'] ?? 0) !== 1) {
-    http_response_code(403);
-    echo json_encode([
-        'status' => 'error',
-        'message' => 'Administrator access is required to view KPI details.'
-    ]);
-    exit;
-}
+AuthMiddleware::requireAdminApi();
 
 require_once __DIR__ . '/../../../Controllers/DashboardController.php';
 
