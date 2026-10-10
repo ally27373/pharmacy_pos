@@ -68,12 +68,23 @@ function escapeHtml(value) {
         .replaceAll("'", "&#039;");
 }
 
+/*
+ * Every state-changing inventory call funnels through fetchJson below, so
+ * the CSRF header is attached in exactly one place. Falls back to a
+ * pass-through if csrf.js failed to load, matching how NxSwal is guarded
+ * elsewhere; the endpoint then answers 403 with a readable reason rather
+ * than the write failing silently.
+ */
+const csrfInit = typeof NxCsrf !== "undefined"
+    ? (options) => NxCsrf.init(options)
+    : (options) => options;
+
 async function fetchJson(url, options = {}) {
-    const response = await fetch(url, {
+    const response = await fetch(url, csrfInit({
         credentials: "same-origin",
         cache: "no-store",
         ...options,
-    });
+    }));
     const data = await response.json();
     if (!response.ok || data.status === "error") {
         throw new Error(data.message || "Request failed.");

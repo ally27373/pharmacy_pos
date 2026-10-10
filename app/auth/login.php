@@ -11,6 +11,7 @@
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
 
+require_once __DIR__ . '/../Helpers/Csrf.php';
 require_once __DIR__ . '/../Controllers/AuthController.php';
 
 $controller = new AuthController();
@@ -26,9 +27,24 @@ if (!empty($_SESSION['auth_message'])) {
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
+    /*
+     | Login CSRF: without this, a page elsewhere could silently sign a
+     | visitor into an account the attacker controls, and whatever they then
+     | type into the app would land on the attacker's records.
+     |
+     | Rendered as HTML rather than JSON because this is a real navigation.
+     */
+    Csrf::requireValid(false);
+
     $result = $controller->login($_POST);
 
     if ($result['success']) {
+
+        /*
+         | The visitor is now authenticated, so the token they held while
+         | anonymous is retired. The next page render mints a fresh one.
+         */
+        Csrf::reset();
 
         header('Location: ' . $result['redirect']);
         exit;
@@ -120,6 +136,8 @@ require_once '../../includes/header.php';
                     <form
                         method="POST"
                         id="loginForm">
+
+                        <?= Csrf::field() ?>
 
                         <div class="mb-4">
 

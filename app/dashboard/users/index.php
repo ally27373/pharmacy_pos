@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 require_once '../../../config/session.php';
 require_once '../../Middleware/AuthMiddleware.php';
+require_once '../../../Helpers/Csrf.php';
 
 AuthMiddleware::admin();
 
@@ -40,6 +41,14 @@ $messageType = 'success';
 */
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+
+    /*
+     | Creating or editing a user is a write. The role check above says who
+     | is asking; this says the browser meant to ask. Without it, any page
+     | on the internet could create an administrator using an admin who
+     | happened to have the app open in another tab.
+     */
+    Csrf::requireValid(false);
 
     $result = $controller->save(
         $_POST,
@@ -240,6 +249,8 @@ require_once '../../../includes/header.php';
                             method="POST"
                             class="row g-3"
                         >
+
+                            <?= Csrf::field() ?>
 
                             <input
                                 type="hidden"

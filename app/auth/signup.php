@@ -66,6 +66,7 @@ http_response_code(403);
 
 <?php
 
+require_once __DIR__ . '/../Helpers/Csrf.php';
 require_once __DIR__ . '/../Controllers/AuthController.php';
 
 $controller = new AuthController();
@@ -73,6 +74,9 @@ $controller = new AuthController();
 $message = '';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+
+    /* Registration is a write, so the token has to come back with it. */
+    Csrf::requireValid(false);
 
     $result = $controller->register($_POST);
 
@@ -172,6 +176,8 @@ Create Account
 <form
 method="POST"
 id="signupForm">
+
+<?= Csrf::field() ?>
 
 <div class="mb-3">
 

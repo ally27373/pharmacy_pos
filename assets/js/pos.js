@@ -1,6 +1,17 @@
 
 console.log("POS JS Loaded");
 
+/*
+ * Checkout is a write: it commits sales, payments and stock movements. The
+ * cashier cookie rides along on any cross-site post, so the endpoint checks
+ * this token as well as the session. Pass-through if csrf.js failed to load,
+ * matching how NxSwal is guarded elsewhere; the endpoint then answers 403
+ * instead of the sale silently failing.
+ */
+const posCsrfInit = typeof NxCsrf !== "undefined"
+    ? (options) => NxCsrf.init(options)
+    : (options) => options;
+
 const cart = [];
 
 const cartBody = document.getElementById("cart-items");
@@ -412,13 +423,13 @@ async function completeSale()
     };
 
     try {
-        const response = await fetch("/app/dashboard/pos/process_sale.php", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify(payload)
-        });
+          const response = await fetch("/app/dashboard/pos/process_sale.php", posCsrfInit({
+              method: "POST",
+              headers: {
+                  "Content-Type": "application/json"
+              },
+              body: JSON.stringify(payload)
+          }));
 
         const result = await response.json();
         console.log(result);

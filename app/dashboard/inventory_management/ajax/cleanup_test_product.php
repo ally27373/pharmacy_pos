@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 require_once __DIR__ . '/../../../../config/session.php';
 require_once __DIR__ . '/../../../Middleware/AuthMiddleware.php';
+require_once __DIR__ . '/../../../Helpers/Csrf.php';
 
 header('Content-Type: application/json; charset=utf-8');
 
@@ -16,6 +17,13 @@ header('Content-Type: application/json; charset=utf-8');
 |
 */
 AuthMiddleware::requireAdminApi();
+
+/*
+| Destructive, so both checks apply: the Administrator role, and proof the
+| request came from this app rather than a cross-site post riding the
+| admin's cookie.
+*/
+Csrf::requireValid();
 
 require_once __DIR__ . '/../../../Controllers/InventoryController.php';
 

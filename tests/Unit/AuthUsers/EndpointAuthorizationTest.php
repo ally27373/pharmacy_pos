@@ -352,7 +352,227 @@ final class EndpointAuthorizationTest extends TestCase
         $this->assertGreaterThan(0, $checked, 'Expected to find CLI diagnostics to check.');
     }
 
-    private function relative(string $file): string
+    /**
+ * Endpoints that change state. Each needs BOTH checks: the role check
+ * answers "who is asking", the CSRF check answers "did this browser mean to
+ * ask". A signed-in cookie is attached by the browser to any cross-site
+ * form post, so the role check on its own leaves the write forgeable.
+ *
+ * Pinned by name rather than discovered, so that adding a new write
+ * endpoint is a deliberate decision to add it here too.
+ */
+private const CSRF_PROTECTED_ENDPOINTS = [
+    '/app/dashboard/archive/ajax/unarchive.php',
+    '/app/dashboard/archive/ajax/delete_archived.php',
+    '/app/dashboard/inventory_management/ajax/save_product.php',
+    '/app/dashboard/inventory_management/ajax/update_product.php',
+    '/app/dashboard/inventory_management/ajax/save_stock.php',
+    '/app/dashboard/inventory_management/ajax/delete_product.php',
+    '/app/dashboard/inventory_management/ajax/cleanup_test_product.php',
+    '/app/dashboard/pos/process_sale.php',
+    '/app/dashboard/users/index.php',
+    ];
+
+    /**
+     * Forms that are unauthenticated by definition. They still take a token
+     * -- login CSRF and signup CSRF are both real attacks, the latter letting
+     * a third-party page register an account through a visitor -- but there
+     * is no session to check a role against, so the ordering rule below does
+     * not apply to them.
+     */
+    private const UNAUTHENTICATED_FORM_ENDPOINTS = [
+        '/app/auth/login.php',
+        '/app/auth/signup.php',
+    ];
+
+/**
+ * @dataProvider provideCsrfProtectedEndpoints
+ */
+public function test_state_changing_endpoints_require_a_csrf_token(string $relativePath): void
+{
+    $file = self::REPO_ROOT . $relativePath;
+
+    $this->assertFileExists($file, $relativePath . ' is expected to exist.');
+
+    $source = (string) file_get_contents($file);
+
+    $this->assertStringContainsString(
+        'Csrf::requireValid(',
+        $source,
+        $relativePath . ' changes state but does not require a CSRF token.'
+    );
+}
+
+    /**
+     * @dataProvider provideUnauthenticatedFormEndpoints
+     */
+    public function test_login_and_signup_take_a_token_and_render_one(string $relativePath): void
+    {
+        $source = (string) file_get_contents(self::REPO_ROOT . $relativePath);
+
+        $this->assertStringContainsString(
+            'Csrf::requireValid(',
+            $source,
+            $relativePath . ' takes an unauthenticated write and must still require a token.'
+        );
+
+        $this->assertStringContainsString(
+            'Csrf::field()',
+            $source,
+            $relativePath . ' must render the hidden field, or the form could never validate.'
+        );
+    }
+
+ * The role check has to come first. run() it in the other order and an
+ * anonymous request is reported as a CSRF failure, which describes the
+ * wrong problem and can be mistaken for a stale-token bug.
+ */
+public function test_csrf_check_follows_the_role_guard(): void
+{
+    foreach (self::CSRF_PROTECTED_ENDPOINTS as $relativePath) {
+        $file = self::REPO_ROOT . $relativePath;
+
+        if (!is_file($file)) {
+            continue;
+        }
+
+        $source = (string) file_get_contents($file);
+
+        if (strpos($source, 'Csrf::requireValid(') === false) {
+            continue;
+        }
+
+        $guardAt = $this->firstGuardOffset($source);
+        $csrfAt = strpos($source, 'Csrf::requireValid(');
+
+        $this->assertNotFalse(
+            $guardAt,
+            $relativePath . ' runs a CSRF check but no access guard.'
+        );
+
+        $this->assertLessThan(
+            $csrfAt,
+            $guardAt,
+            $relativePath . ': the access guard must run before Csrf::requireValid().'
+        );
+    }
+}
+
+/**
+ * JavaScript reads the token out of this meta tag, so if it stops being
+ * emitted every POST in the app starts failing with 403.
+ */
+public function test_header_publishes_the_token_for_javascript(): void
+{
+    $header = (string) file_get_contents(self::REPO_ROOT . '/includes/header.php');
+
+    $this->assertStringContainsString(
+        'csrf-token',
+        $header,
+        'includes/header.php must emit <meta name="csrf-token">.'
+    );
+
+    $this->assertStringContainsString(
+        'Helpers/Csrf.php',
+        $header,
+        'includes/header.php must require the Csrf helper.'
+    );
+}
+
+/**
+ * A POST that forgets NxCsrf.init() still carries the session cookie, which
+ * is the exact thing the token exists to stop. Catch that statically rather
+ * than discovering it in the browser.
+ */
+public function test_post_fetches_route_through_the_csrf_helper(): void
+{
+    $files = [
+        '/assets/js/inventory.js',
+        '/assets/js/pos.js',
+        '/assets/js/archive.js',
+    ];
+
+    foreach ($files as $relativePath) {
+        $source = (string) file_get_contents(self::REPO_ROOT . $relativePath);
+
+        if (strpos($source, 'method: "POST"') === false
+            && strpos($source, "method: 'POST'") === false) {
+            continue;
+        }
+
+        $this->assertMatchesRegularExpression(
+            '/(NxCsrf\.init|[a-zA-Z]+CsrfInit)\(/',
+            $source,
+            $relativePath . ' performs a POST but never attaches the CSRF token.'
+        );
+    }
+}
+
+/**
+ * The GET exports are deliberately not token-checked: CSRF protects state
+ * changes, and requiring a header on a GET would break opening the export
+ * URL directly for no security gain. The role guard still applies.
+ */
+public function test_get_exports_are_not_given_a_csrf_requirement(): void
+{
+    foreach ([
+        '/app/dashboard/data_management/ajax/export_inventory.php',
+        '/app/dashboard/data_management/ajax/export_sales.php',
+    ] as $relativePath) {
+        $source = (string) file_get_contents(self::REPO_ROOT . $relativePath);
+
+        $this->assertStringNotContainsString(
+            'Csrf::requireValid(',
+            $source,
+            $relativePath . ' is a GET; a token requirement there would break '
+            . 'direct navigation without adding protection.'
+        );
+    }
+}
+
+/**
+ * @return iterable<string, array{0: string}>
+ */
+public static function provideCsrfProtectedEndpoints(): iterable
+{
+    foreach (self::CSRF_PROTECTED_ENDPOINTS as $path) {
+        yield $path => [$path];
+    }
+}
+
+    /**
+     * @return iterable<string, array{0: string}>
+     */
+    public static function provideUnauthenticatedFormEndpoints(): iterable
+    {
+        foreach (self::UNAUTHENTICATED_FORM_ENDPOINTS as $path) {
+            yield $path => [$path];
+        }
+    }
+
+/**
+ * Offset of the first access guard call, or false when there is none.
+ */
+private function firstGuardOffset(string $source)
+{
+    $earliest = false;
+
+    foreach (self::GUARDS as $guard) {
+        $at = strpos($source, $guard . '(');
+
+        if ($at === false) {
+            continue;
+        }
+
+        if ($earliest === false || $at < $earliest) {
+            $earliest = $at;
+        }
+    }
+
+    return $earliest;
+}
+
+private function relative(string $file): string
     {
         $root = realpath(self::REPO_ROOT);
 

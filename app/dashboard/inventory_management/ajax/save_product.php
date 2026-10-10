@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 require_once __DIR__ . '/../../../../config/session.php';
 require_once __DIR__ . '/../../../Middleware/AuthMiddleware.php';
+require_once __DIR__ . '/../../../Helpers/Csrf.php';
 
 header('Content-Type: application/json; charset=utf-8');
 
@@ -18,6 +19,14 @@ header('Content-Type: application/json; charset=utf-8');
 |
 */
 AuthMiddleware::requireAdminApi();
+
+/*
+| Creating a product is a write, so it also has to prove the request came
+| from a page in this app. An admin's cookie is attached by the browser to
+| any cross-site form post, so the role check alone would let a third-party
+| page create products as that admin.
+*/
+Csrf::requireValid();
 
 require_once __DIR__ . '/../../../Controllers/InventoryController.php';
 

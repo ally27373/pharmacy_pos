@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 require_once __DIR__ . '/../../../../config/session.php';
 require_once __DIR__ . '/../../../Middleware/AuthMiddleware.php';
+require_once __DIR__ . '/../../../Helpers/Csrf.php';
 
 header('Content-Type: application/json; charset=utf-8');
 
@@ -18,6 +19,12 @@ header('Content-Type: application/json; charset=utf-8');
 |
 */
 AuthMiddleware::requireAdminApi();
+
+/*
+| Permanent deletion is irreversible, so it carries the CSRF check as well as
+| the role check: an admin's cookie rides along on any cross-site post.
+*/
+Csrf::requireValid();
 
 require_once __DIR__ . '/../../../Controllers/InventoryController.php';
 

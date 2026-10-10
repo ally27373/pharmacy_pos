@@ -6,6 +6,11 @@
 
 console.log("Archive JS Loaded");
 
+/* Pass-through if csrf.js failed to load; the endpoint then answers 403. */
+const archiveCsrfInit = typeof NxCsrf !== "undefined"
+    ? (options) => NxCsrf.init(options)
+    : (options) => options;
+
 function archiveShowAlert(message, type = "danger") {
     const container = document.getElementById("archive-alert");
 
@@ -41,7 +46,7 @@ async function archivePost(url, productId, button, pendingLabel, iconMarkup) {
     const body = new URLSearchParams({ product_id: productId });
 
     try {
-        const response = await fetch(url, {
+        const response = await fetch(url, archiveCsrfInit({
             method: "POST",
             credentials: "same-origin",
             headers: {
@@ -49,7 +54,7 @@ async function archivePost(url, productId, button, pendingLabel, iconMarkup) {
                 "Accept": "application/json",
             },
             body,
-        });
+        }));
 
         const data = await response.json().catch(() => ({}));
 

@@ -31,10 +31,19 @@ declare(strict_types=1);
 
 require_once __DIR__ . '/../../../config/session.php';
 require_once __DIR__ . '/../../Middleware/AuthMiddleware.php';
+require_once __DIR__ . '/../../Helpers/Csrf.php';
 
 header('Content-Type: application/json; charset=utf-8');
 
 AuthMiddleware::requireAuthenticatedApi();
+
+/*
+| A sale is a write: it commits sales, sale_items and payments and moves
+| stock. The cashier's cookie is attached by the browser to any cross-site
+| post, so without this a page elsewhere on the internet could ring up sales
+| on their account.
+*/
+Csrf::requireValid();
 
 require_once __DIR__ . '/../../Controllers/POSController.php';
 
