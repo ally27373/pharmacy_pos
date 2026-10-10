@@ -25,11 +25,26 @@ $data = [];
 
 foreach($dashboardData['best_sellers'] as $row){
 
-    $labels[] = $row['product_name'];
+    $labels[] = (string) $row['product_name'];
 
     $data[] = (int)$row['total_quantity'];
 
 }
+
+/* JSON island — see revenue_chart.php for why the payload must not be
+   inlined into the chart script. Product names come straight from the
+   DB, so malformed UTF-8 is a realistic case here. */
+$bestSellerLabelsJson = json_encode($labels, JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT);
+$bestSellerDataJson = json_encode($data);
+
+if (!is_string($bestSellerLabelsJson) || $bestSellerLabelsJson === '') {
+    $bestSellerLabelsJson = '[]';
+}
+
+if (!is_string($bestSellerDataJson) || $bestSellerDataJson === '') {
+    $bestSellerDataJson = '[]';
+}
+
 $mode =
 $_GET['mode']
 ??
@@ -246,6 +261,9 @@ value="<?= $y ?>"
 
 </div>
 
+<script type="application/json" id="best-seller-labels"><?= $bestSellerLabelsJson ?></script>
+<script type="application/json" id="best-seller-data"><?= $bestSellerDataJson ?></script>
+
 <script>
 
 
@@ -257,8 +275,13 @@ document
 .getContext("2d");
 
 
-const bestSellerData =
-<?= json_encode($data, JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT); ?>;
+const bestSellerData = JSON.parse(
+document.getElementById("best-seller-data").textContent
+) || [];
+
+const bestSellerLabels = JSON.parse(
+document.getElementById("best-seller-labels").textContent
+) || [];
 
 const bestSellerChart =
 new Chart(bestSellerCtx,{
@@ -268,7 +291,7 @@ type:"bar",
 data:{
 
 labels:
-<?= json_encode($labels, JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT); ?>,
+bestSellerLabels,
 
 datasets:[{
 

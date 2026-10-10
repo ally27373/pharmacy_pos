@@ -16,10 +16,32 @@ $data = [];
 
 foreach ($dashboardData['revenue_by_category'] as $row){
 
-    $labels[] = $row['category_name'];
+    $labels[] = (string) $row['category_name'];
 
-    $data[] = (float)$row['revenue'];
+    $data[] = (float) $row['revenue'];
 
+}
+
+/*
+ * The payload is emitted inside a <script type="application/json"> island
+ * instead of being inlined into the chart script.
+ *
+ * Rationale: json_encode() returns false on malformed UTF-8, and a raw
+ * inline interpolation would then emit *nothing*, producing broken JS
+ * ("missing ) after argument list") that silently kills the whole block
+ * and leaves an empty canvas. A JSON island is never parsed as JS by the
+ * browser, so no data value can ever break the chart script. JSON_HEX_TAG
+ * additionally neutralises a literal "</script>" inside a product name.
+ */
+$revenueLabelsJson = json_encode($labels, JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT);
+$revenueDataJson = json_encode($data);
+
+if (!is_string($revenueLabelsJson) || $revenueLabelsJson === '') {
+    $revenueLabelsJson = '[]';
+}
+
+if (!is_string($revenueDataJson) || $revenueDataJson === '') {
+    $revenueDataJson = '[]';
 }
 
 ?>
@@ -55,19 +77,42 @@ foreach ($dashboardData['revenue_by_category'] as $row){
 
 
 
+<script type="application/json" id="revenue-chart-labels"><?= $revenueLabelsJson ?></script>
+<script type="application/json" id="revenue-chart-data"><?= $revenueDataJson ?></script>
+
 <script>
 
 /*
- * Wrapped in an IIFE so these consts stay off the global lexical scope.
- * Several chart partials are included on the same page and a single
- * top-level `const` collision between them is a parse-time SyntaxError
- * that silently kills the whole script block — chart included.
+ * Data lives in <script type="application/json"> islands (see above), so
+ * this block contains no interpolated PHP at all — no data value can
+ * break its parsing.
+ *
+ * IIFE keeps these consts off the global lexical scope; several chart
+ * partials share this page and a top-level `const` collision between
+ * them is a parse-time SyntaxError that kills the whole block.
  */
 (function () {
 
-const canvas = document.getElementById("revenueChart");
+var payloadEl = document.getElementById("revenue-chart-labels");
+var dataEl = document.getElementById("revenue-chart-data");
+var canvas = document.getElementById("revenueChart");
 
-if (!canvas || typeof Chart === "undefined") {
+if (!payloadEl || !dataEl || !canvas || typeof Chart === "undefined") {
+    return;
+}
+
+var labels = [];
+var values = [];
+
+try {
+    labels = JSON.parse(payloadEl.textContent) || [];
+    values = JSON.parse(dataEl.textContent) || [];
+} catch (parseError) {
+    console.error("Revenue chart payload could not be parsed:", parseError);
+    return;
+}
+
+if (!labels.length) {
     return;
 }
 
@@ -79,11 +124,11 @@ indexAxis:"y",
 
 data:{
 
-labels:<?= json_encode($labels, JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT); ?>,
+labels: labels,
 
 datasets:[{
 
-data:<?= json_encode($data, JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT); ?>,
+data: values,
 
 backgroundColor:[
 

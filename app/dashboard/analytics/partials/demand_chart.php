@@ -36,6 +36,21 @@ foreach (
         (int)$row['total_quantity'];
 
 }
+
+/* JSON island — see revenue_chart.php for why the payload must not be
+   inlined into the chart script (an empty json_encode() output silently
+   breaks the whole block and leaves an empty canvas). */
+$demandLabelsJson = json_encode($labels, JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT);
+$demandValuesJson = json_encode($demandData);
+
+if (!is_string($demandLabelsJson) || $demandLabelsJson === '') {
+    $demandLabelsJson = '[]';
+}
+
+if (!is_string($demandValuesJson) || $demandValuesJson === '') {
+    $demandValuesJson = '[]';
+}
+
 ?>
 
 <div class="dashboard-panel demand-panel">
@@ -226,13 +241,27 @@ foreach ($analyticsYears as $y):
 
 <?php if (!empty($demandData)): ?>
 
+<script type="application/json" id="demand-chart-labels"><?= $demandLabelsJson ?></script>
+<script type="application/json" id="demand-chart-values"><?= $demandValuesJson ?></script>
+
 <script>
 
-const demandLabels =
-    <?= json_encode($labels, JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT); ?>;
+var demandLabels = [];
+var demandValues = [];
 
-const demandValues =
-    <?= json_encode($demandData, JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT); ?>;
+(function () {
+    var labelsEl = document.getElementById("demand-chart-labels");
+    var valuesEl = document.getElementById("demand-chart-values");
+
+    if (!labelsEl || !valuesEl) return;
+
+    try {
+        demandLabels = JSON.parse(labelsEl.textContent) || [];
+        demandValues = JSON.parse(valuesEl.textContent) || [];
+    } catch (error) {
+        console.error("Demand chart payload could not be parsed:", error);
+    }
+})();
 
 let demandChart;
 
