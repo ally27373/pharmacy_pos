@@ -69,48 +69,27 @@ require_once '../../includes/header.php';
             =========================== -->
 
             <div class="col-lg-6 left-side">
+                <div class="left-decor-corner"></div>
+                <div class="left-decor-bottom"></div>
 
-                <h5 class="pharmacy-name">
-
-                    NICA XANDRA PHARMACY
-
-                </h5>
-
-                <h1 class="system-title">
-
-                    MANAGEMENT<br>
-
-                    SYSTEM
-
-                </h1>
-
-                <div class="features">
-
-                    <div>
-
-                        <i class="bi bi-capsule"></i>
-
-                        Inventory Control
-
+                <div class="brand-header">
+                    <div class="brand-icon-box">
+                        <i class="bi bi-capsule-fill"></i>
                     </div>
-
                     <div>
-
-                        <i class="bi bi-cash-stack"></i>
-
-                        Transaction Processing
-
+                        <h2>NICA XANDRA</h2>
+                        <div class="brand-subtitle">PHARMACY POS SYSTEM</div>
                     </div>
-
-                    <div>
-
-                        <i class="bi bi-bar-chart-fill"></i>
-
-                        Sales Reporting
-
-                    </div>
-
                 </div>
+
+                <h2 class="welcome-title">Welcome Back</h2>
+
+                <p class="welcome-subtitle">To keep connected with us please login with your personal info</p>
+
+                <a href="#" class="outline-signin-btn" onclick="document.getElementById('login').focus(); return false;">
+                    <i class="bi bi-box-arrow-in-right"></i>
+                    SIGN IN
+                </a>
 
             </div>
 
