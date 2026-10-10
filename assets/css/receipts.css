@@ -74,3 +74,106 @@ hr{
         word-break:break-word;
     }
 }
+
+/* =====================================
+   TOTALS
+   The grand total is the one line a
+   customer actually looks for, so it is
+   ruled above and below instead of
+   sitting in the run of amounts.
+   ===================================== */
+.receipt-totals p{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    margin:4px 0;
+
+}
+
+.receipt-grand-total{
+
+    font-weight:bold;
+
+    font-size:15px;
+
+    border-top:1px solid #000;
+
+    border-bottom:1px solid #000;
+
+    padding:6px 0;
+
+    margin-top:6px;
+
+}
+
+/* =====================================
+   PRINTING
+   The printed page has to be the receipt
+   and nothing else. Without this block
+   the print button is printed on every
+   customer copy, and a receipt that
+   happens to wrap near the footer can be
+   split across two pages.
+   ===================================== */
+@media print {
+
+    @page {
+        margin: 6mm;
+    }
+
+    body{
+
+        background:#fff;
+
+        padding:0;
+
+        margin:0;
+
+        font-size:12px;
+
+    }
+
+    .receipt{
+
+        width:100%;
+
+        max-width:100%;
+
+    }
+
+    /* Never print the control that opened the dialog. */
+    .receipt-print-button{
+
+        display:none !important;
+
+    }
+
+    /* Keep the header, the line items and the totals intact. */
+    .receipt h2,
+    .receipt table,
+    .receipt hr,
+    .receipt-totals{
+
+        break-inside:avoid;
+
+        page-break-inside:avoid;
+
+    }
+
+    /* Thermal printers turn colour into grey mud. Force ink. */
+    .receipt,
+    .receipt *{
+
+        color:#000 !important;
+
+        background:transparent !important;
+
+        box-shadow:none !important;
+
+        text-shadow:none !important;
+
+    }
+
+}
