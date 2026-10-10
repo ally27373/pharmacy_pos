@@ -202,7 +202,60 @@ public function getDemandAnalytics($year = null, $month = null)
         ->getDemandQuantity($year, $month);
 }
 
-private function getAnnualForecastArtifact(): array
+/**
+     * Rows behind a KPI card, for the drill-down modal.
+     *
+     * 'sales', 'transactions' and 'growth' are all backed by the same list
+     * of completed sales; only the columns the modal renders differ.
+     *
+     * @return array<string,mixed>
+     */
+    public function getKpiDetail(
+        string $metric,
+        string $period,
+        int $page,
+        int $perPage
+    ): array {
+        $page = max(1, $page);
+        $perPage = max(1, $perPage);
+        $offset = ($page - 1) * $perPage;
+
+        if ($metric === 'items') {
+
+            $total = $this->dashboard->countSoldItems($period);
+
+            $rows = $this->dashboard->getSoldItems(
+                $period,
+                $perPage,
+                $offset
+            );
+
+        } else {
+
+            $total = $this->dashboard->countSalesTransactions($period);
+
+            $rows = $this->dashboard->getSalesTransactions(
+                $period,
+                $perPage,
+                $offset
+            );
+
+        }
+
+        return [
+            'metric' => $metric,
+            'rows' => $rows,
+            'total' => $total,
+            'page' => $page,
+            'per_page' => $perPage,
+            'pages' => max(1, (int) ceil($total / $perPage)),
+            'growth' => $metric === 'growth'
+                ? $this->dashboard->getSalesGrowthDetails($period)
+                : null
+        ];
+    }
+
+    private function getAnnualForecastArtifact(): array
 {
     $projectRoot = $this->projectRoot;
 

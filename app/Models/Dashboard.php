@@ -325,6 +325,184 @@ public function getSalesGrowthDetails($period = '7days'): array
     ];
 }
 
+/*
+|--------------------------------------------------------------------------
+| KPI drill-down
+|--------------------------------------------------------------------------
+|
+| The four KPI cards only summarise a period. These return the rows behind
+| each number so the cards can open a modal with the real data.
+|
+*/
+
+/**
+ * Completed sales behind the Total Sales / Transactions cards, newest first.
+ */
+public function getSalesTransactions(string $period, int $limit, int $offset): array
+{
+    $where = $this->getDateCondition($period, 's.created_at');
+
+    $sql = "
+        SELECT
+            s.sale_id,
+            s.transaction_number,
+            s.subtotal,
+            s.discount_amount,
+            s.total_amount,
+            s.payment_status,
+            s.created_at,
+            COALESCE(u.username, 'Unknown') AS cashier,
+            COALESCE(i.item_count, 0) AS item_count,
+            COALESCE(pay.payment_methods, '') AS payment_methods
+
+        FROM sales s
+
+        LEFT JOIN users u
+            ON u.user_id = s.cashier_id
+
+        LEFT JOIN (
+            SELECT sale_id, COUNT(*) AS item_count
+            FROM sale_items
+            GROUP BY sale_id
+        ) i
+            ON i.sale_id = s.sale_id
+
+        LEFT JOIN (
+            SELECT
+                sale_id,
+                GROUP_CONCAT(
+                    DISTINCT payment_method
+                    ORDER BY payment_id
+                    SEPARATOR ', '
+                ) AS payment_methods
+            FROM payments
+            GROUP BY sale_id
+        ) pay
+            ON pay.sale_id = s.sale_id
+
+        WHERE
+            s.transaction_status = 'Completed'
+            AND $where
+
+        ORDER BY s.created_at DESC, s.sale_id DESC
+        LIMIT :limit OFFSET :offset
+    ";
+
+    $stmt = $this->conn->prepare($sql);
+
+    $stmt->bindValue(':limit', $limit, PDO::PARAM_INT);
+    $stmt->bindValue(':offset', $offset, PDO::PARAM_INT);
+
+    $stmt->execute();
+
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
+
+public function countSalesTransactions(string $period): int
+{
+    $where = $this->getDateCondition($period, 'created_at');
+
+    $sql = "
+        SELECT COUNT(*)
+        FROM sales
+        WHERE transaction_status = 'Completed'
+          AND $where
+    ";
+
+    return (int) ($this->conn
+        ->query($sql)
+        ->fetch(PDO::FETCH_ASSOC)['COUNT(*)'] ?? 0);
+}
+
+/**
+ * Products behind the Items Sold card, most units first.
+ *
+ * revenue uses the same sale-level discount proration as
+ * getRevenueByCategory() so the two agree on what a peso actually earned.
+ */
+public function getSoldItems(string $period, int $limit, int $offset): array
+{
+    $where = $this->getDateCondition($period, 's.created_at');
+
+    $sql = "
+        SELECT
+            p.product_id,
+            p.product_name,
+            COALESCE(c.category_name, 'Uncategorized') AS category_name,
+            SUM(si.quantity) AS qty_sold,
+            COUNT(DISTINCT si.sale_id) AS times_sold,
+            ROUND(
+                SUM(
+                    si.subtotal - COALESCE(
+                        s.discount_amount * si.subtotal
+                            / NULLIF(sl.line_subtotal, 0),
+                        0
+                    )
+                ),
+                2
+            ) AS revenue
+
+        FROM sale_items si
+
+        INNER JOIN products p
+            ON p.product_id = si.product_id
+
+        INNER JOIN sales s
+            ON si.sale_id = s.sale_id
+
+        LEFT JOIN categories c
+            ON c.category_id = p.category_id
+
+        INNER JOIN (
+            SELECT sale_id, SUM(subtotal) AS line_subtotal
+            FROM sale_items
+            GROUP BY sale_id
+        ) sl
+            ON sl.sale_id = si.sale_id
+
+        WHERE
+            s.transaction_status = 'Completed'
+            AND $where
+
+        GROUP BY p.product_id, p.product_name, c.category_name
+        ORDER BY qty_sold DESC, revenue DESC
+        LIMIT :limit OFFSET :offset
+    ";
+
+    $stmt = $this->conn->prepare($sql);
+
+    $stmt->bindValue(':limit', $limit, PDO::PARAM_INT);
+    $stmt->bindValue(':offset', $offset, PDO::PARAM_INT);
+
+    $stmt->execute();
+
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
+
+public function countSoldItems(string $period): int
+{
+    $where = $this->getDateCondition($period, 's.created_at');
+
+    $sql = "
+        SELECT COUNT(*)
+        FROM (
+            SELECT p.product_id
+            FROM sale_items si
+            INNER JOIN products p
+                ON p.product_id = si.product_id
+            INNER JOIN sales s
+                ON si.sale_id = s.sale_id
+            WHERE s.transaction_status = 'Completed'
+              AND $where
+            GROUP BY p.product_id
+        ) grouped_products
+    ";
+
+    return (int) ($this->conn
+        ->query($sql)
+        ->fetch(PDO::FETCH_ASSOC)['COUNT(*)'] ?? 0);
+}
+
 public function getAvailableSalesYears(): array
 {
     $sql = "
