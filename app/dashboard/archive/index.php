@@ -118,15 +118,14 @@ require_once '../../../includes/header.php';
                                 <th>Type</th>
                                 <th>Category</th>
                                 <th class="text-end">Qty</th>
-                                <th class="text-end">Selling Price</th>
-                                <th>Archived</th>
+                                <th class="text-end">Price</th>
                                 <th class="col-actions">Actions</th>
                             </tr>
                         </thead>
                         <tbody id="archive-table-body">
                         <?php if (empty($archived)): ?>
                             <tr>
-                                <td colspan="8" class="inventory-empty">
+                                <td colspan="7" class="inventory-empty">
                                     <i class="bi bi-archive"></i>
                                     <strong>
                                         <?= ($search !== '' || $selectedCategory !== '' || $selectedType !== '')
@@ -166,9 +165,6 @@ require_once '../../../includes/header.php';
                                     <td class="money-cell text-end">
                                         ₱<?= number_format((float) ($product['selling_price'] ?? 0), 2) ?>
                                     </td>
-                                    <td>
-                                        <span class="inventory-status status-expired">Archived</span>
-                                    </td>
                                     <td class="action-cell">
                                         <div class="inventory-actions">
                                             <button
@@ -205,6 +201,26 @@ require_once '../../../includes/header.php';
                 </div>
 
             </section>
+
+            <style>
+                /* The archive table is narrow by design (7 columns) — let it
+                   shrink to the viewport instead of forcing a horizontal
+                   scrollbar that hides the Actions buttons off-screen. */
+                .inventory-card .inventory-table-wrap{ overflow-x:visible; }
+                .inventory-card .inventory-table{ width:100%; min-width:0; table-layout:auto; }
+                .inventory-card .inventory-table td,
+                .inventory-card .inventory-table th{ padding:11px 10px; font-size:13px; }
+                .inventory-card .inventory-table .col-actions,
+                .inventory-card .inventory-table .action-cell{ white-space:nowrap; width:1%; }
+                .inventory-card .inventory-toolbar{ flex-wrap:wrap; }
+                .inventory-card .inventory-search-wrap{ flex:1 1 260px; }
+                @media (max-width:768px){
+                    /* Below tablet the table legitimately needs to scroll —
+                       re-enable it only there rather than on every screen. */
+                    .inventory-card .inventory-table-wrap{ overflow-x:auto; }
+                    .inventory-card .inventory-table{ min-width:720px; }
+                }
+            </style>
 
         </div>
 
