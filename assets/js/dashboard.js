@@ -514,7 +514,7 @@ async function kpiLoad(page)
             cache: "no-store"
         });
 
-        const payload = await response.json();
+        const payload = await NxHttp.json(response);
 
         if (!response.ok || payload.status !== "success") {
             throw new Error(

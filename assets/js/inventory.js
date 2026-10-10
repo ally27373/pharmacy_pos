@@ -85,7 +85,7 @@ async function fetchJson(url, options = {}) {
         cache: "no-store",
         ...options,
     }));
-    const data = await response.json();
+    const data = await NxHttp.json(response);
     if (!response.ok || data.status === "error") {
         throw new Error(data.message || "Request failed.");
     }

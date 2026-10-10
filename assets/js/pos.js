@@ -431,7 +431,7 @@ async function completeSale()
               body: JSON.stringify(payload)
           }));
 
-        const result = await response.json();
+        const result = await NxHttp.json(response);
         console.log(result);
 
         if (!result.success)
@@ -513,7 +513,11 @@ async function completeSale()
             receiptWindow.close();
         }
 
-        await NxSwal.error("Connection failed", "Unable to connect to the server. Please check your connection and try again.");
+        await NxSwal.error(
+              "Sale could not be completed",
+              error.message
+                  || "Unable to reach the server. Please check your connection and try again."
+          );
     }
 }
 
@@ -714,7 +718,7 @@ async function loadProducts(page = 1)
             throw new Error("Product request failed.");
         }
 
-        const result = await response.json();
+        const result = await NxHttp.json(response);
 
         if (requestId !== productRequest) return;
 
@@ -746,10 +750,14 @@ async function loadProducts(page = 1)
 
         if (searchCount) searchCount.textContent = "";
 
+        const reason = error && error.message
+            ? error.message
+            : "Please try again.";
+
         productsTableBody.innerHTML = `
             <tr>
                 <td colspan="8" class="text-center text-danger py-4">
-                    Unable to load products. Please try again.
+                    Could not load products.<br>${escapeHtml(reason)}
                 </td>
             </tr>
         `;

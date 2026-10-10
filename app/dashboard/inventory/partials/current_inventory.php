@@ -3,7 +3,7 @@
 
 $inventoryProducts = $dashboardData['inventory_products'] ?? [];
 $inventoryBatches = $dashboardData['inventory_batches'] ?? [];
-$inventoryPageSize = 5;
+$inventoryPageSize = 8;
 ?>
 
 <div class="dashboard-panel current-inventory-panel">

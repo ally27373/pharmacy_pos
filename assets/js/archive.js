@@ -56,7 +56,7 @@ async function archivePost(url, productId, button, pendingLabel, iconMarkup) {
             body,
         }));
 
-        const data = await response.json().catch(() => ({}));
+        const data = await NxHttp.json(response);
 
         if (!response.ok || data.status !== "success") {
             throw new Error(data.message || "The request could not be completed.");

@@ -184,7 +184,7 @@
                 headers: { 'Accept': 'application/json' }
             });
 
-            const data = await response.json();
+            const data = await NxHttp.json(response);
             if (!response.ok || !data.success) {
                 throw new Error(data.message || 'Unable to load report data.');
             }

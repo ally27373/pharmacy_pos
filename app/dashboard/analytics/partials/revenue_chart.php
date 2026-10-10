@@ -155,8 +155,6 @@ new Chart(canvas,{
 
 type:"bar",
 
-indexAxis:"y",
-
 data:{
 
 labels: labels,
@@ -177,7 +175,7 @@ borderWidth:0,
 
 borderRadius:4,
 
-barThickness:20
+maxBarThickness:26
 
 }]
 
@@ -219,13 +217,13 @@ beginAtZero:true,
 
 ticks:{
 
-callback:function(value){
+maxRotation:45,
 
-return value >= 1000
-    ? (value / 1000) + "k"
-    : value;
+minRotation:30,
 
-}
+autoSkip:false,
+
+font:{size:11}
 
 }
 
@@ -233,53 +231,17 @@ return value >= 1000
 
 y:{
 
+beginAtZero:true,
+
 ticks:{
 
-maxRotation:0,
+callback:function(value){
 
-minRotation:0,
+return value >= 1000
 
-autoSkip:false,
+    ? (value / 1000) + "k"
 
-font:{size:11},
-
-callback:function(value,index){
-
-var label = labels[index] != null
-    ? String(labels[index])
-    : String(value);
-
-if (label.length <= 26 || label.indexOf(" ") === -1) {
-
-    return label;
-
-}
-
-var lines = [""];
-
-var words = label.split(" ");
-
-for (var i = 0; i < words.length; i++){
-
-var current = lines[lines.length - 1];
-
-var candidate = current
-    ? current + " " + words[i]
-    : words[i];
-
-if (current && candidate.length > 26){
-
-lines.push(words[i]);
-
-} else {
-
-lines[lines.length - 1] = candidate;
-
-}
-
-}
-
-return lines;
+    : value;
 
 }
 

@@ -89,6 +89,7 @@ if (session_status() === PHP_SESSION_NONE) {
         <link rel="stylesheet" href="<?= asset_url('/assets/css/search.css') ?>">
 
         <script src="<?= asset_url('/assets/js/search.js') ?>"></script>
+        <script src="<?= asset_url('/assets/js/http.js') ?>"></script>
         <script src="<?= asset_url('/assets/js/csrf.js') ?>"></script>
 
     <?php

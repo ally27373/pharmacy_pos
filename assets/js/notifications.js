@@ -150,7 +150,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
             const result =
-                await response.json();
+                await NxHttp.json(response);
 
 
             if (
