@@ -1,5 +1,17 @@
 <?php
 
+/*
+| These are CLI diagnostics kept alongside the app they exercise. Serving
+| them from the document root let any visitor trigger a live SARIMA refresh
+| or dump forecast internals and database structure in a PHP error page.
+| Refuse every non-CLI SAPI, and answer 404 so the path is not advertised.
+*/
+if (PHP_SAPI !== 'cli') {
+    http_response_code(404);
+    exit('Not found.');
+}
+
+
 require_once dirname(__DIR__, 2) . '/vendor/autoload.php';
 
 require_once dirname(__DIR__, 2) . '/config/database.php';

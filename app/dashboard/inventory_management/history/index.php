@@ -4,7 +4,13 @@ require_once '../../../../config/session.php';
 require_once '../../../Middleware/AuthMiddleware.php';
 require_once '../../../Controllers/InventoryHistoryController.php';
 
-AuthMiddleware::check();
+/*
+| Inventory History sits under the sidebar's ADMIN-ONLY MODULES section
+| (see includes/sidebar.php) and exposes product movements, batch lots and
+| supplier adjustments. check() let any Cashier read all of it by typing the
+| URL, so this matches the module it belongs to.
+*/
+AuthMiddleware::admin();
 
 $menu = "inventory_management";
 $page = "inventory_history";

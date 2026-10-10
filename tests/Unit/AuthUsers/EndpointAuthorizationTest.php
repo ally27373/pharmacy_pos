@@ -228,6 +228,130 @@ final class EndpointAuthorizationTest extends TestCase
         }
     }
 
+    /**
+     * Web-reachable entry points that live outside an ajax/ directory.
+     * The scanner above cannot find these, so they are pinned explicitly.
+     *
+     * Every one of them was reachable with no access check before this
+     * change; export_sales_history.php in particular wrote a CSV to disk.
+     */
+    private const NON_AJAX_ENTRY_POINTS = [
+        '/app/dashboard/pos/process_sale.php',
+        '/app/dashboard/pos/receipt.php',
+        '/app/export/export_sales_history.php',
+    ];
+
+    /**
+     * @dataProvider provideNonAjaxEntryPoints
+     */
+    public function test_non_ajax_entry_points_declare_an_access_guard(string $relativePath): void
+    {
+        $file = self::REPO_ROOT . $relativePath;
+
+        $this->assertFileExists($file, $relativePath . ' is expected to exist.');
+
+        $source = (string) file_get_contents($file);
+
+        foreach (self::GUARDS as $guard) {
+            if (strpos($source, $guard) !== false) {
+                $this->assertTrue(true);
+
+                return;
+            }
+        }
+
+        $this->fail(
+            sprintf(
+                '%s is reachable directly by URL but declares no access guard.'
+                . PHP_EOL
+                . 'Add one of: %s',
+                $relativePath,
+                implode(', ', self::GUARDS)
+            )
+        );
+    }
+
+    /**
+     * @return iterable<string, array{0: string}>
+     */
+    public static function provideNonAjaxEntryPoints(): iterable
+    {
+        foreach (self::NON_AJAX_ENTRY_POINTS as $path) {
+            yield $path => [$path];
+        }
+    }
+
+    /**
+     * Inventory History sits inside the sidebar's ADMIN-ONLY MODULES block.
+     * It used to call check(), which let any Cashier read product movements,
+     * batch lots and supplier adjustments by typing the URL.
+     */
+    public function test_inventory_history_is_administrator_only(): void
+    {
+        $source = (string) file_get_contents(
+            self::REPO_ROOT . '/app/dashboard/inventory_management/history/index.php'
+        );
+
+        $this->assertStringContainsString(
+            'AuthMiddleware::admin()',
+            $source,
+            'Inventory History must be Administrator-only.'
+        );
+    }
+
+    /**
+     * The CLI diagnostics under app/tests/ sit inside the document root.
+     * One of them performs a live SARIMA refresh, so serving it over HTTP
+     * let any visitor kick off a compute-heavy job on demand.
+     *
+     * The guard has to sit ahead of the require_once lines, otherwise the
+     * work still starts before the refusal.
+     */
+    public function test_cli_diagnostics_refuse_to_run_over_http(): void
+    {
+        $dir = self::REPO_ROOT . '/app/tests';
+
+        $checked = 0;
+
+        foreach ((array) glob($dir . '/*.php') as $path) {
+            $source = (string) file_get_contents($path);
+
+            $this->assertStringContainsString(
+                "PHP_SAPI !== 'cli'",
+                $source,
+                basename((string) $path) . ' must refuse non-CLI execution.'
+            );
+
+            $guardAt = strpos($source, "PHP_SAPI !== 'cli'");
+
+            /*
+             * Ordering only matters if the script loads something. These
+             * files mix require and require_once, so look for both, and skip
+             * the comparison when the script loads nothing.
+             */
+            $loads = [];
+            foreach (['require_once', 'require ', 'include_once', 'include '] as $keyword) {
+                $at = strpos($source, $keyword);
+                if ($at !== false) {
+                    $loads[] = $at;
+                }
+            }
+
+            if ($loads !== []) {
+                $this->assertLessThan(
+                    min($loads),
+                    $guardAt,
+                    basename((string) $path) . ': the CLI guard must come before '
+                    . 'the first require, otherwise the work runs anyway.'
+                );
+            }
+
+            $checked++;
+        }
+
+        $this->assertGreaterThan(0, $checked, 'Expected to find CLI diagnostics to check.');
+    }
+
     private function relative(string $file): string
     {
         $root = realpath(self::REPO_ROOT);

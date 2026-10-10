@@ -1,12 +1,35 @@
 <?php
 
-require_once '../../Controllers/SalesController.php';
+declare(strict_types=1);
 
-if (!isset($_GET['sale_id'])) {
+/*
+| Path depths from /app/dashboard/pos:
+|   ../../../  -> project root   (config/ lives here)
+|   ../../     -> app/           (Middleware/ and Controllers/ live here)
+*/
+
+require_once __DIR__ . '/../../../config/session.php';
+require_once __DIR__ . '/../../Middleware/AuthMiddleware.php';
+
+/*
+| This is a standalone printable page opened in a new tab, not an XHR
+| endpoint, so check() is the right guard: a refusal redirects to login,
+| which is what an expired session should do in a real navigation.
+|
+| Receipts belong to whichever account rang the sale up, so any signed-in
+| account is allowed -- an Administrator-only rule would lock cashiers out
+| of the receipts they just printed. Without a guard, enumerating
+| ?sale_id= handed every transaction to any visitor.
+*/
+AuthMiddleware::check();
+
+require_once __DIR__ . '/../../Controllers/SalesController.php';
+
+$saleId = (int) ($_GET['sale_id'] ?? 0);
+
+if ($saleId <= 0) {
     die("Invalid Sale.");
 }
-
-$saleId = (int)$_GET['sale_id'];
 
 $salesController = new SalesController();
 
