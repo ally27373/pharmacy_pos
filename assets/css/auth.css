@@ -259,24 +259,16 @@ body{
 
 }
 
-.left-side::before{
+/* ----- Subtle decorative geometric overlay ----- */
+.left-side::before,
+.left-side::after{
+    mix-blend-mode:soft-light;
+    opacity:.9;
+}
 
-    content:"";
-
-    position:absolute;
-
-    width:450px;
-
-    height:450px;
-
-    background:rgba(255,255,255,.08);
-
-    border-radius:50%;
-
-    top:-120px;
-
-    left:-120px;
-
+/* ----- Right panel refined spacing ----- */
+.right-side{
+    padding:60px 50px;
 }
 
 .left-side::after{
@@ -315,17 +307,21 @@ body{
 
     width:100%;
 
-    max-width:430px;
+    max-width:440px;
 
-    background:white;
+    background:rgba(255,255,255,.97);
 
-    border-radius:25px;
+    backdrop-filter:blur(12px);
 
-    padding:45px;
+    border-radius:28px;
 
-    box-shadow:0 25px 50px rgba(0,0,0,.15);
+    padding:50px 36px;
 
-    transition:.3s;
+    box-shadow:0 28px 60px rgba(30,27,27,.12), 0 1px 2px rgba(30,27,27,.05);
+
+    border:1px solid rgba(255,255,255,.35);
+
+    transition:.35s ease;
 
 }
 
@@ -339,7 +335,13 @@ body{
 
     font-weight:600;
 
-    color:#444;
+    color:#202a33;
+
+    letter-spacing:.02em;
+
+    font-size:14px;
+
+    margin-bottom:6px;
 
 }
 
@@ -371,7 +373,7 @@ body{
 
     border:2px solid #0F8A6B;
 
-    box-shadow:none;
+    box-shadow:0 0 0 4px rgba(15,138,107,.1);
 
 }
 
@@ -393,11 +395,15 @@ body{
 
     border-radius:50px;
 
-    padding:14px;
+    padding:15px;
 
-    font-weight:600;
+    font-weight:700;
+
+    letter-spacing:.03em;
 
     transition:all .3s ease;
+
+    box-shadow:0 8px 22px rgba(15,138,107,.25);
 
 }
 
@@ -407,7 +413,9 @@ body{
 
     color:white;
 
-    transform:translateY(-2px);
+    transform:translateY(-3px);
+
+    box-shadow:0 14px 32px rgba(15,138,107,.35);
 
 }
 
@@ -549,11 +557,26 @@ a:hover{
 
 }
 
+/* ----- Mobile polish ----- */
+@media (max-width:768px){
+    .login-row { flex-direction:column !important; }
+    .left-side { border-top-right-radius:0 !important; border-bottom-right-radius:60px !important; padding:40px 24px !important; }
+    .right-side { padding:30px 24px !important; }
+    .system-title { font-size:42px !important; }
+    .login-card { padding:32px 20px !important; border-radius:22px !important; }
+    .login-card-header h3 { font-size:20px !important; }
+    .pharmacy-name { font-size:16px !important; letter-spacing:2px !important; }
+}
+
 input[type="checkbox"]{
 
     accent-color:var(--primary-green);
 
     cursor:pointer;
+
+    width:18px;
+
+    height:18px;
 
 }
 

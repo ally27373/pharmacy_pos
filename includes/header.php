@@ -34,6 +34,7 @@
 
         <link rel="stylesheet" href="/assets/css/style.css">
         <link rel="stylesheet" href="/assets/css/auth.css">
+        <link rel="stylesheet" href="/assets/css/polish.css">
 
     <!-- Google Font -->
 

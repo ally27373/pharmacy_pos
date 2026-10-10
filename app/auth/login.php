@@ -122,6 +122,12 @@ require_once '../../includes/header.php';
 
                 <div class="login-card">
 
+                <div class="login-card-header mb-4 text-center">
+                    <i class="bi bi-shield-lock-fill" style="font-size:42px; color:#0F8A6B; opacity:.9;"></i>
+                    <h3 style="font-weight:800; letter-spacing:-.03em; color:#1e1b1b; margin-top:14px; font-size:22px;">Welcome Back</h3>
+                    <p style="color:#7b8794; font-size:14px; margin-top:4px;">Sign in to your Nica Xandra account</p>
+                </div>
+
                 <?php if (!empty($message)): ?>
 
                     <div class="alert alert-danger">
