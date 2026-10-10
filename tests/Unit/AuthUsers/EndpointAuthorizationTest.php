@@ -423,11 +423,12 @@ public function test_state_changing_endpoints_require_a_csrf_token(string $relat
         );
     }
 
- * The role check has to come first. run() it in the other order and an
- * anonymous request is reported as a CSRF failure, which describes the
- * wrong problem and can be mistaken for a stale-token bug.
- */
-public function test_csrf_check_follows_the_role_guard(): void
+ /**
+     * The role check has to come first. Run them the other way round and an
+     * anonymous request is reported as a CSRF failure, which describes the
+     * wrong problem and can be mistaken for a stale-token bug.
+     */
+    public function test_csrf_check_follows_the_role_guard(): void
 {
     foreach (self::CSRF_PROTECTED_ENDPOINTS as $relativePath) {
         $file = self::REPO_ROOT . $relativePath;
