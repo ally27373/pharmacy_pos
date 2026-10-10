@@ -61,6 +61,17 @@ class InventoryController
         return $this->inventory->updateProduct($data);
     }
 
+    /**
+     * Archived products, optionally filtered by search term / category / type.
+     */
+    public function getArchivedProducts(
+        string $search = '',
+        string $category = '',
+        string $type = ''
+    ): array {
+        return $this->inventory->getArchivedProducts($search, $category, $type);
+    }
+
     public function archiveProduct(int $productId): array
     {
         return $this->inventory->archiveProduct($productId);
