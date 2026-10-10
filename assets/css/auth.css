@@ -43,6 +43,10 @@ body{
 .login-row{
     min-height:calc(100vh - 60px);
     display:flex;
+    /* Bootstrap's .row ships flex-wrap:wrap. Our two panels plus the
+       gap already fill the full 100% width, so any wrap allowance
+       pushes .right-side onto its own line and breaks the split. */
+    flex-wrap:nowrap;
     align-items:center;
     width:100%;
     max-width:1200px;
@@ -53,7 +57,10 @@ body{
 
 /* ----- LEFT PANEL (Reference Clean Style) ----- */
 .left-side{
-    width:45%;
+    /* Bootstrap's .col-lg-6 sets flex:0 0 auto + width:50%. Claim the
+       basis explicitly so our 45/55 split is honoured. */
+    flex:0 0 calc(50% - 10px);
+    width:auto;
     min-height:640px;
     background:linear-gradient(160deg, #1CBF73 0%, #0F8A6B 50%, #0a6e55 100%);
     border-radius:36px;
@@ -206,7 +213,8 @@ body{
 
 /* ----- RIGHT PANEL ----- */
 .right-side{
-    width:55%;
+    flex:0 0 calc(50% - 10px);
+    width:auto;
     display:flex;
     justify-content:center;
     align-items:center;
@@ -419,17 +427,33 @@ body{
 
 /* ----- Mobile ----- */
 @media (max-width:991.98px){
-    .login-row{ flex-direction:column-reverse !important; padding:30px 16px !important; }
-    .left-side{ width:100% !important; min-height:auto !important; border-radius:0 0 40px 40px !important; padding:50px 28px !important; }
-    .right-side{ width:100% !important; padding:30px 16px !important; }
+    .login-row{
+        flex-direction:column-reverse !important;
+        flex-wrap:wrap !important;
+        padding:30px 16px !important;
+        gap:16px !important;
+    }
+    .left-side{
+        flex:0 0 100% !important;
+        width:100% !important;
+        min-height:auto !important;
+        border-radius:0 0 40px 40px !important;
+        padding:50px 28px !important;
+    }
+    .right-side{
+        flex:0 0 100% !important;
+        width:100% !important;
+        padding:20px 16px !important;
+    }
     .welcome-title{ font-size:38px !important; }
     .login-card{ padding:36px 24px !important; }
-    .brand-area{ justify-content:center; }
+    .brand-header{ justify-content:center; margin-bottom:32px; }
 }
 
 @media (max-width:480px){
     .welcome-title{ font-size:30px !important; }
     .left-side{ padding:36px 20px !important; }
+    .outline-signin-btn{ width:100%; }
 }
 
 /* ----- Animations ----- */
