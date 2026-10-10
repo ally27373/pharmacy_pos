@@ -45,12 +45,19 @@
 /* Horizontal bar chart needs extra vertical room: each category gets its
    own row, so the row count drives the height. Without an explicit
    container height plus maintainAspectRatio:false, the canvas collapses
-   to zero and the chart renders as an empty panel. */
-.revenue-chart-container{
+   to zero and the chart renders as an empty panel.
 
-    height:420px;
+   Specificity note: dashboard-widgets.css sets
+   `.analytics-dashboard-layout .analytics-two-column-row
+    .dashboard-panel > div:has(> canvas) { height: 250px }` — that selector
+   is far more specific than a bare `.revenue-chart-container`, so this
+   rule has to mirror it to win the cascade. */
+.analytics-dashboard-layout .analytics-two-column-row .dashboard-panel > .revenue-chart-container,
+.analytics-dashboard-layout .analytics-three-column-row .dashboard-panel > .revenue-chart-container{
 
-    min-height:420px;
+    height:420px !important;
+
+    min-height:420px !important;
 
     position:relative;
 

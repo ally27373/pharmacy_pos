@@ -57,9 +57,21 @@ foreach ($dashboardData['revenue_by_category'] as $row){
 
 <script>
 
-const revenueChart = document.getElementById("revenueChart");
+/*
+ * Wrapped in an IIFE so these consts stay off the global lexical scope.
+ * Several chart partials are included on the same page and a single
+ * top-level `const` collision between them is a parse-time SyntaxError
+ * that silently kills the whole script block — chart included.
+ */
+(function () {
 
-new Chart(revenueChart,{
+const canvas = document.getElementById("revenueChart");
+
+if (!canvas || typeof Chart === "undefined") {
+    return;
+}
+
+new Chart(canvas,{
 
 type:"bar",
 
@@ -124,6 +136,8 @@ font:{size:12}
 }
 
 });
+
+})();
 
 </script>
 

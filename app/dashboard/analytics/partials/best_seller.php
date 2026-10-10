@@ -251,7 +251,7 @@ value="<?= $y ?>"
 
 
 
-const ctx =
+const bestSellerCtx =
 document
 .getElementById("bestSellerChart")
 .getContext("2d");
@@ -261,7 +261,7 @@ const bestSellerData =
 <?= json_encode($data); ?>;
 
 const bestSellerChart =
-new Chart(ctx,{
+new Chart(bestSellerCtx,{
 
 type:"bar",
 
