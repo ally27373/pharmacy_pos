@@ -8,6 +8,36 @@
 require_once __DIR__ . '/../app/Helpers/Csrf.php';
 
 /*
+| Asset URLs carry a modification-time version.
+|
+| A CSS fix that never reaches the browser is indistinguishable from a fix
+| that does not work. style.css is the clearest example: a z-index change
+| landed, the page kept showing the old stacking, and the natural conclusion
+| was that the fix was wrong rather than that it was cached. auth.js?v=4 had
+| been doing this by hand for one file.
+|
+| filemtime() means the URL changes whenever the file does, so nothing has to
+| remember to bump a counter by hand.
+*/
+if (!function_exists('asset_url')) {
+
+    /**
+     * Root-relative URL for an asset, versioned by its mtime.
+     */
+    function asset_url(string $path): string
+    {
+        $relative = '/' . ltrim($path, '/');
+
+        $full = __DIR__ . '/..' . $relative;
+
+        $version = is_file($full) ? (string) filemtime($full) : '1';
+
+        return $relative . '?v=' . $version;
+    }
+
+}
+
+/*
  * Start the session before a single byte of output.
  *
  * The CSRF token is rendered into <meta> further down and has to survive to
@@ -52,14 +82,14 @@ if (session_status() === PHP_SESSION_NONE) {
         rel="stylesheet"
         href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 
-        <link rel="stylesheet" href="/assets/css/style.css">
-        <link rel="stylesheet" href="/assets/css/auth.css">
-        <link rel="stylesheet" href="/assets/css/polish.css">
-        <link rel="stylesheet" href="/assets/css/swal.css">
-        <link rel="stylesheet" href="/assets/css/search.css">
+        <link rel="stylesheet" href="<?= asset_url('/assets/css/style.css') ?>">
+        <link rel="stylesheet" href="<?= asset_url('/assets/css/auth.css') ?>">
+        <link rel="stylesheet" href="<?= asset_url('/assets/css/polish.css') ?>">
+        <link rel="stylesheet" href="<?= asset_url('/assets/css/swal.css') ?>">
+        <link rel="stylesheet" href="<?= asset_url('/assets/css/search.css') ?>">
 
-        <script src="/assets/js/search.js"></script>
-        <script src="/assets/js/csrf.js"></script>
+        <script src="<?= asset_url('/assets/js/search.js') ?>"></script>
+        <script src="<?= asset_url('/assets/js/csrf.js') ?>"></script>
 
     <?php
     /*
@@ -83,7 +113,7 @@ if (session_status() === PHP_SESSION_NONE) {
 
     <script
         src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
-    <script src="/assets/js/swal.js"></script>
+    <script src="<?= asset_url('/assets/js/swal.js') ?>"></script>
 
     <!-- Google Font -->
 

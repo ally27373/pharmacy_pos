@@ -52,14 +52,29 @@ $header = $details[0];
 
 <title>Receipt</title>
 
-<link rel="stylesheet" href="/assets/css/receipts.css">
-<link rel="stylesheet" href="/assets/css/swal.css">
+<?php
+/*
+ * This page renders standalone, so it cannot use asset_url() from
+ * includes/header.php. Versioning is still worth it here: a cached
+ * stylesheet on the receipt is the same class of bug as a cached one
+ * anywhere else.
+ */
+$receiptAsset = static function (string $path): string {
+    $relative = '/' . ltrim($path, '/');
+    $full = __DIR__ . '/../../../' . $relative;
+
+    return $relative . '?v=' . (is_file($full) ? (string) filemtime($full) : '1');
+};
+?>
+
+<link rel="stylesheet" href="<?= $receiptAsset('/assets/css/receipts.css') ?>">
+<link rel="stylesheet" href="<?= $receiptAsset('/assets/css/swal.css') ?>">
 
 <!-- This page renders standalone (no includes/header.php), so the
      SweetAlert2 bundle + NxSwal wrapper are loaded explicitly here. -->
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
-<script src="/assets/js/swal.js"></script>
-<script src="/assets/js/toast.js"></script>
+<script src="<?= $receiptAsset('/assets/js/swal.js') ?>"></script>
+<script src="<?= $receiptAsset('/assets/js/toast.js') ?>"></script>
 
 </head>
 

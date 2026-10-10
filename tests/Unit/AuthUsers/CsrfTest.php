@@ -219,7 +219,9 @@ final class CsrfTest extends TestCase
         ];
 
         $process = proc_open(
-            ['C:\\xampp\\php\\php.exe', $scriptPath],
+            // See AuthMiddlewareTest::runFixtureScript(): a hardcoded Windows
+            // path would fail everywhere else.
+            [PHP_BINARY, $scriptPath],
             $descriptorSpec,
             $pipes
         );

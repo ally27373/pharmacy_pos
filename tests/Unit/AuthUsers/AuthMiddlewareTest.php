@@ -134,7 +134,13 @@ final class AuthMiddlewareTest extends TestCase
         $scriptPath = tempnam(sys_get_temp_dir(), 'authmw_') . '.php';
         file_put_contents($scriptPath, "<?php\n" . $body . "\n");
 
-        $phpBinary = 'C:\\xampp\\php\\php.exe';
+        /*
+         * PHP_BINARY is the interpreter running this suite, so the fixture
+         * spawns on Windows, Linux and macOS alike. A hardcoded
+         * C:\xampp\php\php.exe made every deny-path test fail on the deploy
+         * host, which runs Linux.
+         */
+        $phpBinary = PHP_BINARY;
         $descriptorSpec = [
             0 => ['pipe', 'r'],
             1 => ['pipe', 'w'],
@@ -289,26 +295,31 @@ final class AuthMiddlewareTest extends TestCase
      * session was seeded with. An administrator demoted to Cashier while
      * signed in has to lose admin access on the next request rather than at
      * the next login.
+     *
+     * Run out of process: the refusal path calls exit(), which in the main
+     * PHPUnit process would end the whole run. That is exactly what this
+     * test did before, taking the rest of the suite down with it.
+     *
+     * The refusal is itself the proof. Session says role_id 1, the database
+     * says role_id 2, so a guard that trusted the cached role would let the
+     * call through and reach REACHED_END.
      */
-    public function test_requireAdminApi_refreshes_role_from_the_database(): void
+    public function test_requireAdminApi_refuses_when_the_cached_role_is_stale(): void
     {
-        $_SESSION['user_id'] = 3;
-        $_SESSION['role_id'] = 1; // stale: session still claims admin
+        $body = $this->buildFixtureScript(
+            'requireAdminApi',
+            ['user_id' => 3, 'role_id' => 1],
+            [
+                'user_id' => 3,
+                'username' => 'demoted',
+                'role_id' => 2,
+                'account_status' => 'Active',
+            ]
+        );
+        $result = $this->runFixtureScript($body);
 
-        $userModel = $this->createMock(User::class);
-        $userModel->method('getById')->willReturn([
-            'user_id' => 3,
-            'username' => 'demoted',
-            'role_id' => 2,
-            'account_status' => 'Active',
-        ]);
-
-        $this->expectOutputString('');
-        $this->expectOutputRegex('/Administrator access is required/');
-
-        AuthMiddleware::requireAdminApi($userModel);
-
-        $this->assertSame(2, $_SESSION['role_id']);
+        $this->assertStringNotContainsString('REACHED_END', $result['stdout']);
+        $this->assertStringContainsString('Administrator access is required', $result['stdout']);
     }
 
     public function test_requireAdminApi_denies_cashier_with_json_403(): void

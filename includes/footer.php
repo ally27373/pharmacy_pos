@@ -5,14 +5,14 @@ src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.j
 
 <!-- Login JS -->
 
-<script src="/assets/js/auth.js?v=4"></script>
+<script src="<?= asset_url('/assets/js/auth.js') ?>"></script>
 
 <!-- Shared toast notifications (no dependencies) -->
-<link rel="stylesheet" href="/assets/css/toast.css">
-<script src="/assets/js/toast.js"></script>
+<link rel="stylesheet" href="<?= asset_url('/assets/css/toast.css') ?>">
+<script src="<?= asset_url('/assets/js/toast.js') ?>"></script>
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<script src="/assets/js/sidebar.js"></script>
+<script src="<?= asset_url('/assets/js/sidebar.js') ?>"></script>
 
 </body>
 

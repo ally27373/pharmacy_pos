@@ -186,6 +186,24 @@ const KPI_STATE = {
 };
 
 /*
+ * Move the modal to the end of <body> before Bootstrap ever sees it.
+ *
+ * Bootstrap documents modals as direct children of <body>, and metrics.php
+ * emits this one from inside .dashboard-content. That is currently harmless
+ * -- none of the ancestors open a stacking context -- but if one ever does
+ * (transform, filter, will-change, isolation, contain), the modal is trapped
+ * inside it and no z-index on .modal can lift it above a sibling navbar.
+ * Relocating removes the possibility instead of relying on nobody adding one.
+ */
+(function relocateKpiModal() {
+    const modal = document.getElementById("kpiDetailModal");
+
+    if (modal && modal.parentNode !== document.body) {
+        document.body.appendChild(modal);
+    }
+})();
+
+/*
  * Values come from the database, so every one of them is escaped before it
  * reaches innerHTML. A product name containing markup must never be parsed
  * as markup.
