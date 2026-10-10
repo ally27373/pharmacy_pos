@@ -55,16 +55,21 @@ require_once '../../../includes/header.php';
                 <form class="inventory-toolbar" method="get" action="">
                     <input type="hidden" name="page" value="archive">
 
-                    <div class="inventory-search-wrap">
-                        <i class="bi bi-search"></i>
+                    <div class="nx-search">
+                        <i class="bi bi-search nx-search__icon"></i>
                         <input
                             type="search"
                             name="search"
                             id="archive-search"
-                            class="inventory-search"
+                            class="nx-search__input"
                             placeholder="Search name, barcode, generic or brand"
                             value="<?= htmlspecialchars($search) ?>"
-                            autocomplete="off">
+                            autocomplete="off"
+                            aria-label="Search archived products">
+                        <span
+                            class="nx-search__count<?= count($archived) > 0 ? '' : ' is-empty'; ?>"
+                            role="status"
+                            aria-live="polite"><?= count($archived) > 0 ? number_format(count($archived)) : 'No results'; ?></span>
                     </div>
 
                     <select name="category" id="archive-category" class="inventory-filter">
@@ -213,7 +218,7 @@ require_once '../../../includes/header.php';
                 .inventory-card .inventory-table .col-actions,
                 .inventory-card .inventory-table .action-cell{ white-space:nowrap; width:1%; }
                 .inventory-card .inventory-toolbar{ flex-wrap:wrap; }
-                .inventory-card .inventory-search-wrap{ flex:1 1 260px; }
+                .inventory-card .nx-search{ flex:1 1 260px; }
                 @media (max-width:768px){
                     /* Below tablet the table legitimately needs to scroll —
                        re-enable it only there rather than on every screen. */

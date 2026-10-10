@@ -714,12 +714,26 @@ async function loadProducts(page = 1)
 
         renderProductRows(result.products || []);
         renderProductPagination(result.pagination || {});
+
+        // Report how many products the current filter actually matched.
+        const searchCount = document.getElementById("product-search-count");
+
+        if (searchCount)
+        {
+            const total = Number((result.pagination || {}).total || 0);
+
+            NxSearch.renderCount(searchCount, total, total);
+        }
     }
     catch (error)
     {
         if (requestId !== productRequest) return;
 
         console.error(error);
+
+        const searchCount = document.getElementById("product-search-count");
+
+        if (searchCount) searchCount.textContent = "";
 
         productsTableBody.innerHTML = `
             <tr>

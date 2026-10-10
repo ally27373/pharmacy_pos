@@ -1,0 +1,144 @@
+/* =====================================================
+ * Shared search component
+ * -----------------------------------------------------
+ * Every searchable table in the POS uses this one box so
+ * a cashier sees the same affordance on every screen:
+ *
+ *   <div class="nx-search">
+ *       <i class="bi bi-search nx-search__icon"></i>
+ *       <input type="search" class="nx-search__input" ...>
+ *       <span class="nx-search__count" role="status"></span>
+ *   </div>
+ *
+ * The count is optional. Pages whose list is filtered
+ * server-side fill it after render; pages filtered in the
+ * browser update it on every keystroke.
+ * ===================================================== */
+
+.nx-search {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 12px;
+    border: 1px solid #d9e2de;
+    border-radius: 10px;
+    background: #fff;
+    max-width: 340px;
+    min-width: 220px;
+    transition: border-color .15s ease, box-shadow .15s ease;
+}
+
+/* The ring is on the wrapper, not the input, so the whole box reads
+   as one control when it takes focus. */
+.nx-search:focus-within {
+    border-color: #118d6d;
+    box-shadow: 0 0 0 3px rgba(17, 141, 109, .12);
+}
+
+.nx-search__icon {
+    flex: 0 0 auto;
+    color: #118d6d;
+    font-size: 14px;
+    line-height: 1;
+}
+
+.nx-search__input {
+    flex: 1 1 auto;
+    min-width: 0;
+    border: none;
+    outline: none;
+    background: transparent;
+    font-family: inherit;
+    font-size: 13px;
+    color: #374151;
+}
+
+/* type="search" paints its own clear glyph in WebKit; hide it so the
+   only affordance is the shared one. */
+.nx-search__input::-webkit-search-decoration,
+.nx-search__input::-webkit-search-cancel-button,
+.nx-search__input::-webkit-search-results-button,
+.nx-search__input::-webkit-search-results-decoration {
+    -webkit-appearance: none;
+    appearance: none;
+}
+
+.nx-search__input::placeholder {
+    color: #9aa4a8;
+}
+
+.nx-search__count {
+    flex: 0 0 auto;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: .02em;
+    color: #6b7a86;
+    white-space: nowrap;
+    font-variant-numeric: tabular-nums;
+}
+
+.nx-search__count:empty {
+    display: none;
+}
+
+/* Filtered but nothing matched — the count carries the message so no
+   extra empty-state element is needed. */
+.nx-search__count.is-empty {
+    color: #b45309;
+}
+
+.nx-search--wide {
+    max-width: 420px;
+}
+
+/* ---------- Toolbar placement ----------
+ * Each toolbar below used to place its search with its own class.
+ * Those rules no longer match now that every box is .nx-search, so the
+ * placement lives here instead of being re-declared per page.
+ */
+
+/* POS Sales / Billings: search pushed to the far right of the toolbar. */
+.sales-toolbar .nx-search {
+    margin-left: auto;
+}
+
+/* Archive / Inventory Management: shares the row with the filters. */
+.inventory-toolbar .nx-search {
+    flex: 1 1 260px;
+    max-width: 420px;
+}
+
+/* Reports: the search grows to fill whatever the selects leave. */
+.reports-toolbar .nx-search {
+    flex: 1 1 300px;
+    min-width: 240px;
+    max-width: none;
+}
+
+@media (max-width: 768px) {
+    .sales-toolbar .nx-search {
+        margin-left: 0;
+        width: min(100%, 360px);
+    }
+}
+
+@media (max-width: 700px) {
+    .reports-toolbar .nx-search {
+        flex-basis: 100%;
+    }
+}
+
+@media (max-width: 480px) {
+    .sales-toolbar .nx-search,
+    .sales-toolbar .btn {
+        width: 100%;
+        margin-left: 0;
+    }
+}
+
+@media (max-width: 768px) {
+    .nx-search {
+        max-width: 100%;
+        width: 100%;
+    }
+}

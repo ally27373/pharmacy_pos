@@ -162,6 +162,13 @@
 
         prevButton.disabled = !pagination.has_previous;
         nextButton.disabled = !pagination.has_next;
+
+        // Report how many records the current filter actually matched.
+        const searchCount = document.getElementById('report-search-count');
+
+        if (searchCount) {
+            NxSearch.renderCount(searchCount, total, total);
+        }
     }
 
     async function loadReport(page = 1) {

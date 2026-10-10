@@ -25,12 +25,21 @@ $limit       = (int) $pagination['limit'];
 
 <div class="products-header">
 
-    <input
-        type="text"
-        id="product-search"
-        class="form-control"
-        placeholder="Search product name or barcode"
-    >
+    <div class="nx-search">
+        <i class="bi bi-search nx-search__icon"></i>
+        <input
+            type="search"
+            id="product-search"
+            class="nx-search__input"
+            placeholder="Search product name or barcode"
+            autocomplete="off"
+            aria-label="Search products">
+        <span
+            class="nx-search__count"
+            id="product-search-count"
+            role="status"
+            aria-live="polite"></span>
+    </div>
 
 <select
     id="category-filter"

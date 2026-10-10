@@ -79,24 +79,16 @@ document.querySelectorAll(".view-billing").forEach(button => {
 
 /* ===========================
    SEARCH BILLINGS
-=========================== */
-const billingSearch = document.getElementById("billing-search");
-const billingRows = document.querySelectorAll(".billing-row");
-
-function filterBillings() {
-    if (!billingSearch) return;
-    const keyword = billingSearch.value.toLowerCase().trim();
-
-    billingRows.forEach(row => {
-        const transaction = row.dataset.transaction || "";
-        const invoice = row.dataset.invoice || "";
-        const payment = row.dataset.payment || "";
-        const match = transaction.includes(keyword) || invoice.includes(keyword) || payment.includes(keyword);
-        row.style.display = match ? "" : "none";
-    });
+   ===========================
+   The billings table is paginated, so searching submits the form and
+   lets SQL search every row. The previous row filter read
+   data-transaction / data-invoice off <tr class="billing-row">, but
+   those rows never carried those attributes, so every value came back
+   empty and each keystroke hid the entire table.
+*/
+if (typeof NxSearch !== "undefined") {
+    NxSearch.submitOnType(document.getElementById("billing-search"));
 }
-
-if (billingSearch) billingSearch.addEventListener("input", filterBillings);
 
 /* ===========================
    MODAL CLOSE HARDENING

@@ -66,15 +66,20 @@ require_once '../../../includes/header.php';
 
         <div class="inventory-toolbar">
 
-            <div class="inventory-search-wrap">
-                <i class="bi bi-search"></i>
+            <div class="nx-search">
+                <i class="bi bi-search nx-search__icon"></i>
                 <input
-                    type="text"
+                    type="search"
                     id="inventory-search"
-                    class="inventory-search"
+                    class="nx-search__input"
                     placeholder="Search product name or barcode"
                     value="<?= htmlspecialchars($search) ?>"
-                    autocomplete="off">
+                    autocomplete="off"
+                    aria-label="Search products">
+                <span
+                    class="nx-search__count"
+                    role="status"
+                    aria-live="polite"><?= number_format((int) ($pagination['total'] ?? 0)) ?></span>
             </div>
 
             <select id="category-filter" class="inventory-filter">

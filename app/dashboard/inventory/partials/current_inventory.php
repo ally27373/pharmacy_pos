@@ -14,9 +14,22 @@ $inventoryPageSize = 5;
                 Product-level quantity with batch details available on selection
             </p>
         </div>
-        <div class="current-inventory-search">
-            <i class="bi bi-search"></i>
-            <input type="text" id="current-inventory-search" placeholder="Search product or barcode..." autocomplete="off">
+        <div class="nx-search">
+            <i class="bi bi-search nx-search__icon"></i>
+            <input
+                type="search"
+                class="nx-search__input"
+                id="current-inventory-search"
+                placeholder="Search product or barcode..."
+                autocomplete="off"
+                aria-label="Search inventory products"
+            >
+            <span
+                class="nx-search__count"
+                id="current-inventory-search-count"
+                role="status"
+                aria-live="polite"
+            ></span>
         </div>
         <div class="current-inventory-total">
             <?= number_format(count($inventoryProducts)); ?> products
@@ -161,10 +174,6 @@ $inventoryPageSize = 5;
 <style>
 .current-inventory-panel { width: 100%; }
 .current-inventory-header { margin-bottom: 14px; }
-.current-inventory-search { display: flex; align-items: center; gap: 8px; padding: 6px 12px; border: 1px solid #d9e2de; border-radius: 8px; background: #fff; max-width: 300px; font-size: 13px; color: #374151; }
-.current-inventory-search i { color: #118d6d; }
-.current-inventory-search input { border: none; outline: none; background: transparent; flex: 1; font-size: 13px; color: #374151; }
-.current-inventory-search input::placeholder { color: #9aa4a8; }
 .current-inventory-total {
     padding: 6px 10px;
     border-radius: 999px;
@@ -243,8 +252,10 @@ $inventoryPageSize = 5;
     var productRows = Array.prototype.slice.call(document.querySelectorAll('.current-inventory-product-row'));
     var paginationSummary = document.getElementById('current-inventory-pagination-summary');
     var pageIndicator = document.getElementById('inventory-page-indicator');
-    var prevButton = document.getElementById('inventory-page-prev');
     var nextButton = document.getElementById('inventory-page-next');
+    var searchQuery = '';
+    var searchCount = document.getElementById('current-inventory-search-count');
+    var filteredTotal = productRows.length;
 
     function closeAllBatchRows() {
         document.querySelectorAll('.inventory-product-check').forEach(function (checkbox) {
@@ -266,18 +277,36 @@ $inventoryPageSize = 5;
         });
     }
 
+    function rowMatchesSearch(row) {
+        if (!searchQuery) return true;
+        var name = (row.querySelector('.current-inventory-product-name')?.textContent || '').toLowerCase();
+        var barcode = (row.querySelector('.current-inventory-barcode')?.textContent || '').toLowerCase();
+        return name.indexOf(searchQuery) !== -1 || barcode.indexOf(searchQuery) !== -1;
+    }
+
     function renderPage() {
-        var total = productRows.length;
+        /*
+         * Paginate the *filtered* set.
+         *
+         * The search handler used to set row.hidden from the match result
+         * and then call renderPage(), which reassigned row.hidden from the
+         * row's plain page position -- discarding the filter on the very
+         * next statement, so typing did nothing.
+         */
+        var matching = productRows.filter(rowMatchesSearch);
+        var total = matching.length;
         var totalPages = Math.max(1, Math.ceil(total / pageSize));
+        filteredTotal = total;
         currentPage = Math.min(Math.max(currentPage, 1), totalPages);
         closeAllBatchRows();
 
         var start = (currentPage - 1) * pageSize;
         var end = Math.min(start + pageSize, total);
 
-        productRows.forEach(function (row, index) {
-            var visible = index >= start && index < end;
-            row.hidden = !visible;
+        var onPage = new Set(matching.slice(start, end));
+
+        productRows.forEach(function (row) {
+            row.hidden = !onPage.has(row);
             var productId = row.getAttribute('data-product-id');
             var batchRow = document.getElementById('inventory-batches-' + productId);
             if (batchRow) batchRow.hidden = true;
@@ -289,6 +318,12 @@ $inventoryPageSize = 5;
         pageIndicator.textContent = 'Page ' + currentPage + ' of ' + totalPages;
         prevButton.disabled = currentPage <= 1;
         nextButton.disabled = currentPage >= totalPages;
+
+        NxSearch.renderCount(
+            searchCount,
+            total,
+            productRows.length
+        );
     }
 
     document.querySelectorAll('.inventory-product-check').forEach(function (checkbox) {
@@ -314,7 +349,9 @@ $inventoryPageSize = 5;
     });
 
     nextButton.addEventListener('click', function () {
-        var totalPages = Math.max(1, Math.ceil(productRows.length / pageSize));
+        // filteredTotal, not productRows.length: with a search active the
+        // unfiltered total would offer pages that hold no matches.
+        var totalPages = Math.max(1, Math.ceil(filteredTotal / pageSize));
         if (currentPage < totalPages) {
             currentPage++;
             renderPage();
@@ -327,16 +364,7 @@ $inventoryPageSize = 5;
     var searchInput = document.getElementById('current-inventory-search');
     if (searchInput) {
         searchInput.addEventListener('input', function () {
-            var query = this.value.toLowerCase().trim();
-            productRows = Array.prototype.slice.call(document.querySelectorAll('.current-inventory-product-row'));
-            productRows.forEach(function (row) {
-                var name = (row.querySelector('.current-inventory-product-name')?.textContent || '').toLowerCase();
-                var barcode = (row.querySelector('.current-inventory-barcode')?.textContent || '').toLowerCase();
-                var visible = !query || name.includes(query) || barcode.includes(query);
-                row.hidden = !visible;
-                var batchRow = document.getElementById('inventory-batches-' + row.getAttribute('data-product-id'));
-                if (batchRow) batchRow.hidden = true;
-            });
+            searchQuery = this.value.toLowerCase().trim();
             currentPage = 1;
             renderPage();
         });

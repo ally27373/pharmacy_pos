@@ -39,14 +39,20 @@ require_once '../../../includes/header.php';
 
                 <div class="reports-toolbar">
 
-                    <div class="report-search-wrap">
-                        <i class="bi bi-search"></i>
+                    <div class="nx-search">
+                        <i class="bi bi-search nx-search__icon"></i>
                         <input
                             type="search"
                             id="report-search"
-                            class="report-search"
+                            class="nx-search__input"
                             placeholder="Search product, barcode, transaction or invoice"
-                            autocomplete="off">
+                            autocomplete="off"
+                            aria-label="Search reports">
+                        <span
+                            class="nx-search__count"
+                            id="report-search-count"
+                            role="status"
+                            aria-live="polite"></span>
                     </div>
 
                     <select id="report-period" class="report-select" aria-label="Report period">

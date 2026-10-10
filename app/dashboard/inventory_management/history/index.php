@@ -89,12 +89,21 @@ require_once '../../../../includes/header.php';
 
     <!-- PRODUCT SEARCH -->
 
-    <input
-        type="text"
-        id="history-search"
-        class="search-box"
-        placeholder="Search Product"
-        value="<?= htmlspecialchars($search) ?>">
+    <div class="nx-search">
+        <i class="bi bi-search nx-search__icon"></i>
+        <input
+            type="search"
+            id="history-search"
+            class="nx-search__input"
+            placeholder="Search Product"
+            value="<?= htmlspecialchars($search) ?>"
+            autocomplete="off"
+            aria-label="Search inventory history">
+        <span
+            class="nx-search__count"
+            role="status"
+            aria-live="polite"><?= number_format((int) ($pagination['total'] ?? 0)) ?></span>
+    </div>
 
 
     <!-- ACTION FILTER -->

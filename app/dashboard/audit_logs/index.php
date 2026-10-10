@@ -72,13 +72,21 @@ require_once '../../../includes/header.php';
 
                     <div class="filter-group">
                         <label for="search">Search</label>
-                        <input
-                            type="text"
-                            id="search"
-                            name="search"
-                            value="<?= htmlspecialchars($filters['search']) ?>"
-                            placeholder="User, module, or description"
-                        >
+                        <div class="nx-search">
+                            <i class="bi bi-search nx-search__icon"></i>
+                            <input
+                                type="search"
+                                id="search"
+                                name="search"
+                                class="nx-search__input"
+                                value="<?= htmlspecialchars($filters['search']) ?>"
+                                placeholder="User, module, or description"
+                                aria-label="Search audit logs">
+                            <span
+                                class="nx-search__count<?= $totalRecords > 0 ? '' : ' is-empty'; ?>"
+                                role="status"
+                                aria-live="polite"><?= $totalRecords > 0 ? number_format($totalRecords) : 'No results'; ?></span>
+                        </div>
                     </div>
 
                     <div class="filter-group">

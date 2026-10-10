@@ -671,16 +671,24 @@ require_once '../../../includes/header.php';
                                 Search
                             </label>
 
-                            <input
-                                type="text"
-                                id="search"
-                                name="search"
-                                class="form-control"
-                                value="<?= htmlspecialchars(
-                                    $filters['search']
-                                ) ?>"
-                                placeholder="Name, username, or email"
-                            >
+                            <div class="nx-search">
+                                <i class="bi bi-search nx-search__icon"></i>
+                                <input
+                                    type="search"
+                                    id="search"
+                                    name="search"
+                                    class="nx-search__input"
+                                    value="<?= htmlspecialchars(
+                                        $filters['search']
+                                    ) ?>"
+                                    placeholder="Name, username, or email"
+                                    autocomplete="off"
+                                    aria-label="Search users">
+                                <span
+                                    class="nx-search__count"
+                                    role="status"
+                                    aria-live="polite"><?= number_format((int) $result['total']) ?></span>
+                            </div>
 
                         </div>
 

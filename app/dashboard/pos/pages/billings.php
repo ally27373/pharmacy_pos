@@ -26,6 +26,17 @@ $pagination = $result['pagination'] ?? [
     'has_next' => false,
 ];
 
+/*
+ * Resolved up here rather than beside the pagination footer: the search
+ * box reports the result count, and that has to be known before the
+ * toolbar renders.
+ */
+$currentPage = (int) $pagination['page'];
+$totalPages = (int) $pagination['total_pages'];
+$total = (int) $pagination['total'];
+$start = $total > 0 ? (($currentPage - 1) * $limit) + 1 : 0;
+$end = $total > 0 ? min($currentPage * $limit, $total) : 0;
+
 require_once '../../../includes/header.php';
 ?>
 
@@ -46,13 +57,22 @@ require_once '../../../includes/header.php';
         <form class="sales-toolbar" method="get" action="">
             <input type="hidden" name="page" value="billings">
 
-            <input
-                type="search"
-                name="search"
-                value="<?= htmlspecialchars($search) ?>"
-                class="search-box"
-                placeholder="Search transaction, invoice, payment or status"
-                autocomplete="off">
+            <div class="nx-search">
+                <i class="bi bi-search nx-search__icon"></i>
+                <input
+                    type="search"
+                    name="search"
+                    id="billing-search"
+                    class="nx-search__input"
+                    value="<?= htmlspecialchars($search) ?>"
+                    placeholder="Search transaction, invoice, payment or status"
+                    autocomplete="off"
+                    aria-label="Search billings">
+                <span
+                    class="nx-search__count<?= $total > 0 ? '' : ' is-empty'; ?>"
+                    role="status"
+                    aria-live="polite"><?= $total > 0 ? number_format($total) : 'No results'; ?></span>
+            </div>
 
             <button type="submit" class="btn btn-success">Search</button>
 
@@ -115,14 +135,6 @@ require_once '../../../includes/header.php';
                 </tbody>
             </table>
         </div>
-
-        <?php
-        $currentPage = (int) $pagination['page'];
-        $totalPages = (int) $pagination['total_pages'];
-        $total = (int) $pagination['total'];
-        $start = $total > 0 ? (($currentPage - 1) * $limit) + 1 : 0;
-        $end = $total > 0 ? min($currentPage * $limit, $total) : 0;
-        ?>
 
         <div class="records-pagination">
             <div class="pagination-info">

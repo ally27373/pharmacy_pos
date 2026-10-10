@@ -2,24 +2,15 @@ console.log("Sales JS Loaded");
 
 /* ===========================
    SEARCH
-=========================== */
-const searchInput = document.getElementById("sales-search");
-const rows = document.querySelectorAll(".sales-row");
-
-function filterSales() {
-    if (!searchInput) return;
-    const keyword = searchInput.value.toLowerCase().trim();
-    rows.forEach(row => {
-        const transaction = row.dataset.transaction || "";
-        const invoice = row.dataset.invoice || "";
-        const sale = row.dataset.sale || "";
-        const payment = row.dataset.payment || "";
-        const match = transaction.includes(keyword) || invoice.includes(keyword) || sale.includes(keyword) || payment.includes(keyword);
-        row.style.display = match ? "" : "none";
-    });
+   ===========================
+   The transactions table is paginated 20 rows at a time, so
+   searching submits the form and lets SQL search every row.
+   Filtering only the rows already on screen reports "no results"
+   for a transaction sitting three pages away.
+*/
+if (typeof NxSearch !== "undefined") {
+    NxSearch.submitOnType(document.getElementById("sales-search"));
 }
-
-if (searchInput) searchInput.addEventListener("input", filterSales);
 
 /* ===========================
    BOOTSTRAP MODAL HELPERS

@@ -36,6 +36,9 @@
         <link rel="stylesheet" href="/assets/css/auth.css">
         <link rel="stylesheet" href="/assets/css/polish.css">
         <link rel="stylesheet" href="/assets/css/swal.css">
+        <link rel="stylesheet" href="/assets/css/search.css">
+
+        <script src="/assets/js/search.js"></script>
 
     <!-- SweetAlert2: every confirm()/alert() goes through NxSwal.
          Loaded here (not in footer) so pages like receipt.php that skip
