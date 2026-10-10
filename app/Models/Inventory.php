@@ -165,23 +165,77 @@ class Inventory
         ];
     }
 
-    public function getArchivedProducts(): array
-    {
+    /**
+     * Archived products with optional filters (search / category / type).
+     *
+     * Every filter is applied as a bound parameter. LEFT JOINs are used so a
+     * product archived with a missing category/type still shows up instead of
+     * silently vanishing behind an INNER JOIN.
+     *
+     * The whole read is guarded: if the is_archived column has not been
+     * migrated yet, return an empty list instead of letting a PDOException
+     * bubble up and turn the page into an HTTP 500.
+     */
+    public function getArchivedProducts(
+        string $search = '',
+        string $category = '',
+        string $type = ''
+    ): array {
+        $search = trim($search);
+        $category = trim($category);
+        $type = trim($type);
+
+        $where = ['p.is_archived = 1'];
+        $params = [];
+
+        if ($search !== '') {
+            $where[] = "(p.product_name LIKE :search
+                        OR p.barcode LIKE :search
+                        OR COALESCE(p.generic_name, '') LIKE :search
+                        OR COALESCE(p.brand_name, '') LIKE :search)";
+            $params[':search'] = '%' . $search . '%';
+        }
+
+        if ($category !== '') {
+            $where[] = 'c.category_name = :category';
+            $params[':category'] = $category;
+        }
+
+        if ($type !== '') {
+            $where[] = 'pt.type_name = :type';
+            $params[':type'] = $type;
+        }
+
         $sql = "
             SELECT
                 p.product_id,
                 p.product_name,
                 p.barcode,
-                pt.type_name,
-                c.category_name
+                COALESCE(p.generic_name, '') AS generic_name,
+                COALESCE(p.brand_name, '') AS brand_name,
+                COALESCE(pt.type_name, '—') AS type_name,
+                COALESCE(c.category_name, '—') AS category_name,
+                p.quantity,
+                p.selling_price,
+                p.updated_at
             FROM products p
-            INNER JOIN product_types pt ON p.type_id = pt.type_id
-            INNER JOIN categories c ON p.category_id = c.category_id
-            WHERE p.is_archived = 1
-            ORDER BY p.product_name ASC
+            LEFT JOIN product_types pt ON p.type_id = pt.type_id
+            LEFT JOIN categories c ON p.category_id = c.category_id
+            WHERE " . implode(' AND ', $where) . "
+            ORDER BY p.product_name ASC, p.product_id ASC
         ";
-        $stmt = $this->conn->query($sql);
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        try {
+            $stmt = $this->conn->prepare($sql);
+            $this->bindStringParams($stmt, $params);
+            $stmt->execute();
+
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        } catch (Throwable $e) {
+            error_log('getArchivedProducts failed: ' . $e->getMessage());
+
+            return [];
+        }
     }
 
     public function getProductDetails($id): ?array
