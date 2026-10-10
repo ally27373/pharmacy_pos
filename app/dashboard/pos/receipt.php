@@ -98,7 +98,6 @@ $header = $details[0];
 
 <p><strong>Subtotal:</strong> ₱<?= number_format(($header['subtotal'] ?? 0), 2); ?></p>
 <p><strong>Discount:</strong> ₱<?= number_format(($header['discount_amount'] ?? 0), 2); ?></p>
-<p><strong>VAT:</strong> ₱<?= number_format(($header['vat_amount'] ?? 0), 2); ?></p>
 <p><strong>Total:</strong> ₱<?= number_format($header['total_amount'],2); ?></p>
 
 <p><strong>Payment:</strong> <?= $header['payment_method']; ?></p>

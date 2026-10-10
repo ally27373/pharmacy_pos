@@ -75,7 +75,6 @@ class Billing
                 p.payment_date,
                 s.subtotal,
                 s.discount_amount,
-                s.vat_amount,
                 s.total_amount
             FROM payments p
             INNER JOIN sales s ON p.sale_id = s.sale_id
@@ -123,7 +122,6 @@ class Billing
                 s.transaction_number,
                 s.subtotal,
                 s.discount_amount,
-                s.vat_amount,
                 s.total_amount,
                 CONCAT('INV-', LPAD(s.sale_id,6,'0')) AS invoice_number
             FROM payments p

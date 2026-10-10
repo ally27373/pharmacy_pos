@@ -473,7 +473,6 @@ public function processSale(array $data): array
                 cashier_id,
                 subtotal,
                 discount_amount,
-                vat_amount,
                 total_amount,
                 payment_status,
                 transaction_status
@@ -485,7 +484,6 @@ public function processSale(array $data): array
                 :cashier_id,
                 :subtotal,
                 :discount,
-                0,
                 :total,
                 'Paid',
                 'Completed'

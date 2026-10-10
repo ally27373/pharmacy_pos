@@ -108,7 +108,6 @@ class Sales
                 s.transaction_number,
                 s.subtotal,
                 s.discount_amount,
-                s.vat_amount,
                 s.total_amount,
                 CONCAT('INV-', LPAD(s.sale_id,6,'0')) AS invoice_number,
                 pay.payment_method,

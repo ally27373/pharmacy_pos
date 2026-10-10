@@ -89,7 +89,6 @@ class DataManagement
 
                 s.subtotal AS transaction_subtotal,
                 s.discount_amount AS transaction_discount,
-                s.vat_amount,
                 s.total_amount,
 
                 s.payment_status,

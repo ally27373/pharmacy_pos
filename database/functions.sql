@@ -13,44 +13,6 @@ DELIMITER $$
 /*
 ====================================================
 FUNCTION 1
-Calculate VAT
-====================================================
-*/
-
-CREATE FUNCTION fn_calculate_vat(
-    amount DECIMAL(10,2)
-)
-RETURNS DECIMAL(10,2)
-DETERMINISTIC
-
-BEGIN
-
-    RETURN amount * 0.12;
-
-END$$
-
-/*
-====================================================
-FUNCTION 2
-Calculate Total with VAT
-====================================================
-*/
-
-CREATE FUNCTION fn_total_with_vat(
-    amount DECIMAL(10,2)
-)
-RETURNS DECIMAL(10,2)
-DETERMINISTIC
-
-BEGIN
-
-    RETURN amount + (amount * 0.12);
-
-END$$
-
-/*
-====================================================
-FUNCTION 3
 Check Low Stock
 ====================================================
 */
@@ -70,7 +32,7 @@ END$$
 
 /*
 ====================================================
-FUNCTION 4
+FUNCTION 2
 Days Before Expiration
 ====================================================
 */
@@ -89,7 +51,7 @@ END$$
 
 /*
 ====================================================
-FUNCTION 5
+FUNCTION 3
 Medicine Expired?
 ====================================================
 */
@@ -108,7 +70,7 @@ END$$
 
 /*
 ====================================================
-FUNCTION 6
+FUNCTION 4
 Generate Today's Date String
 Example:
 20260628

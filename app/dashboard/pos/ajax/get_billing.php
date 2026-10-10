@@ -56,11 +56,6 @@ if(empty($billing))
 </p>
 
 <p>
-<strong>VAT:</strong>
-₱<?= number_format(($billing['vat_amount'] ?? 0), 2); ?>
-</p>
-
-<p>
 <strong>Amount Paid:</strong>
 ₱<?= number_format($billing['amount_paid'],2); ?>
 </p>

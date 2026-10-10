@@ -148,9 +148,6 @@ CREATE TABLE system_settings (
     currency VARCHAR(20)
         DEFAULT 'PHP',
 
-    vat DECIMAL(5,2)
-        DEFAULT 12.00,
-
     low_stock_threshold INT
         DEFAULT 10,
 

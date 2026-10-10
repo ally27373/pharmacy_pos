@@ -501,7 +501,6 @@ CREATE TABLE `sales` (
   `cashier_id` int(11) NOT NULL,
   `subtotal` decimal(10,2) NOT NULL DEFAULT 0.00,
   `discount_amount` decimal(10,2) NOT NULL DEFAULT 0.00,
-  `vat_amount` decimal(10,2) NOT NULL DEFAULT 0.00,
   `total_amount` decimal(10,2) NOT NULL DEFAULT 0.00,
   `payment_status` enum('Pending','Paid','Partially Paid','Refunded') DEFAULT 'Pending',
   `transaction_status` enum('Completed','Cancelled','Void') DEFAULT 'Completed',
@@ -514,14 +513,14 @@ CREATE TABLE `sales` (
 -- Dumping data for table `sales`
 --
 
-INSERT INTO `sales` (`sale_id`, `transaction_number`, `customer_id`, `cashier_id`, `subtotal`, `discount_amount`, `vat_amount`, `total_amount`, `payment_status`, `transaction_status`, `remarks`, `created_at`, `updated_at`) VALUES
-(101998, 'TID-20260830110452', NULL, 1, 18.00, 0.00, 0.00, 18.00, 'Paid', 'Completed', NULL, '2026-08-30 09:04:52', '2026-08-30 09:04:52'),
-(101999, 'TID-20260903032514-108', NULL, 11, 12.00, 0.00, 0.00, 12.00, 'Paid', 'Completed', NULL, '2026-09-03 01:25:14', '2026-09-03 01:25:14'),
-(102000, 'TID-20260903040006-437', NULL, 11, 95.50, 9.55, 0.00, 85.95, 'Paid', 'Completed', NULL, '2026-09-03 02:00:06', '2026-09-03 02:00:06'),
-(102001, 'TID-20260903050053-658', NULL, 11, 20.50, 0.00, 0.00, 20.50, 'Paid', 'Completed', NULL, '2026-09-03 03:00:53', '2026-09-03 03:00:53'),
-(102002, 'TID-20260905083039-438', NULL, 11, 475.00, 0.00, 0.00, 475.00, 'Paid', 'Completed', NULL, '2026-09-05 06:30:39', '2026-09-05 06:30:39'),
-(102003, 'TID-20260905105720-834', NULL, 11, 190.00, 0.00, 0.00, 190.00, 'Paid', 'Completed', NULL, '2026-09-05 08:57:20', '2026-09-05 08:57:20'),
-(102004, 'TID-20260906091025-585', NULL, 13, 18.00, 0.00, 0.00, 18.00, 'Paid', 'Completed', NULL, '2026-09-06 07:10:25', '2026-09-06 07:10:25');
+INSERT INTO `sales` (`sale_id`, `transaction_number`, `customer_id`, `cashier_id`, `subtotal`, `discount_amount`, `total_amount`, `payment_status`, `transaction_status`, `remarks`, `created_at`, `updated_at`) VALUES
+(101998, 'TID-20260830110452', NULL, 1, 18.00, 0.00, 18.00, 'Paid', 'Completed', NULL, '2026-08-30 09:04:52', '2026-08-30 09:04:52'),
+(101999, 'TID-20260903032514-108', NULL, 11, 12.00, 0.00, 12.00, 'Paid', 'Completed', NULL, '2026-09-03 01:25:14', '2026-09-03 01:25:14'),
+(102000, 'TID-20260903040006-437', NULL, 11, 95.50, 9.55, 85.95, 'Paid', 'Completed', NULL, '2026-09-03 02:00:06', '2026-09-03 02:00:06'),
+(102001, 'TID-20260903050053-658', NULL, 11, 20.50, 0.00, 20.50, 'Paid', 'Completed', NULL, '2026-09-03 03:00:53', '2026-09-03 03:00:53'),
+(102002, 'TID-20260905083039-438', NULL, 11, 475.00, 0.00, 475.00, 'Paid', 'Completed', NULL, '2026-09-05 06:30:39', '2026-09-05 06:30:39'),
+(102003, 'TID-20260905105720-834', NULL, 11, 190.00, 0.00, 190.00, 'Paid', 'Completed', NULL, '2026-09-05 08:57:20', '2026-09-05 08:57:20'),
+(102004, 'TID-20260906091025-585', NULL, 13, 18.00, 0.00, 18.00, 'Paid', 'Completed', NULL, '2026-09-06 07:10:25', '2026-09-06 07:10:25');
 
 -- --------------------------------------------------------
 
@@ -659,7 +658,6 @@ CREATE TABLE `system_settings` (
   `address` text DEFAULT NULL,
   `logo` varchar(255) DEFAULT NULL,
   `currency` varchar(20) DEFAULT 'PHP',
-  `vat` decimal(5,2) DEFAULT 12.00,
   `low_stock_threshold` int(11) DEFAULT 10,
   `receipt_footer` text DEFAULT NULL,
   `timezone` varchar(100) DEFAULT 'Asia/Manila',
@@ -670,8 +668,8 @@ CREATE TABLE `system_settings` (
 -- Dumping data for table `system_settings`
 --
 
-INSERT INTO `system_settings` (`setting_id`, `pharmacy_name`, `owner_name`, `email`, `contact_number`, `address`, `logo`, `currency`, `vat`, `low_stock_threshold`, `receipt_footer`, `timezone`, `updated_at`) VALUES
-(1, 'NicaXandra Pharmacy', 'Administrator', 'admin@nicaxandra.com', '09123456789', 'Philippines', NULL, 'PHP', 12.00, 10, 'Thank you for purchasing at NicaXandra Pharmacy!', 'Asia/Manila', '2026-06-28 07:39:59');
+INSERT INTO `system_settings` (`setting_id`, `pharmacy_name`, `owner_name`, `email`, `contact_number`, `address`, `logo`, `currency`, `low_stock_threshold`, `receipt_footer`, `timezone`, `updated_at`) VALUES
+(1, 'NicaXandra Pharmacy', 'Administrator', 'admin@nicaxandra.com', '09123456789', 'Philippines', NULL, 'PHP', 10, 'Thank you for purchasing at NicaXandra Pharmacy!', 'Asia/Manila', '2026-06-28 07:39:59');
 
 -- --------------------------------------------------------
 

@@ -70,7 +70,6 @@ require_once '../../../includes/header.php';
                         <th>Method</th>
                         <th>Subtotal</th>
                         <th>Discount</th>
-                        <th>VAT</th>
                         <th>Amount Due</th>
                         <th>Paid</th>
                         <th>Change</th>
@@ -83,7 +82,7 @@ require_once '../../../includes/header.php';
                 <tbody>
                 <?php if (empty($billings)): ?>
                     <tr>
-                        <td colspan="9" class="empty-state">
+                        <td colspan="11" class="empty-state">
                             <?= $search !== ''
                                 ? 'No billing records matched your search.'
                                 : 'No billing records yet.' ?>
@@ -97,7 +96,6 @@ require_once '../../../includes/header.php';
                             <td><?= htmlspecialchars($billing['payment_method']) ?></td>
                             <td>₱<?= number_format((float) ($billing['subtotal'] ?? 0), 2) ?></td>
                             <td>₱<?= number_format((float) ($billing['discount_amount'] ?? 0), 2) ?></td>
-                            <td>₱<?= number_format((float) ($billing['vat_amount'] ?? 0), 2) ?></td>
                             <td>₱<?= number_format((float) $billing['amount_due'], 2) ?></td>
                             <td>₱<?= number_format((float) $billing['amount_paid'], 2) ?></td>
                             <td>₱<?= number_format((float) $billing['change_amount'], 2) ?></td>
