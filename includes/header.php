@@ -35,6 +35,15 @@
         <link rel="stylesheet" href="/assets/css/style.css">
         <link rel="stylesheet" href="/assets/css/auth.css">
         <link rel="stylesheet" href="/assets/css/polish.css">
+        <link rel="stylesheet" href="/assets/css/swal.css">
+
+    <!-- SweetAlert2: every confirm()/alert() goes through NxSwal.
+         Loaded here (not in footer) so pages like receipt.php that skip
+         includes/footer.php still get the dialogs. -->
+
+    <script
+        src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
+    <script src="/assets/js/swal.js"></script>
 
     <!-- Google Font -->
 

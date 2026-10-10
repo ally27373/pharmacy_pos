@@ -1,0 +1,96 @@
+/* ==========================================================
+   NX SWAL — SweetAlert2 theme overrides
+   Scoped to .nx-swal-* classes so nothing else on the page
+   is affected. Loaded after the SweetAlert2 bundle.
+   ========================================================== */
+
+.nx-swal-popup {
+    border-radius: 18px !important;
+    font-family: 'Poppins', sans-serif !important;
+    padding: 26px 26px 22px !important;
+    box-shadow: 0 24px 60px rgba(30, 27, 27, .22) !important;
+    border: 1px solid rgba(30, 27, 27, .05) !important;
+}
+
+.nx-swal-title {
+    font-size: 20px !important;
+    font-weight: 800 !important;
+    color: #1a2230 !important;
+    letter-spacing: -.02em !important;
+}
+
+.nx-swal-body {
+    font-size: 14.5px !important;
+    color: #6b7280 !important;
+    line-height: 1.55 !important;
+}
+
+.nx-swal-confirm,
+.nx-swal-cancel {
+    font-family: 'Poppins', sans-serif !important;
+    font-weight: 600 !important;
+    font-size: 14px !important;
+    border-radius: 50px !important;
+    padding: 11px 26px !important;
+    min-width: 118px !important;
+    box-shadow: none !important;
+    transition: transform .15s ease, box-shadow .15s ease, opacity .15s ease !important;
+}
+
+.nx-swal-confirm:hover {
+    transform: translateY(-1px) !important;
+    box-shadow: 0 8px 20px rgba(30, 27, 27, .16) !important;
+}
+
+.nx-swal-cancel {
+    background: #eef1f4 !important;
+    color: #4b5563 !important;
+}
+
+.nx-swal-cancel:hover {
+    background: #e3e8ec !important;
+    color: #1a2230 !important;
+    box-shadow: 0 8px 20px rgba(30, 27, 27, .1) !important;
+}
+
+.nx-swal-popup .swal2-icon {
+    margin: 6px auto 16px !important;
+    border: 0 !important;
+}
+
+.nx-swal-popup .swal2-icon.swal2-warning {
+    color: #f0ad4e !important;
+}
+
+.nx-swal-popup .swal2-icon.swal2-question {
+    color: #0F8A6B !important;
+}
+
+.nx-swal-popup .swal2-icon.swal2-success {
+    color: #118d6d !important;
+}
+
+.nx-swal-popup .swal2-icon.swal2-error {
+    color: #dc3545 !important;
+}
+
+.nx-swal-popup .swal2-icon.swal2-info {
+    color: #1685c5 !important;
+}
+
+@media (max-width: 480px) {
+    .nx-swal-popup {
+        padding: 22px 18px 18px !important;
+    }
+
+    .nx-swal-title {
+        font-size: 18px !important;
+    }
+
+    .nx-swal-confirm,
+    .nx-swal-cancel {
+        padding: 11px 18px !important;
+        min-width: 96px !important;
+        font-size: 13px !important;
+    }
+}

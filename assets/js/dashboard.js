@@ -111,8 +111,14 @@ function setTopProducts(limit) {
     window.location.href = url;
 }
 
-function exportBestSellerCSV() {
-    if (!confirm("Confirm export best seller CSV?\n\nThis will download the CSV file.")) return;
+async function exportBestSellerCSV() {
+    const proceed = await NxSwal.confirm(
+        "Export best seller CSV?",
+        "This will download the best seller data as a CSV file.",
+        { confirmText: "Download CSV", icon: "question" }
+    );
+
+    if (!proceed) return;
 
     window.location.href =
         "/app/export/export_best_seller.php";

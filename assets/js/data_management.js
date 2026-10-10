@@ -25,7 +25,13 @@ async function downloadCsv(button, endpoint, label) {
     if (!button) return;
 
     // === CONFIRMATION ===
-    if (!confirm(`Confirm export ${label} dataset?\n\nThis will download the CSV file.`)) return;
+    const proceed = await NxSwal.confirm(
+        `Export ${label} dataset?`,
+        "This will download the full dataset as a CSV file.",
+        { confirmText: "Download CSV", icon: "question" }
+    );
+
+    if (!proceed) return;
 
     const originalHtml = button.innerHTML;
     button.disabled = true;

@@ -102,8 +102,14 @@ if (saleModalElement) {
     });
 }
 
-function printReceipt(saleId) {
-    if (!confirm("Confirm print receipt?\n\nThis will open the receipt for printing.")) return;
+async function printReceipt(saleId) {
+    const proceed = await NxSwal.confirm(
+        "Print receipt?",
+        "The receipt will open in a new window ready for printing.",
+        { confirmText: "Open receipt", icon: "question" }
+    );
+
+    if (!proceed) return;
 
     window.open(
         "/app/dashboard/pos/receipt.php?sale_id=" + encodeURIComponent(saleId),

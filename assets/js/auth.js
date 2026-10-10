@@ -86,9 +86,18 @@ document.addEventListener("DOMContentLoaded", function () {
 
     if (signupForm) {
 
-        signupForm.addEventListener("submit", function (e) {
+        signupForm.addEventListener("submit", async function (e) {
             // === CONFIRMATION ===
-            if (!confirm("Confirm create account?\n\nThis will register a new user account.")) {
+            const usernameField = document.getElementById("username");
+            const confirmed = await NxSwal.confirm(
+                "Create this account?",
+                usernameField?.value?.trim()
+                    ? `"${usernameField.value.trim()}" will be registered as a new user account.`
+                    : "This will register a new user account.",
+                { confirmText: "Create account", icon: "question" }
+            );
+
+            if (!confirmed) {
                 e.preventDefault();
                 return false;
             }

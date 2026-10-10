@@ -566,11 +566,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
         refreshButton.addEventListener(
             "click",
-            (event) => {
+            async (event) => {
 
                 event.stopPropagation();
-
-                if (!confirm("Refresh notifications?\n\nThis will reload the latest alerts.")) return;
 
                 loadNotifications();
 

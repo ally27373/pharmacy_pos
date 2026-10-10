@@ -70,7 +70,13 @@ document.querySelectorAll(".unarchive-product").forEach((button) => {
         const productId = button.dataset.product;
         const productName = button.dataset.name || "this product";
 
-        if (!confirm(`Unarchive "${productName}"?\n\nThis will restore it to the active inventory list.`)) {
+        const proceed = await NxSwal.confirm(
+            `Unarchive "${productName}"?`,
+            "This will restore it to the active inventory list.",
+            { confirmText: "Unarchive", icon: "question" }
+        );
+
+        if (!proceed) {
             return;
         }
 
@@ -97,11 +103,23 @@ document.querySelectorAll(".delete-archived-product").forEach((button) => {
         const productId = button.dataset.product;
         const productName = button.dataset.name || "this product";
 
-        if (!confirm(`Permanently delete "${productName}"?\n\nThis cannot be undone. Only archived products with no sales or batch history can be deleted.`)) {
+        const proceed = await NxSwal.confirm(
+            `Delete "${productName}" permanently?`,
+            "This cannot be undone. Only archived products with no sales or batch history can be deleted.",
+            { confirmText: "Delete forever", danger: true }
+        );
+
+        if (!proceed) {
             return;
         }
 
-        if (!confirm(`Last chance — are you sure you want to delete "${productName}" for good?`)) {
+        const lastChance = await NxSwal.confirm(
+            "Are you absolutely sure?",
+            `"${productName}" will be gone for good. This cannot be recovered.`,
+            { confirmText: "Yes, delete it", cancelText: "Keep it", danger: true }
+        );
+
+        if (!lastChance) {
             return;
         }
 

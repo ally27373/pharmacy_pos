@@ -30,6 +30,13 @@ $header = $details[0];
 <title>Receipt</title>
 
 <link rel="stylesheet" href="/assets/css/receipts.css">
+<link rel="stylesheet" href="/assets/css/swal.css">
+
+<!-- This page renders standalone (no includes/header.php), so the
+     SweetAlert2 bundle + NxSwal wrapper are loaded explicitly here. -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
+<script src="/assets/js/swal.js"></script>
+<script src="/assets/js/toast.js"></script>
 
 </head>
 
@@ -142,14 +149,21 @@ Get Well Soon!
 
 function confirmAndPrint() {
 
-    if (confirm("Confirm print receipt?\n\nThis will send the receipt to the printer.")) {
+    NxSwal.confirm(
+        "Print this receipt?",
+        "This will send the receipt to the printer.",
+        { confirmText: "Print now", icon: "question" }
+    ).then(function (confirmed) {
+
+        if (!confirmed) return;
 
         if (typeof NxToast !== 'undefined') {
             NxToast.show("🖨 Receipt sent to printer.", "success");
         }
+
         window.print();
 
-    }
+    });
 
 }
 

@@ -124,7 +124,14 @@ addModal?.addEventListener("shown.bs.modal", () => {
 const saveProductButton = document.getElementById("save-product");
 saveProductButton?.addEventListener("click", async () => {
     // === CONFIRMATION ===
-    if (!confirm("Confirm save new product?\n\nThis will add the product to inventory.")) return;
+    const productName = document.getElementById("product_name")?.value?.trim();
+    if (!await NxSwal.confirm(
+        "Save new product?",
+        productName
+            ? `"${productName}" will be added to inventory.`
+            : "This will add the product to inventory.",
+        { confirmText: "Save product" }
+    )) return;
 
     const button = saveProductButton;
     button.disabled = true;
@@ -233,7 +240,16 @@ document.querySelectorAll(".edit-product").forEach(button => {
 const updateProductButton = document.getElementById("update-product");
 updateProductButton?.addEventListener("click", async function () {
     // === CONFIRMATION ===
-    if (!confirm("Confirm update product?\n\nThis will save changes to the product details.")) {
+    const editedName = document.getElementById("edit_product_name")?.value?.trim();
+    const confirmed = await NxSwal.confirm(
+        "Update product?",
+        editedName
+            ? `Save the changes you made to "${editedName}"?`
+            : "This will save changes to the product details.",
+        { confirmText: "Save changes" }
+    );
+
+    if (!confirmed) {
         this.disabled = false;
         this.innerHTML = `<i class="bi bi-floppy-fill me-2"></i>Update Product`;
         return;
@@ -288,7 +304,13 @@ document.querySelectorAll(".delete-product").forEach(button => {
 
 document.getElementById("confirm-delete-product")?.addEventListener("click", async function () {
     // === CONFIRMATION ===
-    if (!confirm(`Confirm archive product "${deleteProductName || 'this product'}"?\n\nThis will archive the product (not permanently delete).`)) {
+    const archived = await NxSwal.confirm(
+        `Archive "${deleteProductName || "this product"}"?`,
+        "The product will be hidden from the active inventory. You can restore it later from Archived Products.",
+        { confirmText: "Archive product", icon: "warning" }
+    );
+
+    if (!archived) {
         return;
     }
 
@@ -330,7 +352,18 @@ document.querySelectorAll(".cleanup-test-product").forEach(button => {
 
 document.getElementById("confirm-cleanup-test-product")?.addEventListener("click", async () => {
     // === CONFIRMATION ===
-    if (!confirm("Confirm clean up test data?\n\nThis will remove all test records for this product.")) return;
+    const testProductName = document.getElementById("cleanup-test-product-name")?.textContent?.trim();
+
+    const proceed = await NxSwal.confirm(
+        "Clean up test data?",
+        `All test records for "${testProductName || "this product"}" will be permanently removed.`,
+        {
+            confirmText: "Clean up",
+            danger: true,
+        }
+    );
+
+    if (!proceed) return;
 
     if (!cleanupTestProductId) return;
 
@@ -431,8 +464,21 @@ document.querySelectorAll(".stock-product").forEach(button => {
 
 document.getElementById("save-stock")?.addEventListener("click", async function () {
     // === CONFIRMATION ===
-    const actionLabel = stockAction.value === "IN" ? "Stock In" : "Stock Out";
-    if (!confirm(`Confirm ${actionLabel} adjustment?\n\nQuantity: ${document.getElementById("stock_quantity")?.value || 0}`)) {
+    const stockIn = stockAction.value === "IN";
+    const actionLabel = stockIn ? "Stock In" : "Stock Out";
+    const stockQty = document.getElementById("stock_quantity")?.value || 0;
+    const stockProduct = document.getElementById("stock_product_name")?.value?.trim() || "this product";
+
+    const proceed = await NxSwal.confirm(
+        `Confirm ${actionLabel}?`,
+        `${stockQty} unit(s) will be ${stockIn ? "added to" : "deducted from"} "${stockProduct}".`,
+        {
+            confirmText: `${actionLabel} adjustment`,
+            icon: stockIn ? "success" : "warning",
+        }
+    );
+
+    if (!proceed) {
         return;
     }
 

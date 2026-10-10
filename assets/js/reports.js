@@ -209,9 +209,15 @@
         loadReport(1);
     }
 
-    function downloadReport(format) {
+    async function downloadReport(format) {
         // === CONFIRMATION ===
-        if (!confirm(`Confirm download ${format.toUpperCase()} report?\n\nThis will generate and download the file.`)) return;
+        const proceed = await NxSwal.confirm(
+            `Download ${format.toUpperCase()} report?`,
+            "This will generate the report using the current filters and download it.",
+            { confirmText: `Download ${format.toUpperCase()}`, icon: "question" }
+        );
+
+        if (!proceed) return;
         const params = currentQuery(1);
         params.delete('page');
         params.delete('limit');

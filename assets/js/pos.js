@@ -326,7 +326,7 @@ async function completeSale()
 {
     if (cart.length === 0)
     {
-        alert("Please add at least one product.");
+        await NxSwal.warning("Cart is empty", "Please add at least one product before completing the sale.");
         return;
     }
 
@@ -339,13 +339,13 @@ async function completeSale()
 
     if (discountType?.value === "percent" && enteredDiscount > 100)
     {
-        alert("Percentage discount cannot exceed 100%.");
+        await NxSwal.error("Invalid discount", "Percentage discount cannot exceed 100%.");
         return;
     }
 
     if (discountType?.value === "peso" && enteredDiscount > subtotal)
     {
-        alert("Peso discount cannot exceed the subtotal.");
+        await NxSwal.error("Invalid discount", "Peso discount cannot exceed the subtotal.");
         return;
     }
 
@@ -355,19 +355,28 @@ async function completeSale()
 
         if (cash < total)
         {
-            alert("Insufficient cash.");
+            await NxSwal.error(
+                "Insufficient cash",
+                `The total is ₱${total.toFixed(2)} but only ₱${cash.toFixed(2)} was entered.`
+            );
             return;
         }
     }
 
     if (method !== "Cash" && referenceInput.value.trim() === "")
     {
-        alert("Please enter the Reference Number.");
+        await NxSwal.error("Reference number required", `Please enter the ${method} reference number to continue.`);
         return;
     }
 
     // === CONFIRMATION BEFORE PROCESSING SALE ===
-    if (!confirm("Confirm complete sale?\n\nThis will finalize the transaction and open the receipt for printing."))
+    const confirmed = await NxSwal.confirm(
+        "Complete this sale?",
+        `${cart.length} item(s) • Total ₱${total.toFixed(2)} via ${method}. This finalizes the transaction and opens the receipt for printing.`,
+        { confirmText: "Complete sale", icon: "question" }
+    );
+
+    if (!confirmed)
     {
         return;
     }
@@ -420,7 +429,7 @@ async function completeSale()
                 receiptWindow.close();
             }
 
-            alert(result.message);
+            await NxSwal.error("Sale not completed", result.message || "Please try again.");
             return;
         }
 
@@ -436,7 +445,10 @@ async function completeSale()
                 receiptWindow.close();
             }
 
-            alert("Sale completed, but the receipt could not be opened because the sale ID was not returned.");
+            await NxSwal.warning(
+                "Receipt unavailable",
+                "Sale completed, but the receipt could not be opened because the sale ID was not returned."
+            );
             window.location.reload();
             return;
         }
@@ -476,7 +488,10 @@ async function completeSale()
         renderCart();
         updatePaymentFields();
 
-        alert(result.message);
+        await NxSwal.success(
+            "Sale completed",
+            result.message || "The transaction was recorded successfully."
+        );
 
     }
     catch(error)
@@ -487,7 +502,7 @@ async function completeSale()
             receiptWindow.close();
         }
 
-        alert("Unable to connect to the server.");
+        await NxSwal.error("Connection failed", "Unable to connect to the server. Please check your connection and try again.");
     }
 }
 
