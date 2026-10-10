@@ -7,7 +7,7 @@ ini_set('display_errors', 1);
 error_reporting(E_ALL);
 header('Content-Type: text/plain; charset=utf-8');
 
-$root = dirname(__DIR__, 2);
+$root = dirname(__DIR__, 3);
 chdir($root);
 
 echo "PHP: " . PHP_VERSION . "\n";
