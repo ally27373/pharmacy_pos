@@ -85,7 +85,7 @@ foreach ($analyticsYears as $year):
         </div>
 
     <?php else: ?>
-        <div>
+        <div class="chart-container">
 
         <canvas id="salesChart"></canvas>
 

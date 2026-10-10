@@ -47,7 +47,7 @@ foreach ($dashboardData['revenue_by_category'] as $row){
 
 <?php else: ?>
 
-    <div>
+    <div class="chart-container revenue-chart-container">
 
         <canvas id="revenueChart"></canvas>
 

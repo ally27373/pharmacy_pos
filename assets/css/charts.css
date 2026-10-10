@@ -42,6 +42,22 @@
 
 }
 
+/* Horizontal bar chart needs extra vertical room: each category gets its
+   own row, so the row count drives the height. Without an explicit
+   container height plus maintainAspectRatio:false, the canvas collapses
+   to zero and the chart renders as an empty panel. */
+.revenue-chart-container{
+
+    height:420px;
+
+    min-height:420px;
+
+    position:relative;
+
+    width:100%;
+
+}
+
 .chart-container canvas,
 .inventory-chart-container canvas{
 

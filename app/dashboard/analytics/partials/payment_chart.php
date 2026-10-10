@@ -46,7 +46,7 @@ after completed sales.
 </div>
 
 <?php else: ?>
-<div>
+<div class="chart-container">
 <canvas id="paymentChart"></canvas>
 </div>
 
