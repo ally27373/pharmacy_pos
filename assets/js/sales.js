@@ -29,6 +29,24 @@ function getSalesModal() {
 }
 
 /* ===========================
+   ESCAPING
+   Server text is interpolated
+   into innerHTML below, so it
+   has to be escaped. A refusal
+   body is JSON and a fatal body
+   is HTML; neither is ours to
+   trust.
+=========================== */
+function salesEscape(value) {
+    return String(value ?? "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+}
+
+/* ===========================
    VIEW TRANSACTION
 =========================== */
 document.querySelectorAll(".view-sale").forEach(button => {
@@ -56,9 +74,27 @@ document.querySelectorAll(".view-sale").forEach(button => {
                 "ajax/get_sale.php?id=" + encodeURIComponent(saleId),
                 { headers: { "Accept": "text/html" }, cache: "no-store" }
             );
-            if (!response.ok) throw new Error("Unable to load transaction.");
 
-            body.innerHTML = await response.text();
+            /*
+             * Read the body before deciding it is unusable. get_sale.php
+             * answers a lapsed session with a JSON refusal from
+             * AuthMiddleware::requireAuthenticatedApi(), and a PHP fatal
+             * truncates the document, so both arrive as a body worth
+             * showing. Reporting a bare "unable to load" made an
+             * authorisation refusal and a server crash look identical, and
+             * sent the fix after the wrong layer.
+             */
+            const html = await response.text();
+
+            if (!response.ok) {
+                throw new Error(
+                    "The server refused this request (HTTP "
+                    + response.status + "). "
+                    + NxHttp.describe(html)
+                );
+            }
+
+            body.innerHTML = html;
 
             const printBtn = document.getElementById("print-receipt");
             if (printBtn) {
@@ -68,7 +104,14 @@ document.querySelectorAll(".view-sale").forEach(button => {
             }
         } catch (error) {
             console.error(error);
-            body.innerHTML = `<div class="alert alert-danger mb-0">Unable to load transaction details.</div>`;
+            body.innerHTML = `
+                <div class="alert alert-danger mb-0">
+                    <strong>Unable to load transaction details.</strong>
+                    <div class="mt-1 small">${salesEscape(
+                        error.message || "No further detail was reported."
+                    )}</div>
+                </div>
+            `;
         }
     });
 });
