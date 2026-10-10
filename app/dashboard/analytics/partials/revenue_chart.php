@@ -33,7 +33,7 @@ foreach ($dashboardData['revenue_by_category'] as $row){
  * browser, so no data value can ever break the chart script. JSON_HEX_TAG
  * additionally neutralises a literal "</script>" inside a product name.
  */
-$revenueLabelsJson = json_encode($labels, JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT);
+$revenueLabelsJson = json_encode($labels, JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_INVALID_UTF8_SUBSTITUTE);
 $revenueDataJson = json_encode($data);
 
 if (!is_string($revenueLabelsJson) || $revenueLabelsJson === '') {
@@ -113,7 +113,20 @@ try {
 }
 
 if (!labels.length) {
+
+    /*
+     * Canvas is present but there is nothing to plot. Leaving it blank
+     * reads as a broken widget, so say so explicitly instead.
+     */
+    canvas.style.display = "none";
+
+    var note = document.createElement("div");
+    note.className = "batch-empty";
+    note.textContent = "Revenue data is unavailable for this period.";
+    canvas.parentNode.appendChild(note);
+
     return;
+
 }
 
 new Chart(canvas,{

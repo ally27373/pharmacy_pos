@@ -104,7 +104,7 @@ foreach ($analyticsYears as $year):
             data: {
 
                 labels:
-                    <?= json_encode($months, JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT); ?>,
+                    <?= json_encode($months, JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_INVALID_UTF8_SUBSTITUTE); ?>,
 
                 datasets: [{
 
@@ -112,7 +112,7 @@ foreach ($analyticsYears as $year):
                         'Monthly Sales <?= $currentYear; ?>',
 
                     data:
-                        <?= json_encode($sales, JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT); ?>,
+                        <?= json_encode($sales, JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_INVALID_UTF8_SUBSTITUTE); ?>,
 
                     fill: true,
 

@@ -34,7 +34,7 @@ foreach($dashboardData['best_sellers'] as $row){
 /* JSON island — see revenue_chart.php for why the payload must not be
    inlined into the chart script. Product names come straight from the
    DB, so malformed UTF-8 is a realistic case here. */
-$bestSellerLabelsJson = json_encode($labels, JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT);
+$bestSellerLabelsJson = json_encode($labels, JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_INVALID_UTF8_SUBSTITUTE);
 $bestSellerDataJson = json_encode($data);
 
 if (!is_string($bestSellerLabelsJson) || $bestSellerLabelsJson === '') {

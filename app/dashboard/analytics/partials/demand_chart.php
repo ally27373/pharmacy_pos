@@ -40,7 +40,7 @@ foreach (
 /* JSON island — see revenue_chart.php for why the payload must not be
    inlined into the chart script (an empty json_encode() output silently
    breaks the whole block and leaves an empty canvas). */
-$demandLabelsJson = json_encode($labels, JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT);
+$demandLabelsJson = json_encode($labels, JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_INVALID_UTF8_SUBSTITUTE);
 $demandValuesJson = json_encode($demandData);
 
 if (!is_string($demandLabelsJson) || $demandLabelsJson === '') {
