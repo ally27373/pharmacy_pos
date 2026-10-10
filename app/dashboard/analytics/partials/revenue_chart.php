@@ -83,13 +83,13 @@ if (!is_string($revenueDataJson) || $revenueDataJson === '') {
 <script>
 
 /*
- * Data lives in <script type="application/json"> islands (see above), so
- * this block contains no interpolated PHP at all — no data value can
- * break its parsing.
+ * Data lives in JSON islands (see the two application/json script tags
+ * above), so this block contains no interpolated PHP at all — no data
+ * value can break its parsing.
  *
- * IIFE keeps these consts off the global lexical scope; several chart
- * partials share this page and a top-level `const` collision between
- * them is a parse-time SyntaxError that kills the whole block.
+ * IIFE keeps these vars off the global lexical scope; several chart
+ * partials share this page and a top-level redeclaration between them
+ * is a parse-time SyntaxError that kills the whole block.
  */
 (function () {
 
