@@ -172,12 +172,9 @@ hr{
 
     }
 
-    /* Never print the download button. It is a screen affordance, and
-       printing it is the same defect as the toast being printed.
-       .receipt-print-button is still listed here so the rule holds if the
-       print button is ever brought back. */
-    .receipt-print-button,
-    .receipt-pdf-button{
+    /* Never print the print button. It is a screen affordance, and
+       printing it is the same defect as the toast being printed. */
+    .receipt-print-button{
 
         display:none !important;
 
@@ -212,18 +209,12 @@ hr{
 }
 
 /* =====================================
-   RECEIPT CONTROLS
-   Print is the normal path and PDF is
-   the fallback that needs no browser
-   setup. The PDF link is a plain
-   anchor with no download attribute:
-   the server's Content-Disposition
-   already saves a PDF, and adding the
-   attribute would also swallow any
-   error response.
+/* =====================================
+   RECEIPT CONTROL
+   One button. The receipt is printed
+   directly; there is no PDF path.
    ===================================== */
-.receipt-print-button,
-.receipt-pdf-button{
+.receipt-print-button{
 
     display:inline-block;
 
@@ -237,27 +228,11 @@ hr{
 
     border-radius:4px;
 
-    text-decoration:none;
-
-    border:1px solid #198754;
-
-}
-
-.receipt-print-button{
-
     background:#198754;
 
     color:#fff;
 
-}
-
-.receipt-pdf-button{
-
-    background:#fff;
-
-    color:#198754;
-
-    margin-left:8px;
+    border:1px solid #198754;
 
 }
 
@@ -266,11 +241,5 @@ hr{
     background:#157a4a;
 
     color:#fff;
-
-}
-
-.receipt-pdf-button:hover{
-
-    background:#eef7f4;
 
 }

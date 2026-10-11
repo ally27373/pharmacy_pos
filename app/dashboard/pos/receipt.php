@@ -222,18 +222,9 @@ Get Well Soon!
     type="button"
 >
 
-    <i class="bi bi-printer"></i> Print
+    <i class="bi bi-printer"></i> Print Receipt
 
 </button>
-
-<a
-    class="receipt-pdf-button"
-    href="receipt_pdf.php?sale_id=<?= (int) $saleId; ?>&width=58"
->
-
-    <i class="bi bi-file-earmark-pdf"></i> Download PDF
-
-</a>
 
 </div>
 

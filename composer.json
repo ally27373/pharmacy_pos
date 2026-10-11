@@ -5,7 +5,6 @@
         "ext-pdo_mysql": "*",
         "ext-gd": "*",
         "ext-zip": "*",
-        "dompdf/dompdf": "^3.1",
         "phpoffice/phpspreadsheet": "^5.9"
     },
     "autoload": {
