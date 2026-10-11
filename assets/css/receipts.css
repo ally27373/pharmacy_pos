@@ -212,13 +212,17 @@ hr{
 }
 
 /* =====================================
-   RECEIPT CONTROL
-   One download button, nothing else.
-   It is a plain anchor with the
-   download attribute so the PDF
-   saves without a script or a
-   print dialog.
+   RECEIPT CONTROLS
+   Print is the normal path and PDF is
+   the fallback that needs no browser
+   setup. The PDF link is a plain
+   anchor with no download attribute:
+   the server's Content-Disposition
+   already saves a PDF, and adding the
+   attribute would also swallow any
+   error response.
    ===================================== */
+.receipt-print-button,
 .receipt-pdf-button{
 
     display:inline-block;
@@ -235,18 +239,38 @@ hr{
 
     text-decoration:none;
 
+    border:1px solid #198754;
+
+}
+
+.receipt-print-button{
+
     background:#198754;
 
     color:#fff;
 
-    border:1px solid #198754;
+}
+
+.receipt-pdf-button{
+
+    background:#fff;
+
+    color:#198754;
+
+    margin-left:8px;
+
+}
+
+.receipt-print-button:hover{
+
+    background:#157a4a;
+
+    color:#fff;
 
 }
 
 .receipt-pdf-button:hover{
 
-    background:#157a4a;
-
-    color:#fff;
+    background:#eef7f4;
 
 }

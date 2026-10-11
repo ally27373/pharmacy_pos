@@ -145,9 +145,10 @@ async function printReceipt(saleId) {
 
     if (!proceed) return;
 
-    // Opens the receipt page, which offers the PDF download.
+    // Opens the receipt page. auto=1 so it prints itself; the page also
+    // offers the PDF download for anyone who needs a copy.
     window.open(
-        "/app/dashboard/pos/receipt.php?sale_id=" + encodeURIComponent(saleId),
+        "/app/dashboard/pos/receipt.php?sale_id=" + encodeURIComponent(saleId) + "&auto=1",
         "_blank"
     );
 

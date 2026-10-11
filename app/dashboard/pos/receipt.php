@@ -52,6 +52,22 @@ if (!$details) {
 
 $header = $details[0];
 
+/*
+ | Auto-print
+ |
+ | ?auto=1 makes the receipt print the moment it opens, which is the flow
+ | the counter asked for: complete a sale, the receipt comes off the POS-58
+ | without anyone touching anything.
+ |
+ | This only becomes silent with Chrome started --kiosk-printing. Without
+ | that flag the browser either shows the print dialog or, if it refuses a
+ | print that no gesture triggered, does nothing at all -- which is why the
+ | button below is still here as a fallback rather than being removed.
+ |
+ | The PDF download is the third option and needs no browser setup at all.
+ */
+$autoPrint = isset($_GET['auto']) && $_GET['auto'] === '1';
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -200,6 +216,16 @@ Get Well Soon!
 
 <div style="text-align:center; padding: 10px 0;">
 
+<button
+    class="receipt-print-button"
+    onclick="printReceipt()"
+    type="button"
+>
+
+    <i class="bi bi-printer"></i> Print
+
+</button>
+
 <a
     class="receipt-pdf-button"
     href="receipt_pdf.php?sale_id=<?= (int) $saleId; ?>&width=58"
@@ -212,6 +238,43 @@ Get Well Soon!
 </div>
 
 </div>
+
+<script>
+
+/*
+ * One print per page load.
+ *
+ * Auto-print and the button can both fire: the browser may ignore the
+ * automatic one and the cashier may click the button instead, or click it
+ * while the automatic print is still queued. Without this guard that is two
+ * identical receipts on the roll.
+ */
+var hasPrinted = false;
+
+function printReceipt() {
+
+    if (hasPrinted) return;
+
+    hasPrinted = true;
+
+    window.print();
+
+}
+
+var autoPrint = <?= $autoPrint ? 'true' : 'false'; ?>;
+
+window.addEventListener('load', function () {
+
+    /*
+     * Give the icon webfont and the layout a moment to settle. Printing
+     * before the font lands produces a page that reflows once the dialog
+     * closes, which is how a receipt ends up printed slightly short.
+     */
+    setTimeout(printReceipt, 350);
+
+});
+
+</script>
 
 </body>
 </html>

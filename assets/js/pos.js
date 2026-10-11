@@ -464,11 +464,13 @@ async function completeSale()
             return;
         }
 
-        // The receipt page now offers a PDF download rather than printing
-        // itself, so no auto flag is passed. The window is still reused so a
-        // queue of sales does not stack up tabs.
+        // auto=1: the receipt prints itself the moment it opens, so a
+        // completed sale goes straight to the POS-58 without anyone walking
+        // to this tab. The window is still reused so a queue of sales does
+        // not stack up tabs.
         const receiptUrl =
-            "receipt.php?sale_id=" + encodeURIComponent(String(saleId));
+            "receipt.php?sale_id=" + encodeURIComponent(String(saleId))
+            + "&auto=1";
 
         if (receiptWindow && !receiptWindow.closed)
         {
