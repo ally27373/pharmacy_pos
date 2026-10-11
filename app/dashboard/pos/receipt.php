@@ -87,14 +87,15 @@ $receiptAsset = static function (string $path): string {
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 
 <!--
-  This page used to load SweetAlert2, swal.js, toast.js and swal.css for a
-  "Print this receipt?" confirmation, a "Receipt sent to printer" toast and a
-  print button. The receipt is now delivered as a PDF download, so none of
-  them is called any more.
+  No download attribute on this link, deliberately.
 
-  Dropping the SweetAlert2 CDN matters here rather than being tidiness: that
-  script is render-blocking, and this page opens on its own the moment a sale
-  completes and is expected to be usable before the cashier looks up.
+  The attribute forces a download whatever the server answers, which is why
+  a broken endpoint produced an empty receipt.pdf.htm and Brave's "Site
+  wasn't available" instead of the message explaining what was missing.
+  Content-Disposition: attachment on a real PDF already triggers the
+  download on its own, so the attribute bought nothing and hid every
+  failure. Without it the browser navigates: a PDF saves, and an error
+  renders so it can be read.
 -->
 
 </head>
@@ -202,7 +203,6 @@ Get Well Soon!
 <a
     class="receipt-pdf-button"
     href="receipt_pdf.php?sale_id=<?= (int) $saleId; ?>&width=58"
-    download
 >
 
     <i class="bi bi-file-earmark-pdf"></i> Download PDF

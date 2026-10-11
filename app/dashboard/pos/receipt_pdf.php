@@ -62,14 +62,37 @@ if ($missing) {
 
     http_response_code(503);
 
-    header('Content-Type: text/plain; charset=utf-8');
+    header('Content-Type: text/html; charset=utf-8');
 
-    die(
-        "This receipt cannot be produced yet.\n\n"
-        . "Missing:\n  - " . implode("\n  - ", $missing) . "\n\n"
-        . "On the server run:\n\n"
-        . "    cd /var/www/html/ && composer require dompdf/dompdf\n"
-    );
+    $list = '';
+
+    foreach ($missing as $problem) {
+        $list .= '<li>' . htmlspecialchars($problem) . '</li>';
+    }
+
+    echo '<!DOCTYPE html><html lang="en"><head><meta charset="utf-8">'
+        . '<meta name="viewport" content="width=device-width,initial-scale=1">'
+        . '<title>PDF receipts not ready</title><style>'
+        . 'body{font-family:system-ui,sans-serif;background:#f6f8fb;color:#1a2230;'
+        . 'margin:0;padding:40px 20px;display:flex;justify-content:center}'
+        . '.card{background:#fff;border-radius:12px;padding:32px;max-width:560px;'
+        . 'width:100%;box-shadow:0 6px 24px rgba(30,27,27,.08);'
+        . 'border-left:5px solid #d97706}'
+        . 'h1{font-size:20px;margin:0 0 6px}'
+        . 'p{color:#55606b;line-height:1.6;margin:0 0 18px}'
+        . 'ul{background:#fdf6ec;border-radius:8px;padding:14px 14px 14px 32px;'
+        . 'color:#8a5a10;font-size:14px}'
+        . 'pre{background:#0f172a;color:#e2e8f0;border-radius:8px;padding:16px;'
+        . 'overflow-x:auto;font-size:13px;margin:0}'
+        . '</style></head><body><div class="card">'
+        . '<h1>PDF receipts are not ready yet</h1>'
+        . '<p>This receipt could not be produced. What is missing:</p>'
+        . '<ul>' . $list . '</ul>'
+        . '<p>Run this once on the server, then reload:</p>'
+        . '<pre>cd /var/www/html/ &amp;&amp; composer require dompdf/dompdf</pre>'
+        . '</div></body></html>';
+
+    exit;
 
 }
 
