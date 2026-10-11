@@ -122,7 +122,7 @@ $receiptAsset = static function (string $path): string {
 
 <h2>NICAXANDRA PHARMACY</h2>
 
-<p>Official Receipt</p>
+<p>This is not official receipt</p>
 
 <hr>
 
