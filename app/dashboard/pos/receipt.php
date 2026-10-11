@@ -221,6 +221,16 @@ Get Well Soon!
 
 </button>
 
+<a
+    class="receipt-pdf-button"
+    href="receipt_pdf.php?sale_id=<?= (int) $saleId; ?>&width=58"
+    download
+>
+
+    <i class="bi bi-file-earmark-pdf"></i> Download PDF
+
+</a>
+
 </div>
 
 </div>

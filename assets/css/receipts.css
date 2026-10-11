@@ -172,8 +172,11 @@ hr{
 
     }
 
-    /* Never print the control that opened the dialog. */
-    .receipt-print-button{
+    /* Never print the controls. Both the button and the PDF link are
+       screen affordances; either one appearing on the customer's copy is
+       the same defect as the toast being printed. */
+    .receipt-print-button,
+    .receipt-pdf-button{
 
         display:none !important;
 
@@ -204,5 +207,60 @@ hr{
         text-shadow:none !important;
 
     }
+
+}
+
+/* =====================================
+   PRINT AND PDF CONTROLS
+   Both sit side by side under the
+   receipt. The PDF link is a plain
+   anchor so it downloads without any
+   script, which is the whole point of
+   having it.
+   ===================================== */
+.receipt-print-button,
+.receipt-pdf-button{
+
+    display:inline-block;
+
+    padding:10px 18px;
+
+    font-size:14px;
+
+    font-family:inherit;
+
+    cursor:pointer;
+
+    border-radius:4px;
+
+    text-decoration:none;
+
+}
+
+.receipt-print-button{
+
+    background:#198754;
+
+    color:#fff;
+
+    border:1px solid #198754;
+
+}
+
+.receipt-pdf-button{
+
+    background:#fff;
+
+    color:#198754;
+
+    border:1px solid #198754;
+
+    margin-left:8px;
+
+}
+
+.receipt-pdf-button:hover{
+
+    background:#eef7f4;
 
 }
