@@ -3,7 +3,7 @@
 
 $inventoryProducts = $dashboardData['inventory_products'] ?? [];
 $inventoryBatches = $dashboardData['inventory_batches'] ?? [];
-$inventoryPageSize = 8;
+$inventoryPageSize = 5;
 ?>
 
 <div class="dashboard-panel current-inventory-panel">
@@ -252,6 +252,7 @@ $inventoryPageSize = 8;
     var productRows = Array.prototype.slice.call(document.querySelectorAll('.current-inventory-product-row'));
     var paginationSummary = document.getElementById('current-inventory-pagination-summary');
     var pageIndicator = document.getElementById('inventory-page-indicator');
+    var prevButton = document.getElementById('inventory-page-prev');
     var nextButton = document.getElementById('inventory-page-next');
     var searchQuery = '';
     var searchCount = document.getElementById('current-inventory-search-count');
