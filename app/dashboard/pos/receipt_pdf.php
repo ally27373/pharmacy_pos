@@ -7,23 +7,21 @@ declare(strict_types=1);
 | Printable receipt as a PDF download
 |--------------------------------------------------------------------------
 |
-| The POS prints to a 58mm thermal roll. Chrome only prints straight to a
-| printer when the browser is started with --kiosk-printing; otherwise
-| window.print() opens a dialog every single time. This endpoint is the
-| other half of that: it renders the same receipt to a file that downloads
-| with no dialog at all, for when the receipt has to be kept, emailed or
-| reprinted later.
-|
-| Same data and same guard as receipt.php, so the two can never disagree
-| about who is allowed to read a transaction.
-|
 | Path depths from /app/dashboard/pos:
 |   ../../../  -> project root   (vendor/ lives here)
 |   ../../     -> app/           (Middleware/ and Controllers/ live here)
 |
+| Same data and same guard as receipt.php, so the two views can never
+| disagree about who is allowed to read a transaction.
+|
 */
 
-require_once __DIR__ . '/../../../vendor/autoload.php';
+$vendorAutoload = __DIR__ . '/../../../vendor/autoload.php';
+
+if (is_file($vendorAutoload)) {
+    require_once $vendorAutoload;
+}
+
 require_once __DIR__ . '/../../../config/session.php';
 require_once __DIR__ . '/../../Middleware/AuthMiddleware.php';
 
@@ -35,33 +33,53 @@ require_once __DIR__ . '/../../Middleware/AuthMiddleware.php';
 */
 AuthMiddleware::check();
 
-$saleId = (int) ($_GET['sale_id'] ?? 0);
+/*
+| Tell the user exactly what is missing rather than emitting a fatal.
+|
+| The endpoint is reached from a link on the receipt, so a blank page or a
+| stray HTML file in the Downloads folder tells nobody anything. This used
+| to be reachable-but-broken exactly this way.
+*/
+$missing = [];
 
-if ($saleId <= 0) {
-    die('Invalid Sale.');
+if (!is_file($vendorAutoload)) {
+    $missing[] = 'vendor/autoload.php is missing';
 }
 
-/*
-| composer.json now requires dompdf, but the vendor directory is only
-| rebuilt when someone runs composer on the server. Until that happens this
-| endpoint would be a fatal, and it is reachable from a button on the
-| receipt, so say what is missing instead of dying.
-*/
-if (!class_exists('\Dompdf\Dompdf')) {
+if (is_file($vendorAutoload) && !class_exists('\Dompdf\Dompdf')) {
+    $missing[] = 'dompdf is not installed';
+}
+
+// dompdf needs these; composer will refuse to install it without them, so
+// a partial install is worth naming precisely.
+foreach (['dom', 'mbstring', 'gd'] as $extension) {
+    if (!extension_loaded($extension)) {
+        $missing[] = 'PHP extension "' . $extension . '" is not loaded';
+    }
+}
+
+if ($missing) {
 
     http_response_code(503);
 
     header('Content-Type: text/plain; charset=utf-8');
 
     die(
-        "PDF receipts are not installed yet.\n\n"
-        . "Run this once on the server:\n\n"
+        "This receipt cannot be produced yet.\n\n"
+        . "Missing:\n  - " . implode("\n  - ", $missing) . "\n\n"
+        . "On the server run:\n\n"
         . "    cd /var/www/html/ && composer require dompdf/dompdf\n"
     );
 
 }
 
 require_once __DIR__ . '/../../Controllers/SalesController.php';
+
+$saleId = (int) ($_GET['sale_id'] ?? 0);
+
+if ($saleId <= 0) {
+    die('Invalid Sale.');
+}
 
 $salesController = new SalesController();
 
@@ -214,13 +232,38 @@ $dompdf->setPaper([0, 0, $pageWidthPt, $pageHeightPt]);
 $dompdf->loadHtml($html);
 $dompdf->render();
 
-$invoice = preg_replace('/[^A-Za-z0-9_-]+/', '-', (string) ($header['invoice_number'] ?? 'receipt'));
+/*
+| Render to a string and send the headers here rather than using
+| dompdf->stream().
+|
+| stream() owns the header block, and if anything at all reached the
+| output before it -- a stray newline, a warning from an extension, a BOM
+| in a file this endpoint happens to include -- the response silently stops
+| being a PDF and the browser saves a broken file instead. Owning the
+| headers means a stray byte is visible rather than mysterious.
+|
+| Clearing the buffer first is the other half: any output that did happen
+| gets discarded instead of being pasted in front of the %PDF- magic.
+*/
+while (ob_get_level() > 0) {
+    ob_end_clean();
+}
 
-$filename = 'receipt-' . ($invoice !== '' ? $invoice : (string) $saleId) . '.pdf';
+$pdf = $dompdf->output();
+
+$invoice = preg_replace('/[^A-Za-z0-9_-]+/', '-', (string) ($header['invoice_number'] ?? ''));
+
+$filename = 'receipt-' . ($invoice !== '' && $invoice !== null ? $invoice : (string) $saleId) . '.pdf';
 
 /*
 | attachment, not inline: the point of this endpoint is a file that lands
 | in Downloads without a print dialog appearing. isRemoteEnabled is off
 | above, so nothing here fetches an external resource while rendering.
 */
-$dompdf->stream($filename, ['Attachment' => true]);
+header('Content-Type: application/pdf');
+header('Content-Disposition: attachment; filename="' . $filename . '"');
+header('Content-Length: ' . strlen($pdf));
+header('Cache-Control: private, max-age=0, must-revalidate');
+header('Pragma: public');
+
+echo $pdf;

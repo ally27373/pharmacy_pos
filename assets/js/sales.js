@@ -138,17 +138,16 @@ if (saleModalElement) {
 
 async function printReceipt(saleId) {
     const proceed = await NxSwal.confirm(
-        "Print receipt?",
-        "The receipt will open in a new window ready for printing.",
+        "Get receipt?",
+        "The receipt will open in a new window where you can download it as a PDF.",
         { confirmText: "Open receipt", icon: "question" }
     );
 
     if (!proceed) return;
 
-    // The dialog promises the receipt opens "ready for printing", so it
-    // now actually does: auto=1 makes the page print itself on load.
+    // Opens the receipt page, which offers the PDF download.
     window.open(
-        "/app/dashboard/pos/receipt.php?sale_id=" + encodeURIComponent(saleId) + "&auto=1",
+        "/app/dashboard/pos/receipt.php?sale_id=" + encodeURIComponent(saleId),
         "_blank"
     );
 

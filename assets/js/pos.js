@@ -464,11 +464,11 @@ async function completeSale()
             return;
         }
 
-        // auto=1: the receipt prints as it opens. A cashier ringing up a
-        // queue should not have to walk to the receipt tab and click again.
+        // The receipt page now offers a PDF download rather than printing
+        // itself, so no auto flag is passed. The window is still reused so a
+        // queue of sales does not stack up tabs.
         const receiptUrl =
-            "receipt.php?sale_id=" + encodeURIComponent(String(saleId))
-            + "&auto=1";
+            "receipt.php?sale_id=" + encodeURIComponent(String(saleId));
 
         if (receiptWindow && !receiptWindow.closed)
         {

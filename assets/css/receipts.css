@@ -172,9 +172,10 @@ hr{
 
     }
 
-    /* Never print the controls. Both the button and the PDF link are
-       screen affordances; either one appearing on the customer's copy is
-       the same defect as the toast being printed. */
+    /* Never print the download button. It is a screen affordance, and
+       printing it is the same defect as the toast being printed.
+       .receipt-print-button is still listed here so the rule holds if the
+       print button is ever brought back. */
     .receipt-print-button,
     .receipt-pdf-button{
 
@@ -211,14 +212,13 @@ hr{
 }
 
 /* =====================================
-   PRINT AND PDF CONTROLS
-   Both sit side by side under the
-   receipt. The PDF link is a plain
-   anchor so it downloads without any
-   script, which is the whole point of
-   having it.
+   RECEIPT CONTROL
+   One download button, nothing else.
+   It is a plain anchor with the
+   download attribute so the PDF
+   saves without a script or a
+   print dialog.
    ===================================== */
-.receipt-print-button,
 .receipt-pdf-button{
 
     display:inline-block;
@@ -235,10 +235,6 @@ hr{
 
     text-decoration:none;
 
-}
-
-.receipt-print-button{
-
     background:#198754;
 
     color:#fff;
@@ -247,20 +243,10 @@ hr{
 
 }
 
-.receipt-pdf-button{
-
-    background:#fff;
-
-    color:#198754;
-
-    border:1px solid #198754;
-
-    margin-left:8px;
-
-}
-
 .receipt-pdf-button:hover{
 
-    background:#eef7f4;
+    background:#157a4a;
+
+    color:#fff;
 
 }
