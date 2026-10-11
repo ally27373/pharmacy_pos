@@ -8,7 +8,29 @@
 
 .audit-filters {
     display: grid;
-    grid-template-columns: 2fr 1fr 1fr 1fr 1fr auto;
+    /*
+     * minmax(0, Nfr), not plain Nfr.
+     *
+     * A fr track is sized with an automatic minimum, which means it refuses
+     * to shrink below its content's min-content width. That pinned the row
+     * to whatever the widest control demanded: 242px for Module, because a
+     * select's min-content width is its longest option (INVENTORY_MANAGEMENT),
+     * and 157px each for the two native date inputs. Those five tracks plus
+     * the gaps came to 1049px inside a 1005px card, so the Filter and Reset
+     * buttons were pushed 58px past the card edge and clipped off screen.
+     *
+     * minmax(0, ...) lets the tracks compress to the space actually
+     * available. Long option text in a select is clipped by the control
+     * itself, which is how a native select is meant to behave, and the
+     * buttons keep their own width because their track is still auto.
+     */
+    grid-template-columns:
+        minmax(0, 2fr)
+        minmax(0, 1fr)
+        minmax(0, 1fr)
+        minmax(0, 1fr)
+        minmax(0, 1fr)
+        auto;
     gap: 14px;
     align-items: end;
 }
