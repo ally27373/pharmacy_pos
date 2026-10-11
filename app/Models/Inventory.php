@@ -658,7 +658,7 @@ class Inventory
 
             $this->conn->beginTransaction();
 
-            $check = $this->conn->prepare("SELECT product_id, product_name FROM products WHERE product_id = :id FOR UPDATE");
+            $check = $this->conn->prepare("SELECT product_id, product_name, is_archived FROM products WHERE product_id = :id FOR UPDATE");
             $check->execute([':id' => $productId]);
             $product = $check->fetch(PDO::FETCH_ASSOC);
             if (!$product) {
@@ -691,7 +691,7 @@ class Inventory
 
             $this->conn->beginTransaction();
 
-            $check = $this->conn->prepare("SELECT product_id, product_name FROM products WHERE product_id = :id FOR UPDATE");
+            $check = $this->conn->prepare("SELECT product_id, product_name, is_archived FROM products WHERE product_id = :id FOR UPDATE");
             $check->execute([':id' => $productId]);
             $product = $check->fetch(PDO::FETCH_ASSOC);
             if (!$product) {
