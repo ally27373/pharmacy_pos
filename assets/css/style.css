@@ -117,6 +117,30 @@
     z-index:calc(var(--z-modal,1300) + 30) !important;
 }
 
+/* =====================================================
+   SWEETALERT2 GOES ON THE SCALE TOO
+
+   SweetAlert2 ships its own z-index (1060) as an INLINE style
+   on .swal2-container. Inline beats a stylesheet, so this needs
+   !important or it is simply ignored.
+
+   1060 sits below the navbar (1210), the sidebar drawer (1200),
+   the modal backdrop (1300) and the modal (1310), which means every
+   NxSwal.confirm() raised from inside an open Bootstrap modal was
+   painted behind that modal's backdrop and looked like a dialog
+   that had failed to appear. Archiving a product hit it: the Archive
+   modal opens, then the confirmation fires underneath it.
+
+   +40 keeps it above the modal and its tooltip and still below
+   NxToast (.nx-toast-container, 3000), so a toast raised by a dialog
+   still lands on top of it.
+   ===================================================== */
+
+.swal2-container
+{
+    z-index:calc(var(--z-modal,1300) + 40) !important;
+}
+
 
 /* ===========================================================
    CROSS-CUTTING UTILITIES
