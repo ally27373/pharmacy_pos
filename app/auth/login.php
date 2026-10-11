@@ -1,7 +1,7 @@
 <?php
 // =====================================================
 // LOGIN PAGE
-// Pharmacy POS System
+// Nica Xandra Pharmacy Management System
 // Phase 4.1
 // =====================================================
 ?>
@@ -94,18 +94,15 @@ require_once '../../includes/header.php';
                     </div>
                     <div>
                         <h2>NICA XANDRA</h2>
-                        <div class="brand-subtitle">PHARMACY POS SYSTEM</div>
+                        <div class="brand-subtitle">Nica Xandra Pharmacy Management System</div>
                     </div>
                 </div>
 
                 <h2 class="welcome-title">Welcome Back</h2>
 
-                <p class="welcome-subtitle">To keep connected with us please login with your personal info</p>
-
-                <a href="#" class="outline-signin-btn" onclick="document.getElementById('login').focus(); return false;">
-                    <i class="bi bi-box-arrow-in-right"></i>
-                    SIGN IN
-                </a>
+                <p class="welcome-subtitle">
+                    Sign in to manage your inventory, sales, and reports.
+                </p>
 
             </div>
 
@@ -119,8 +116,8 @@ require_once '../../includes/header.php';
 
                 <div class="login-card-header mb-4 text-center">
                     <i class="bi bi-shield-lock-fill" style="font-size:42px; color:#0F8A6B; opacity:.9;"></i>
-                    <h3 style="font-weight:800; letter-spacing:-.03em; color:#1e1b1b; margin-top:14px; font-size:22px;">Welcome Back</h3>
-                    <p style="color:#7b8794; font-size:14px; margin-top:4px;">Sign in to your Nica Xandra account</p>
+                    <h3 style="font-weight:800; letter-spacing:-.03em; color:#1e1b1b; margin-top:14px; font-size:22px;">Sign In</h3>
+                    <p style="color:#7b8794; font-size:14px; margin-top:4px;">Enter your credentials to open your account</p>
                 </div>
 
                 <?php if (!empty($message)): ?>

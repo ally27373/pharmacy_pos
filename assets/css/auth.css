@@ -1,6 +1,6 @@
 /* =======================================================
-   LOGIN PAGE — Polished Design (Reference: Clean Split)
-   Pharmacy POS System
+   LOGIN PAGE - Polished Design (Reference: Clean Split)
+   Nica Xandra Pharmacy Management System
 ======================================================= */
 
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap');
@@ -41,25 +41,31 @@ body{
 
 /* ----- Split Layout ----- */
 .login-row{
-    min-height:calc(100vh - 60px);
+    /* The row used to be min-height:calc(100vh - 60px), which made both
+       panels run the full height of the window and read as two halves of
+       the page rather than as cards. .wrapper already centres its child
+       vertically, so letting the row size to its content is what makes the
+       two panels float with breathing room above and below. */
+    min-height:auto;
     display:flex;
     /* Bootstrap's .row ships flex-wrap:wrap. Our two panels plus the
        gap already fill the full 100% width, so any wrap allowance
        pushes .right-side onto its own line and breaks the split. */
     flex-wrap:nowrap;
-    align-items:center;
+    align-items:stretch;
     width:100%;
-    max-width:1200px;
+    max-width:1180px;
     margin:0 auto;
-    padding:40px 24px;
-    gap:20px;
+    padding:56px 28px;
+    gap:28px;
 }
 
 /* ----- LEFT PANEL (Reference Clean Style) ----- */
 .left-side{
     /* Bootstrap's .col-lg-6 sets flex:0 0 auto + width:50%. Claim the
-       basis explicitly so our 45/55 split is honoured. */
-    flex:0 0 calc(50% - 10px);
+       basis explicitly so our 45/55 split is honoured. Half the 28px gap
+       keeps the two panels flush to 50/50. */
+    flex:0 0 calc(50% - 14px);
     width:auto;
     min-height:640px;
     background:linear-gradient(160deg, #1CBF73 0%, #0F8A6B 50%, #0a6e55 100%);
@@ -126,6 +132,21 @@ body{
     letter-spacing:-.03em;
     color:#fff;
     line-height:1.15;
+}
+
+/* The subtitle carried the old name, "PHARMACY POS SYSTEM", which was
+   short enough to sit on one line with no styling of its own. It now reads
+   "Nica Xandra Pharmacy Management System", which needs its own scale,
+   tracking and a wrap limit or it collides with the logo box. */
+.brand-subtitle{
+    font-size:12px;
+    font-weight:600;
+    letter-spacing:.12em;
+    text-transform:uppercase;
+    color:rgba(255,255,255,.72);
+    margin-top:4px;
+    max-width:230px;
+    line-height:1.5;
 }
 
 /* Welcome text */
@@ -213,7 +234,7 @@ body{
 
 /* ----- RIGHT PANEL ----- */
 .right-side{
-    flex:0 0 calc(50% - 10px);
+    flex:0 0 calc(50% - 14px);
     width:auto;
     display:flex;
     justify-content:center;
@@ -375,34 +396,6 @@ body{
     box-shadow:0 10px 28px rgba(15,138,107,.3);
 }
 
-.outline-signin-btn{
-    display:inline-flex;
-    align-items:center;
-    justify-content:center;
-    gap:10px;
-    padding:14px 32px;
-    border:2px solid rgba(255,255,255,.4);
-    border-radius:50px;
-    color:#fff;
-    font-weight:700;
-    font-size:14px;
-    letter-spacing:.08em;
-    text-decoration:none;
-    text-transform:uppercase;
-    transition:all .3s ease;
-    backdrop-filter:blur(4px);
-    background:rgba(255,255,255,.05);
-    margin-top:30px;
-}
-
-.outline-signin-btn:hover{
-    background:rgba(255,255,255,.15);
-    border-color:rgba(255,255,255,.7);
-    color:#fff;
-    transform:translateY(-2px);
-    box-shadow:0 8px 22px rgba(255,255,255,.15);
-}
-
 .login-btn:hover{
     background:linear-gradient(135deg, #0C745A, #0F8A6B);
     transform:translateY(-4px);
@@ -453,7 +446,6 @@ body{
 @media (max-width:480px){
     .welcome-title{ font-size:30px !important; }
     .left-side{ padding:36px 20px !important; }
-    .outline-signin-btn{ width:100%; }
 }
 
 /* ----- Animations ----- */
