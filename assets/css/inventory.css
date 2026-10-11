@@ -130,7 +130,13 @@
 
 .inventory-table {
     width: 100%;
-    min-width: 1180px;
+    /* No min-width floor. The table used to demand 1180px, which is wider
+       than the content area on a normal laptop (a 1365px viewport leaves
+       about 1005px after the 260px sidebar and page padding), so every
+       visitor scrolled the table sideways to reach Status and the row
+       buttons. width:100% plus the per-cell floors below now fit that
+       space, and overflow-x on the wrapper is still there as the fallback
+       for genuinely narrow screens. */
     border-collapse: separate;
     border-spacing: 0;
     font-size: 13px;
@@ -142,7 +148,7 @@
     z-index: 1;
     background: #118d6d;
     color: #fff;
-    padding: 13px 12px;
+    padding: 13px 9px;
     border-bottom: 0;
     font-size: 12px;
     font-weight: 700;
@@ -159,7 +165,7 @@
 }
 
 .inventory-table tbody td {
-    padding: 13px 12px;
+    padding: 13px 9px;
     border-bottom: 1px solid #edf1f3;
     color: #374151;
     vertical-align: middle;
@@ -181,7 +187,10 @@
 }
 
 .product-cell {
-    min-width: 210px;
+    /* Floors exist to stop the browser crushing this column once the table
+       floor is gone. 150px still fits a readable product name; the long
+       ones wrap onto a second line. */
+    min-width: 150px;
 }
 
 .product-name {
@@ -270,7 +279,9 @@
 }
 
 .action-cell {
-    min-width: 180px;
+    /* Three ~31px buttons plus gaps; 180px left the column visibly wider
+       than its contents. */
+    min-width: 118px;
 }
 
 .inventory-actions {

@@ -127,7 +127,9 @@
 
 .reports-table {
     width: 100%;
-    min-width: 1120px;
+    /* Was min-width: 1120px, but the content alone measured 1243px because
+       every cell was nowrap (see below), so this table scrolled sideways
+       even at the width its own floor claimed to allow. */
     border-collapse: collapse;
 }
 
@@ -138,16 +140,21 @@
 
 .reports-table th,
 .reports-table td {
-    padding: 12px 13px;
+    padding: 12px 10px;
     border-bottom: 1px solid #edf0f2;
     text-align: left;
-    white-space: nowrap;
     vertical-align: middle;
 }
 
+/* Headers stay on one line so the column labels never stack. Body cells are
+   allowed to wrap: a full product name plus its category cannot fit an
+   11-column table on one line, and nowrap is what pushed the table to
+   1243px and forced the horizontal scrollbar. Prices, dates and barcodes
+   are single unbreakable tokens, so they still read on one line. */
 .reports-table th {
     font-size: 13px;
     font-weight: 600;
+    white-space: nowrap;
 }
 
 .reports-table td {
