@@ -52,6 +52,22 @@ if (!$details) {
 
 $header = $details[0];
 
+/*
+ | Auto-print
+ |
+ | ?auto=1 makes the receipt print as soon as it opens, which is what both
+ | callers want: the POS opens this straight after a completed sale, and the
+ | Sales screen already promises "The receipt will open in a new window
+ | ready for printing". Until now both landed the user on a page with a
+ | button, a confirmation dialog and then the print dialog -- three steps
+ | to print one receipt.
+ |
+ | Browsers only honour window.print() when it runs from a user gesture, so
+ | this cannot always be silent; when the browser blocks it the button is
+ | still on the page and nothing is lost.
+ */
+$autoPrint = isset($_GET['auto']) && $_GET['auto'] === '1';
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -79,7 +95,6 @@ $receiptAsset = static function (string $path): string {
 ?>
 
 <link rel="stylesheet" href="<?= $receiptAsset('/assets/css/receipts.css') ?>">
-<link rel="stylesheet" href="<?= $receiptAsset('/assets/css/swal.css') ?>">
 
 <!-- The print button uses a bi-printer glyph. This page renders standalone
      and never loads includes/header.php, so the icon font has to be pulled in
@@ -87,11 +102,16 @@ $receiptAsset = static function (string $path): string {
      pin as header.php uses. -->
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 
-<!-- This page renders standalone (no includes/header.php), so the
-     SweetAlert2 bundle + NxSwal wrapper are loaded explicitly here. -->
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
-<script src="<?= $receiptAsset('/assets/js/swal.js') ?>"></script>
-<script src="<?= $receiptAsset('/assets/js/toast.js') ?>"></script>
+<!--
+  This page used to load SweetAlert2, swal.js, toast.js and swal.css for the
+  "Print this receipt?" confirmation and the "Receipt sent to printer" toast.
+  Printing now happens directly from ?auto=1 or the button, so none of it is
+  called any more.
+
+  Dropping the SweetAlert2 CDN matters here rather than being tidiness: that
+  script is render-blocking, and this page opens on its own the moment a sale
+  completes and is expected to be printing before the cashier looks up.
+-->
 
 </head>
 
@@ -195,9 +215,9 @@ Get Well Soon!
 
 <div style="text-align:center; padding: 10px 0;">
 
-<button class="receipt-print-button" onclick="confirmAndPrint()" style="padding: 10px 20px; font-size: 14px; cursor: pointer; background: #198754; color: white; border: none; border-radius: 4px;">
+<button class="receipt-print-button" onclick="printReceipt()" style="padding: 10px 20px; font-size: 14px; cursor: pointer; background: #198754; color: white; border: none; border-radius: 4px;">
 
-<i class="bi bi-printer"></i> Confirm & Print Receipt
+<i class="bi bi-printer"></i> Print Receipt
 
 </button>
 
@@ -207,31 +227,45 @@ Get Well Soon!
 
 <script>
 
-function confirmAndPrint() {
+/*
+ * One print per page load.
+ *
+ * Auto-print and the on-page button can both fire -- the user may click the
+ * button while the automatic print is still queued, or the browser may
+ * ignore the automatic one and they try again. Without this guard that is
+ * two identical receipts on the roll.
+ */
+var hasPrinted = false;
 
-    NxSwal.confirm(
-        "Print this receipt?",
-        "This will send the receipt to the printer.",
-        { confirmText: "Print now", icon: "question" }
-    ).then(function (confirmed) {
+function printReceipt() {
 
-        if (!confirmed) return;
+    if (hasPrinted) return;
 
-        if (typeof NxToast !== 'undefined') {
-            NxToast.show("🖨 Receipt sent to printer.", "success");
-        }
+    hasPrinted = true;
 
-        window.print();
-
-    });
+    window.print();
 
 }
 
-// Optional: auto-focus for quick confirmation
+var autoPrint = <?= $autoPrint ? 'true' : 'false'; ?>;
 
-window.addEventListener('load', function() {
+window.addEventListener('load', function () {
 
-    document.querySelector('button')?.focus();
+    if (!autoPrint) {
+
+        // Nothing to print automatically, so put the cursor on the button.
+        document.querySelector('.receipt-print-button')?.focus();
+
+        return;
+
+    }
+
+    /*
+     * Wait for the icon webfont and the layout to settle first. Printing
+     * before the font lands produces a page that reflows once the dialog
+     * closes, which is how a receipt ends up printed slightly short.
+     */
+    setTimeout(printReceipt, 350);
 
 });
 

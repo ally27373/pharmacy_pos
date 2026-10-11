@@ -464,8 +464,11 @@ async function completeSale()
             return;
         }
 
+        // auto=1: the receipt prints as it opens. A cashier ringing up a
+        // queue should not have to walk to the receipt tab and click again.
         const receiptUrl =
-            "receipt.php?sale_id=" + encodeURIComponent(String(saleId));
+            "receipt.php?sale_id=" + encodeURIComponent(String(saleId))
+            + "&auto=1";
 
         if (receiptWindow && !receiptWindow.closed)
         {

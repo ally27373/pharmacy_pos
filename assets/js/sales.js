@@ -145,8 +145,10 @@ async function printReceipt(saleId) {
 
     if (!proceed) return;
 
+    // The dialog promises the receipt opens "ready for printing", so it
+    // now actually does: auto=1 makes the page print itself on load.
     window.open(
-        "/app/dashboard/pos/receipt.php?sale_id=" + encodeURIComponent(saleId),
+        "/app/dashboard/pos/receipt.php?sale_id=" + encodeURIComponent(saleId) + "&auto=1",
         "_blank"
     );
 

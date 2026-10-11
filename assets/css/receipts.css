@@ -120,7 +120,19 @@ hr{
 @media print {
 
     @page {
-        margin: 6mm;
+        /*
+         * size:auto makes the document adopt whatever paper the print
+         * dialog has selected. Leaving it off makes the document default to
+         * A4, and the browser then scales the whole A4 page down to fit the
+         * 58mm roll -- which renders the receipt about two pixels tall. That
+         * is the blank page the print preview showed: the receipt was
+         * there, just scaled out of existence.
+         *
+         * 2mm rather than 6mm because a thermal printer's unprintable
+         * margin is close to zero and the default clips the first line.
+         */
+        size:auto;
+        margin:2mm;
     }
 
     body{
@@ -140,6 +152,23 @@ hr{
         width:100%;
 
         max-width:100%;
+
+    }
+
+    /*
+     * Overlays must never reach paper.
+     *
+     * The toast container is position:fixed, and a fixed element is
+     * re-laid-out on every sheet, so "Receipt sent to printer." was being
+     * printed on the customer's copy -- over a blank-looking page, because
+     * it was the only thing large enough to survive the scale-down above.
+     * Same for a SweetAlert that happens to be open when print fires.
+     */
+    .nx-toast-container,
+    .swal2-container,
+    .swal2-popup{
+
+        display:none !important;
 
     }
 
