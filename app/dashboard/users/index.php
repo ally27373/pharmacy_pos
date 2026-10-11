@@ -4,7 +4,22 @@ declare(strict_types=1);
 
 require_once '../../../config/session.php';
 require_once '../../Middleware/AuthMiddleware.php';
-require_once '../../../Helpers/Csrf.php';
+/*
+ | Path depths from app/dashboard/users:
+ |   ../../../ -> project root (config/, includes/ live here)
+ |   ../../    -> app/         (Helpers/, Middleware/, Controllers/ live here)
+ |
+ | This was '../../../Helpers/Csrf.php', one level too deep. users/index.php
+ | is requested directly by the browser, so PHP resolves a bare relative
+ | require against this file's own directory and ../../../ lands on the
+ | project root, where there is no Helpers/. require_once on a missing file
+ | is a fatal, so the whole page answered HTTP 500 on every request --
+ | including plain GETs that never reached the form this line was added for.
+ |
+ | __DIR__ makes the depth explicit and matches how every other file in the
+ | project requires the helper.
+ */
+require_once __DIR__ . '/../../Helpers/Csrf.php';
 
 AuthMiddleware::admin();
 
