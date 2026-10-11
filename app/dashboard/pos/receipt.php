@@ -233,20 +233,36 @@ Get Well Soon!
 <script>
 
 /*
- * One print per page load.
+ * Guard only the moment right after an automatic print.
  *
- * Auto-print and the button can both fire: the browser may ignore the
- * automatic one and the cashier may click the button instead, or click it
- * while the automatic print is still queued. Without this guard that is two
- * identical receipts on the roll.
+ * This used to be a plain hasPrinted latch, which looked right and was
+ * wrong: it blocked the second click for the rest of the page's life, so
+ * reprinting a receipt that came out smudged, torn or half-fed did nothing
+ * at all. A cashier reprinting is an ordinary thing to do, not an error.
+ *
+ * The duplicate it was written to prevent is narrow: auto-print fires at
+ * load, and a click in the same instant puts two identical receipts on the
+ * roll. Suppressing a couple of seconds covers that and nothing else, so
+ * every later click prints.
  */
-var hasPrinted = false;
+var PRINT_GUARD_MS = 2000;
+
+/*
+ * -Infinity, not 0. The guard reads "was anything printed within the last
+ * PRINT_GUARD_MS", and 0 only answers that correctly because Date.now()
+ * returns epoch milliseconds and therefore dwarfs any small window. Start
+ * at -Infinity and the first print is unambiguously allowed, which also
+ * makes the logic testable against a clock that starts near zero.
+ */
+var lastPrintedAt = -Infinity;
 
 function printReceipt() {
 
-    if (hasPrinted) return;
+    var now = Date.now();
 
-    hasPrinted = true;
+    if (now - lastPrintedAt < PRINT_GUARD_MS) return;
+
+    lastPrintedAt = now;
 
     window.print();
 
