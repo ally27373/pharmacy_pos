@@ -8,8 +8,21 @@
 
 <?php
 
+/*
+ * Report everything to the server log, never to the page.
+ *
+ * This file used to set display_errors to 1 and was the only file in the
+ * project that did. It is also the one page anyone can reach without an
+ * account, so a malformed request that made a query fail printed the SQL,
+ * the bound parameters and the absolute paths of config/ and app/ straight
+ * into the response -- free reconnaissance for anyone probing the form.
+ *
+ * log_errors stays on, so nothing is lost: the same detail is in the
+ * server's error log, which is where it belongs.
+ */
 error_reporting(E_ALL);
-ini_set('display_errors', 1);
+ini_set('display_errors', '0');
+ini_set('log_errors', '1');
 
 require_once __DIR__ . '/../Helpers/Csrf.php';
 require_once __DIR__ . '/../Controllers/AuthController.php';
