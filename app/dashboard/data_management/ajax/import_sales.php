@@ -121,6 +121,17 @@ try {
         ':user_agent' => $_SERVER['HTTP_USER_AGENT'] ?? null,
     ]);
 
+    // Trigger forecast refresh automatically after import.
+    try {
+        require_once '../../../../app/Services/ForecastRefreshService.php';
+        use App\Services\ForecastRefreshService;
+        $service = new ForecastRefreshService(new Database()->connect());
+        $service->refresh();
+    } catch (Throwable $refreshErr) {
+        // Forecast refresh failure must not block the import success.
+        error_log('Auto-refresh after import failed: ' . $refreshErr->getMessage());
+    }
+
     echo json_encode([
         'status' => 'success',
         'message' => 'Import completed: ' . $result['imported_sales'] . ' sales, ' . $result['imported_items'] . ' line items.',
