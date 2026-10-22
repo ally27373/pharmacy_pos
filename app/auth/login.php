@@ -111,7 +111,7 @@ require_once '../../includes/header.php';
                     </div>
                 </div>
 
-                <h2 class="welcome-title">Welcome Back</h2>
+                <h2 class="welcome-title">Welcome</h2>
 
                 <p class="welcome-subtitle">
                     Sign in to manage your inventory, sales, and reports.
