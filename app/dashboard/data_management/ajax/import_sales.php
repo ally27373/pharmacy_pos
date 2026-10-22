@@ -124,8 +124,7 @@ try {
     // Trigger forecast refresh automatically after import.
     try {
         require_once '../../../../app/Services/ForecastRefreshService.php';
-        use App\Services\ForecastRefreshService;
-        $service = new ForecastRefreshService(new Database()->connect());
+        $service = new \App\Services\ForecastRefreshService(new Database()->connect());
         $service->refresh();
     } catch (Throwable $refreshErr) {
         // Forecast refresh failure must not block the import success.
