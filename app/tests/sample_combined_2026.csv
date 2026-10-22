@@ -1,0 +1,887 @@
+date,product_name,quantity,unit_price
+2026-01-01,Biogesic 500mg,2,8.5
+2026-01-01,Bioflu,2,12.0
+2026-01-01,Enervon,1,9.0
+2026-01-01,Amoxicillin 500mg,5,18.0
+2026-01-02,Amoxicillin 500mg,1,18.0
+2026-01-02,Kremil-S,1,7.5
+2026-01-03,Cetirizine,5,10.0
+2026-01-03,Amoxicillin 500mg,5,18.0
+2026-01-04,Tempra Syrup,5,95.0
+2026-01-04,Cetirizine,4,10.0
+2026-01-05,Solmux Syrup,1,145.0
+2026-01-05,Enervon,2,9.0
+2026-01-06,Kremil-S,2,7.5
+2026-01-06,Mefenamic Acid,3,11.0
+2026-01-06,Enervon,1,9.0
+2026-01-06,Biogesic 500mg,1,8.5
+2026-01-07,Biogesic 500mg,5,8.5
+2026-01-07,Mefenamic Acid,3,11.0
+2026-01-07,Tempra Syrup,1,95.0
+2026-01-08,Solmux Syrup,1,145.0
+2026-01-08,Tempra Syrup,5,95.0
+2026-01-08,Biogesic 500mg,3,8.5
+2026-01-08,Cetirizine,5,10.0
+2026-01-09,Amoxicillin 500mg,1,18.0
+2026-01-09,Cetirizine,2,10.0
+2026-01-09,Biogesic 500mg,3,8.5
+2026-01-10,Cetirizine,4,10.0
+2026-01-10,Biogesic 500mg,3,8.5
+2026-01-11,Mefenamic Acid,3,11.0
+2026-01-11,Neozep Forte,2,9.5
+2026-01-11,Amoxicillin 500mg,3,18.0
+2026-01-12,Biogesic 500mg,4,8.5
+2026-01-12,Neozep Forte,4,9.5
+2026-01-12,Cetirizine,3,10.0
+2026-01-12,Amoxicillin 500mg,5,18.0
+2026-01-13,Mefenamic Acid,2,11.0
+2026-01-13,Bioflu,1,12.0
+2026-01-14,Kremil-S,2,7.5
+2026-01-14,Enervon,5,9.0
+2026-01-14,Biogesic 500mg,3,8.5
+2026-01-15,Solmux Syrup,4,145.0
+2026-01-15,Kremil-S,2,7.5
+2026-01-16,Neozep Forte,5,9.5
+2026-01-16,Cetirizine,4,10.0
+2026-01-16,Enervon,5,9.0
+2026-01-17,Mefenamic Acid,5,11.0
+2026-01-17,Cetirizine,4,10.0
+2026-01-17,Neozep Forte,1,9.5
+2026-01-18,Biogesic 500mg,2,8.5
+2026-01-18,Neozep Forte,4,9.5
+2026-01-19,Biogesic 500mg,4,8.5
+2026-01-19,Kremil-S,5,7.5
+2026-01-19,Tempra Syrup,3,95.0
+2026-01-19,Enervon,5,9.0
+2026-01-20,Biogesic 500mg,3,8.5
+2026-01-20,Tempra Syrup,3,95.0
+2026-01-21,Enervon,2,9.0
+2026-01-21,Kremil-S,4,7.5
+2026-01-22,Enervon,2,9.0
+2026-01-22,Tempra Syrup,5,95.0
+2026-01-23,Enervon,5,9.0
+2026-01-23,Tempra Syrup,2,95.0
+2026-01-24,Mefenamic Acid,5,11.0
+2026-01-24,Neozep Forte,5,9.5
+2026-01-25,Amoxicillin 500mg,4,18.0
+2026-01-25,Mefenamic Acid,1,11.0
+2026-01-26,Mefenamic Acid,2,11.0
+2026-01-26,Enervon,1,9.0
+2026-01-27,Amoxicillin 500mg,1,18.0
+2026-01-27,Biogesic 500mg,4,8.5
+2026-01-28,Tempra Syrup,2,95.0
+2026-01-28,Neozep Forte,4,9.5
+2026-01-29,Neozep Forte,5,9.5
+2026-01-29,Enervon,2,9.0
+2026-01-29,Kremil-S,3,7.5
+2026-01-29,Biogesic 500mg,4,8.5
+2026-01-30,Mefenamic Acid,2,11.0
+2026-01-30,Solmux Syrup,2,145.0
+2026-01-30,Tempra Syrup,1,95.0
+2026-01-30,Bioflu,3,12.0
+2026-01-31,Amoxicillin 500mg,2,18.0
+2026-01-31,Tempra Syrup,5,95.0
+2026-02-01,Bioflu,1,12.0
+2026-02-01,Biogesic 500mg,2,8.5
+2026-02-02,Bioflu,1,12.0
+2026-02-02,Mefenamic Acid,5,11.0
+2026-02-03,Enervon,2,9.0
+2026-02-03,Solmux Syrup,5,145.0
+2026-02-04,Amoxicillin 500mg,2,18.0
+2026-02-04,Solmux Syrup,4,145.0
+2026-02-05,Cetirizine,4,10.0
+2026-02-05,Biogesic 500mg,3,8.5
+2026-02-05,Tempra Syrup,4,95.0
+2026-02-06,Solmux Syrup,1,145.0
+2026-02-06,Bioflu,4,12.0
+2026-02-06,Biogesic 500mg,3,8.5
+2026-02-07,Cetirizine,2,10.0
+2026-02-07,Amoxicillin 500mg,5,18.0
+2026-02-08,Neozep Forte,3,9.5
+2026-02-08,Kremil-S,4,7.5
+2026-02-08,Amoxicillin 500mg,2,18.0
+2026-02-09,Solmux Syrup,1,145.0
+2026-02-09,Tempra Syrup,1,95.0
+2026-02-10,Tempra Syrup,2,95.0
+2026-02-10,Bioflu,2,12.0
+2026-02-10,Biogesic 500mg,4,8.5
+2026-02-10,Kremil-S,4,7.5
+2026-02-11,Cetirizine,2,10.0
+2026-02-11,Kremil-S,4,7.5
+2026-02-11,Bioflu,1,12.0
+2026-02-12,Enervon,4,9.0
+2026-02-12,Solmux Syrup,5,145.0
+2026-02-12,Amoxicillin 500mg,4,18.0
+2026-02-13,Cetirizine,2,10.0
+2026-02-13,Enervon,1,9.0
+2026-02-14,Tempra Syrup,1,95.0
+2026-02-14,Bioflu,5,12.0
+2026-02-14,Mefenamic Acid,4,11.0
+2026-02-14,Amoxicillin 500mg,5,18.0
+2026-02-15,Neozep Forte,2,9.5
+2026-02-15,Bioflu,1,12.0
+2026-02-15,Biogesic 500mg,5,8.5
+2026-02-15,Kremil-S,1,7.5
+2026-02-16,Cetirizine,2,10.0
+2026-02-16,Kremil-S,5,7.5
+2026-02-16,Biogesic 500mg,5,8.5
+2026-02-16,Enervon,1,9.0
+2026-02-17,Biogesic 500mg,2,8.5
+2026-02-17,Kremil-S,3,7.5
+2026-02-17,Mefenamic Acid,2,11.0
+2026-02-17,Neozep Forte,3,9.5
+2026-02-18,Neozep Forte,3,9.5
+2026-02-18,Enervon,1,9.0
+2026-02-18,Solmux Syrup,1,145.0
+2026-02-19,Amoxicillin 500mg,5,18.0
+2026-02-19,Biogesic 500mg,2,8.5
+2026-02-19,Tempra Syrup,5,95.0
+2026-02-20,Neozep Forte,2,9.5
+2026-02-20,Mefenamic Acid,3,11.0
+2026-02-20,Biogesic 500mg,3,8.5
+2026-02-21,Solmux Syrup,3,145.0
+2026-02-21,Tempra Syrup,5,95.0
+2026-02-22,Tempra Syrup,1,95.0
+2026-02-22,Bioflu,2,12.0
+2026-02-22,Enervon,3,9.0
+2026-02-22,Mefenamic Acid,1,11.0
+2026-02-23,Tempra Syrup,3,95.0
+2026-02-23,Neozep Forte,3,9.5
+2026-02-24,Cetirizine,3,10.0
+2026-02-24,Mefenamic Acid,5,11.0
+2026-02-24,Amoxicillin 500mg,4,18.0
+2026-02-24,Tempra Syrup,3,95.0
+2026-02-25,Biogesic 500mg,3,8.5
+2026-02-25,Kremil-S,1,7.5
+2026-02-26,Mefenamic Acid,3,11.0
+2026-02-26,Neozep Forte,2,9.5
+2026-02-27,Solmux Syrup,1,145.0
+2026-02-27,Tempra Syrup,1,95.0
+2026-02-27,Kremil-S,1,7.5
+2026-02-27,Enervon,2,9.0
+2026-02-28,Bioflu,2,12.0
+2026-02-28,Mefenamic Acid,1,11.0
+2026-02-28,Neozep Forte,3,9.5
+2026-02-28,Cetirizine,3,10.0
+2026-03-01,Mefenamic Acid,2,11.0
+2026-03-01,Cetirizine,1,10.0
+2026-03-02,Tempra Syrup,2,95.0
+2026-03-02,Kremil-S,2,7.5
+2026-03-02,Neozep Forte,2,9.5
+2026-03-03,Bioflu,4,12.0
+2026-03-03,Neozep Forte,2,9.5
+2026-03-03,Mefenamic Acid,3,11.0
+2026-03-04,Biogesic 500mg,1,8.5
+2026-03-04,Kremil-S,4,7.5
+2026-03-05,Cetirizine,3,10.0
+2026-03-05,Solmux Syrup,3,145.0
+2026-03-06,Cetirizine,2,10.0
+2026-03-06,Bioflu,4,12.0
+2026-03-07,Enervon,3,9.0
+2026-03-07,Biogesic 500mg,5,8.5
+2026-03-07,Amoxicillin 500mg,4,18.0
+2026-03-08,Tempra Syrup,3,95.0
+2026-03-08,Mefenamic Acid,2,11.0
+2026-03-08,Bioflu,5,12.0
+2026-03-08,Solmux Syrup,3,145.0
+2026-03-09,Biogesic 500mg,3,8.5
+2026-03-09,Kremil-S,3,7.5
+2026-03-10,Amoxicillin 500mg,4,18.0
+2026-03-10,Tempra Syrup,5,95.0
+2026-03-10,Biogesic 500mg,2,8.5
+2026-03-11,Bioflu,5,12.0
+2026-03-11,Kremil-S,5,7.5
+2026-03-11,Amoxicillin 500mg,2,18.0
+2026-03-12,Kremil-S,5,7.5
+2026-03-12,Biogesic 500mg,3,8.5
+2026-03-12,Mefenamic Acid,1,11.0
+2026-03-13,Enervon,4,9.0
+2026-03-13,Tempra Syrup,3,95.0
+2026-03-13,Amoxicillin 500mg,4,18.0
+2026-03-13,Mefenamic Acid,3,11.0
+2026-03-14,Neozep Forte,4,9.5
+2026-03-14,Cetirizine,2,10.0
+2026-03-14,Kremil-S,5,7.5
+2026-03-14,Mefenamic Acid,5,11.0
+2026-03-15,Kremil-S,3,7.5
+2026-03-15,Tempra Syrup,3,95.0
+2026-03-15,Bioflu,2,12.0
+2026-03-16,Amoxicillin 500mg,4,18.0
+2026-03-16,Mefenamic Acid,4,11.0
+2026-03-16,Solmux Syrup,2,145.0
+2026-03-17,Solmux Syrup,5,145.0
+2026-03-17,Neozep Forte,5,9.5
+2026-03-17,Biogesic 500mg,3,8.5
+2026-03-17,Tempra Syrup,1,95.0
+2026-03-18,Enervon,2,9.0
+2026-03-18,Cetirizine,2,10.0
+2026-03-19,Bioflu,4,12.0
+2026-03-19,Cetirizine,5,10.0
+2026-03-20,Solmux Syrup,5,145.0
+2026-03-20,Kremil-S,2,7.5
+2026-03-21,Kremil-S,2,7.5
+2026-03-21,Solmux Syrup,1,145.0
+2026-03-21,Amoxicillin 500mg,1,18.0
+2026-03-21,Biogesic 500mg,4,8.5
+2026-03-22,Neozep Forte,4,9.5
+2026-03-22,Tempra Syrup,1,95.0
+2026-03-23,Cetirizine,4,10.0
+2026-03-23,Biogesic 500mg,5,8.5
+2026-03-23,Solmux Syrup,5,145.0
+2026-03-23,Tempra Syrup,5,95.0
+2026-03-24,Solmux Syrup,5,145.0
+2026-03-24,Tempra Syrup,4,95.0
+2026-03-24,Kremil-S,2,7.5
+2026-03-25,Solmux Syrup,2,145.0
+2026-03-25,Amoxicillin 500mg,3,18.0
+2026-03-25,Enervon,5,9.0
+2026-03-25,Kremil-S,4,7.5
+2026-03-26,Cetirizine,3,10.0
+2026-03-26,Enervon,2,9.0
+2026-03-26,Solmux Syrup,3,145.0
+2026-03-26,Bioflu,3,12.0
+2026-03-27,Tempra Syrup,2,95.0
+2026-03-27,Biogesic 500mg,2,8.5
+2026-03-27,Neozep Forte,4,9.5
+2026-03-28,Neozep Forte,4,9.5
+2026-03-28,Cetirizine,3,10.0
+2026-03-28,Biogesic 500mg,5,8.5
+2026-03-28,Tempra Syrup,4,95.0
+2026-03-29,Bioflu,4,12.0
+2026-03-29,Cetirizine,5,10.0
+2026-03-29,Kremil-S,1,7.5
+2026-03-30,Kremil-S,3,7.5
+2026-03-30,Solmux Syrup,4,145.0
+2026-03-30,Bioflu,4,12.0
+2026-03-30,Neozep Forte,5,9.5
+2026-03-31,Tempra Syrup,3,95.0
+2026-03-31,Cetirizine,4,10.0
+2026-03-31,Solmux Syrup,4,145.0
+2026-03-31,Biogesic 500mg,1,8.5
+2026-04-01,Mefenamic Acid,4,11.0
+2026-04-01,Kremil-S,2,7.5
+2026-04-01,Neozep Forte,5,9.5
+2026-04-02,Bioflu,4,12.0
+2026-04-02,Kremil-S,2,7.5
+2026-04-02,Amoxicillin 500mg,4,18.0
+2026-04-02,Solmux Syrup,2,145.0
+2026-04-03,Enervon,3,9.0
+2026-04-03,Kremil-S,2,7.5
+2026-04-04,Mefenamic Acid,3,11.0
+2026-04-04,Amoxicillin 500mg,4,18.0
+2026-04-04,Kremil-S,3,7.5
+2026-04-05,Solmux Syrup,5,145.0
+2026-04-05,Bioflu,1,12.0
+2026-04-06,Cetirizine,1,10.0
+2026-04-06,Biogesic 500mg,2,8.5
+2026-04-06,Bioflu,2,12.0
+2026-04-07,Amoxicillin 500mg,2,18.0
+2026-04-07,Neozep Forte,2,9.5
+2026-04-08,Biogesic 500mg,3,8.5
+2026-04-08,Cetirizine,3,10.0
+2026-04-08,Solmux Syrup,2,145.0
+2026-04-09,Amoxicillin 500mg,1,18.0
+2026-04-09,Biogesic 500mg,5,8.5
+2026-04-09,Neozep Forte,1,9.5
+2026-04-09,Solmux Syrup,3,145.0
+2026-04-10,Kremil-S,5,7.5
+2026-04-10,Amoxicillin 500mg,2,18.0
+2026-04-10,Cetirizine,1,10.0
+2026-04-10,Bioflu,3,12.0
+2026-04-11,Amoxicillin 500mg,5,18.0
+2026-04-11,Biogesic 500mg,4,8.5
+2026-04-11,Bioflu,3,12.0
+2026-04-11,Neozep Forte,1,9.5
+2026-04-12,Mefenamic Acid,4,11.0
+2026-04-12,Bioflu,1,12.0
+2026-04-12,Kremil-S,4,7.5
+2026-04-12,Solmux Syrup,3,145.0
+2026-04-13,Solmux Syrup,5,145.0
+2026-04-13,Neozep Forte,3,9.5
+2026-04-13,Kremil-S,5,7.5
+2026-04-13,Biogesic 500mg,5,8.5
+2026-04-14,Solmux Syrup,3,145.0
+2026-04-14,Kremil-S,2,7.5
+2026-04-14,Enervon,1,9.0
+2026-04-15,Solmux Syrup,5,145.0
+2026-04-15,Cetirizine,5,10.0
+2026-04-15,Amoxicillin 500mg,4,18.0
+2026-04-16,Bioflu,2,12.0
+2026-04-16,Solmux Syrup,4,145.0
+2026-04-16,Mefenamic Acid,2,11.0
+2026-04-17,Enervon,5,9.0
+2026-04-17,Mefenamic Acid,3,11.0
+2026-04-17,Amoxicillin 500mg,5,18.0
+2026-04-18,Tempra Syrup,1,95.0
+2026-04-18,Cetirizine,2,10.0
+2026-04-19,Kremil-S,4,7.5
+2026-04-19,Solmux Syrup,4,145.0
+2026-04-19,Cetirizine,4,10.0
+2026-04-19,Mefenamic Acid,1,11.0
+2026-04-20,Enervon,4,9.0
+2026-04-20,Cetirizine,2,10.0
+2026-04-21,Amoxicillin 500mg,5,18.0
+2026-04-21,Mefenamic Acid,5,11.0
+2026-04-21,Solmux Syrup,3,145.0
+2026-04-22,Tempra Syrup,4,95.0
+2026-04-22,Mefenamic Acid,3,11.0
+2026-04-22,Amoxicillin 500mg,3,18.0
+2026-04-23,Cetirizine,3,10.0
+2026-04-23,Biogesic 500mg,1,8.5
+2026-04-23,Amoxicillin 500mg,5,18.0
+2026-04-24,Neozep Forte,4,9.5
+2026-04-24,Cetirizine,3,10.0
+2026-04-24,Tempra Syrup,5,95.0
+2026-04-24,Mefenamic Acid,5,11.0
+2026-04-25,Enervon,2,9.0
+2026-04-25,Biogesic 500mg,3,8.5
+2026-04-25,Cetirizine,2,10.0
+2026-04-25,Neozep Forte,3,9.5
+2026-04-26,Tempra Syrup,3,95.0
+2026-04-26,Neozep Forte,1,9.5
+2026-04-27,Tempra Syrup,2,95.0
+2026-04-27,Enervon,4,9.0
+2026-04-28,Bioflu,4,12.0
+2026-04-28,Enervon,4,9.0
+2026-04-29,Mefenamic Acid,3,11.0
+2026-04-29,Neozep Forte,4,9.5
+2026-04-29,Bioflu,1,12.0
+2026-04-30,Kremil-S,1,7.5
+2026-04-30,Solmux Syrup,5,145.0
+2026-05-01,Bioflu,5,12.0
+2026-05-01,Neozep Forte,3,9.5
+2026-05-01,Tempra Syrup,1,95.0
+2026-05-01,Kremil-S,2,7.5
+2026-05-02,Tempra Syrup,5,95.0
+2026-05-02,Kremil-S,5,7.5
+2026-05-03,Cetirizine,4,10.0
+2026-05-03,Tempra Syrup,3,95.0
+2026-05-03,Kremil-S,5,7.5
+2026-05-03,Amoxicillin 500mg,4,18.0
+2026-05-04,Amoxicillin 500mg,2,18.0
+2026-05-04,Bioflu,2,12.0
+2026-05-04,Biogesic 500mg,3,8.5
+2026-05-05,Biogesic 500mg,5,8.5
+2026-05-05,Neozep Forte,1,9.5
+2026-05-05,Cetirizine,2,10.0
+2026-05-05,Amoxicillin 500mg,1,18.0
+2026-05-06,Solmux Syrup,1,145.0
+2026-05-06,Amoxicillin 500mg,2,18.0
+2026-05-06,Enervon,3,9.0
+2026-05-07,Enervon,2,9.0
+2026-05-07,Solmux Syrup,3,145.0
+2026-05-07,Biogesic 500mg,5,8.5
+2026-05-07,Mefenamic Acid,2,11.0
+2026-05-08,Biogesic 500mg,2,8.5
+2026-05-08,Tempra Syrup,3,95.0
+2026-05-08,Cetirizine,2,10.0
+2026-05-09,Bioflu,3,12.0
+2026-05-09,Neozep Forte,5,9.5
+2026-05-10,Amoxicillin 500mg,4,18.0
+2026-05-10,Enervon,3,9.0
+2026-05-10,Solmux Syrup,4,145.0
+2026-05-10,Bioflu,3,12.0
+2026-05-11,Tempra Syrup,5,95.0
+2026-05-11,Solmux Syrup,1,145.0
+2026-05-11,Amoxicillin 500mg,4,18.0
+2026-05-11,Bioflu,3,12.0
+2026-05-12,Enervon,5,9.0
+2026-05-12,Bioflu,5,12.0
+2026-05-12,Biogesic 500mg,1,8.5
+2026-05-12,Solmux Syrup,3,145.0
+2026-05-13,Bioflu,4,12.0
+2026-05-13,Neozep Forte,3,9.5
+2026-05-13,Solmux Syrup,2,145.0
+2026-05-13,Enervon,5,9.0
+2026-05-14,Solmux Syrup,3,145.0
+2026-05-14,Biogesic 500mg,4,8.5
+2026-05-14,Amoxicillin 500mg,3,18.0
+2026-05-15,Biogesic 500mg,4,8.5
+2026-05-15,Neozep Forte,4,9.5
+2026-05-15,Mefenamic Acid,3,11.0
+2026-05-16,Kremil-S,1,7.5
+2026-05-16,Tempra Syrup,3,95.0
+2026-05-16,Bioflu,3,12.0
+2026-05-16,Cetirizine,3,10.0
+2026-05-17,Kremil-S,1,7.5
+2026-05-17,Tempra Syrup,5,95.0
+2026-05-18,Kremil-S,5,7.5
+2026-05-18,Bioflu,3,12.0
+2026-05-18,Cetirizine,5,10.0
+2026-05-19,Solmux Syrup,3,145.0
+2026-05-19,Bioflu,5,12.0
+2026-05-19,Cetirizine,2,10.0
+2026-05-20,Solmux Syrup,1,145.0
+2026-05-20,Amoxicillin 500mg,5,18.0
+2026-05-20,Biogesic 500mg,2,8.5
+2026-05-21,Neozep Forte,4,9.5
+2026-05-21,Enervon,1,9.0
+2026-05-21,Bioflu,2,12.0
+2026-05-21,Tempra Syrup,1,95.0
+2026-05-22,Biogesic 500mg,3,8.5
+2026-05-22,Neozep Forte,5,9.5
+2026-05-22,Solmux Syrup,3,145.0
+2026-05-23,Solmux Syrup,4,145.0
+2026-05-23,Amoxicillin 500mg,5,18.0
+2026-05-23,Cetirizine,2,10.0
+2026-05-24,Cetirizine,1,10.0
+2026-05-24,Tempra Syrup,3,95.0
+2026-05-24,Neozep Forte,4,9.5
+2026-05-25,Tempra Syrup,3,95.0
+2026-05-25,Enervon,3,9.0
+2026-05-25,Bioflu,5,12.0
+2026-05-26,Solmux Syrup,4,145.0
+2026-05-26,Neozep Forte,3,9.5
+2026-05-26,Amoxicillin 500mg,3,18.0
+2026-05-26,Enervon,5,9.0
+2026-05-27,Kremil-S,2,7.5
+2026-05-27,Solmux Syrup,2,145.0
+2026-05-27,Mefenamic Acid,5,11.0
+2026-05-27,Amoxicillin 500mg,4,18.0
+2026-05-28,Kremil-S,3,7.5
+2026-05-28,Bioflu,4,12.0
+2026-05-29,Kremil-S,1,7.5
+2026-05-29,Amoxicillin 500mg,2,18.0
+2026-05-29,Neozep Forte,5,9.5
+2026-05-29,Cetirizine,5,10.0
+2026-05-30,Biogesic 500mg,5,8.5
+2026-05-30,Solmux Syrup,4,145.0
+2026-05-30,Amoxicillin 500mg,1,18.0
+2026-05-31,Neozep Forte,4,9.5
+2026-05-31,Kremil-S,3,7.5
+2026-05-31,Amoxicillin 500mg,3,18.0
+2026-05-31,Bioflu,5,12.0
+2026-06-01,Kremil-S,5,7.5
+2026-06-01,Biogesic 500mg,4,8.5
+2026-06-01,Mefenamic Acid,3,11.0
+2026-06-01,Amoxicillin 500mg,4,18.0
+2026-06-02,Bioflu,3,12.0
+2026-06-02,Biogesic 500mg,2,8.5
+2026-06-02,Cetirizine,1,10.0
+2026-06-02,Mefenamic Acid,4,11.0
+2026-06-03,Biogesic 500mg,2,8.5
+2026-06-03,Solmux Syrup,3,145.0
+2026-06-04,Bioflu,1,12.0
+2026-06-04,Mefenamic Acid,3,11.0
+2026-06-05,Mefenamic Acid,2,11.0
+2026-06-05,Kremil-S,5,7.5
+2026-06-05,Neozep Forte,4,9.5
+2026-06-06,Neozep Forte,5,9.5
+2026-06-06,Amoxicillin 500mg,4,18.0
+2026-06-06,Tempra Syrup,5,95.0
+2026-06-06,Bioflu,2,12.0
+2026-06-07,Amoxicillin 500mg,4,18.0
+2026-06-07,Neozep Forte,3,9.5
+2026-06-07,Cetirizine,4,10.0
+2026-06-08,Bioflu,5,12.0
+2026-06-08,Solmux Syrup,2,145.0
+2026-06-08,Enervon,1,9.0
+2026-06-09,Mefenamic Acid,3,11.0
+2026-06-09,Enervon,4,9.0
+2026-06-09,Kremil-S,3,7.5
+2026-06-10,Kremil-S,1,7.5
+2026-06-10,Solmux Syrup,2,145.0
+2026-06-11,Amoxicillin 500mg,3,18.0
+2026-06-11,Mefenamic Acid,1,11.0
+2026-06-11,Enervon,4,9.0
+2026-06-12,Bioflu,3,12.0
+2026-06-12,Amoxicillin 500mg,2,18.0
+2026-06-12,Solmux Syrup,5,145.0
+2026-06-13,Cetirizine,2,10.0
+2026-06-13,Amoxicillin 500mg,1,18.0
+2026-06-13,Enervon,1,9.0
+2026-06-14,Solmux Syrup,2,145.0
+2026-06-14,Bioflu,1,12.0
+2026-06-14,Mefenamic Acid,3,11.0
+2026-06-15,Kremil-S,2,7.5
+2026-06-15,Neozep Forte,5,9.5
+2026-06-15,Cetirizine,3,10.0
+2026-06-16,Tempra Syrup,4,95.0
+2026-06-16,Enervon,3,9.0
+2026-06-16,Neozep Forte,3,9.5
+2026-06-16,Solmux Syrup,1,145.0
+2026-06-17,Biogesic 500mg,4,8.5
+2026-06-17,Neozep Forte,5,9.5
+2026-06-17,Cetirizine,3,10.0
+2026-06-18,Kremil-S,3,7.5
+2026-06-18,Bioflu,5,12.0
+2026-06-19,Solmux Syrup,3,145.0
+2026-06-19,Mefenamic Acid,5,11.0
+2026-06-20,Mefenamic Acid,4,11.0
+2026-06-20,Biogesic 500mg,1,8.5
+2026-06-20,Cetirizine,5,10.0
+2026-06-21,Mefenamic Acid,4,11.0
+2026-06-21,Cetirizine,3,10.0
+2026-06-21,Biogesic 500mg,4,8.5
+2026-06-21,Amoxicillin 500mg,1,18.0
+2026-06-22,Bioflu,3,12.0
+2026-06-22,Amoxicillin 500mg,4,18.0
+2026-06-23,Biogesic 500mg,5,8.5
+2026-06-23,Cetirizine,2,10.0
+2026-06-24,Solmux Syrup,5,145.0
+2026-06-24,Mefenamic Acid,2,11.0
+2026-06-24,Kremil-S,4,7.5
+2026-06-25,Biogesic 500mg,1,8.5
+2026-06-25,Solmux Syrup,3,145.0
+2026-06-25,Kremil-S,2,7.5
+2026-06-25,Neozep Forte,4,9.5
+2026-06-26,Cetirizine,3,10.0
+2026-06-26,Mefenamic Acid,5,11.0
+2026-06-26,Biogesic 500mg,3,8.5
+2026-06-27,Kremil-S,2,7.5
+2026-06-27,Enervon,1,9.0
+2026-06-28,Biogesic 500mg,1,8.5
+2026-06-28,Cetirizine,3,10.0
+2026-06-28,Bioflu,2,12.0
+2026-06-29,Amoxicillin 500mg,1,18.0
+2026-06-29,Cetirizine,5,10.0
+2026-06-30,Amoxicillin 500mg,2,18.0
+2026-06-30,Cetirizine,3,10.0
+2026-07-01,Amoxicillin 500mg,3,18.0
+2026-07-01,Bioflu,2,12.0
+2026-07-02,Tempra Syrup,2,95.0
+2026-07-02,Enervon,1,9.0
+2026-07-03,Bioflu,2,12.0
+2026-07-03,Neozep Forte,5,9.5
+2026-07-03,Amoxicillin 500mg,3,18.0
+2026-07-03,Tempra Syrup,1,95.0
+2026-07-04,Enervon,2,9.0
+2026-07-04,Bioflu,4,12.0
+2026-07-05,Biogesic 500mg,3,8.5
+2026-07-05,Amoxicillin 500mg,5,18.0
+2026-07-05,Solmux Syrup,5,145.0
+2026-07-05,Cetirizine,1,10.0
+2026-07-06,Tempra Syrup,5,95.0
+2026-07-06,Cetirizine,3,10.0
+2026-07-06,Bioflu,4,12.0
+2026-07-07,Bioflu,4,12.0
+2026-07-07,Amoxicillin 500mg,4,18.0
+2026-07-07,Solmux Syrup,1,145.0
+2026-07-07,Kremil-S,4,7.5
+2026-07-08,Solmux Syrup,5,145.0
+2026-07-08,Biogesic 500mg,2,8.5
+2026-07-08,Tempra Syrup,1,95.0
+2026-07-08,Neozep Forte,2,9.5
+2026-07-09,Amoxicillin 500mg,4,18.0
+2026-07-09,Tempra Syrup,5,95.0
+2026-07-09,Mefenamic Acid,5,11.0
+2026-07-10,Solmux Syrup,1,145.0
+2026-07-10,Tempra Syrup,1,95.0
+2026-07-10,Kremil-S,5,7.5
+2026-07-11,Cetirizine,4,10.0
+2026-07-11,Kremil-S,3,7.5
+2026-07-11,Solmux Syrup,4,145.0
+2026-07-11,Biogesic 500mg,4,8.5
+2026-07-12,Biogesic 500mg,3,8.5
+2026-07-12,Mefenamic Acid,3,11.0
+2026-07-12,Kremil-S,3,7.5
+2026-07-13,Solmux Syrup,1,145.0
+2026-07-13,Biogesic 500mg,1,8.5
+2026-07-14,Kremil-S,3,7.5
+2026-07-14,Biogesic 500mg,2,8.5
+2026-07-15,Bioflu,1,12.0
+2026-07-15,Tempra Syrup,4,95.0
+2026-07-15,Mefenamic Acid,3,11.0
+2026-07-15,Solmux Syrup,4,145.0
+2026-07-16,Bioflu,1,12.0
+2026-07-16,Enervon,5,9.0
+2026-07-16,Tempra Syrup,5,95.0
+2026-07-16,Neozep Forte,2,9.5
+2026-07-17,Solmux Syrup,1,145.0
+2026-07-17,Cetirizine,3,10.0
+2026-07-18,Mefenamic Acid,2,11.0
+2026-07-18,Biogesic 500mg,4,8.5
+2026-07-18,Enervon,5,9.0
+2026-07-18,Solmux Syrup,5,145.0
+2026-07-19,Tempra Syrup,2,95.0
+2026-07-19,Bioflu,3,12.0
+2026-07-19,Enervon,3,9.0
+2026-07-19,Amoxicillin 500mg,3,18.0
+2026-07-20,Bioflu,5,12.0
+2026-07-20,Neozep Forte,4,9.5
+2026-07-20,Tempra Syrup,1,95.0
+2026-07-21,Bioflu,5,12.0
+2026-07-21,Biogesic 500mg,2,8.5
+2026-07-22,Kremil-S,2,7.5
+2026-07-22,Solmux Syrup,3,145.0
+2026-07-22,Mefenamic Acid,3,11.0
+2026-07-23,Mefenamic Acid,2,11.0
+2026-07-23,Biogesic 500mg,5,8.5
+2026-07-23,Bioflu,1,12.0
+2026-07-23,Tempra Syrup,1,95.0
+2026-07-24,Solmux Syrup,5,145.0
+2026-07-24,Kremil-S,4,7.5
+2026-07-24,Amoxicillin 500mg,4,18.0
+2026-07-25,Cetirizine,3,10.0
+2026-07-25,Tempra Syrup,4,95.0
+2026-07-25,Biogesic 500mg,1,8.5
+2026-07-26,Amoxicillin 500mg,1,18.0
+2026-07-26,Solmux Syrup,2,145.0
+2026-07-26,Enervon,4,9.0
+2026-07-27,Bioflu,2,12.0
+2026-07-27,Amoxicillin 500mg,2,18.0
+2026-07-27,Cetirizine,3,10.0
+2026-07-27,Neozep Forte,3,9.5
+2026-07-28,Biogesic 500mg,4,8.5
+2026-07-28,Bioflu,2,12.0
+2026-07-28,Solmux Syrup,2,145.0
+2026-07-29,Tempra Syrup,1,95.0
+2026-07-29,Cetirizine,4,10.0
+2026-07-29,Mefenamic Acid,1,11.0
+2026-07-30,Bioflu,3,12.0
+2026-07-30,Solmux Syrup,5,145.0
+2026-07-30,Biogesic 500mg,4,8.5
+2026-07-31,Kremil-S,4,7.5
+2026-07-31,Amoxicillin 500mg,1,18.0
+2026-07-31,Enervon,3,9.0
+2026-07-31,Bioflu,2,12.0
+2026-08-01,Solmux Syrup,1,145.0
+2026-08-01,Mefenamic Acid,2,11.0
+2026-08-01,Biogesic 500mg,4,8.5
+2026-08-01,Cetirizine,5,10.0
+2026-08-02,Tempra Syrup,3,95.0
+2026-08-02,Biogesic 500mg,3,8.5
+2026-08-02,Kremil-S,2,7.5
+2026-08-03,Neozep Forte,5,9.5
+2026-08-03,Biogesic 500mg,5,8.5
+2026-08-03,Tempra Syrup,2,95.0
+2026-08-04,Mefenamic Acid,1,11.0
+2026-08-04,Neozep Forte,2,9.5
+2026-08-04,Cetirizine,3,10.0
+2026-08-05,Neozep Forte,1,9.5
+2026-08-05,Amoxicillin 500mg,2,18.0
+2026-08-06,Solmux Syrup,5,145.0
+2026-08-06,Amoxicillin 500mg,5,18.0
+2026-08-06,Tempra Syrup,3,95.0
+2026-08-06,Mefenamic Acid,3,11.0
+2026-08-07,Solmux Syrup,4,145.0
+2026-08-07,Biogesic 500mg,4,8.5
+2026-08-08,Enervon,5,9.0
+2026-08-08,Amoxicillin 500mg,1,18.0
+2026-08-08,Bioflu,3,12.0
+2026-08-08,Neozep Forte,4,9.5
+2026-08-09,Bioflu,3,12.0
+2026-08-09,Amoxicillin 500mg,1,18.0
+2026-08-09,Mefenamic Acid,1,11.0
+2026-08-10,Amoxicillin 500mg,5,18.0
+2026-08-10,Tempra Syrup,5,95.0
+2026-08-10,Kremil-S,1,7.5
+2026-08-10,Cetirizine,4,10.0
+2026-08-11,Cetirizine,2,10.0
+2026-08-11,Mefenamic Acid,1,11.0
+2026-08-11,Solmux Syrup,4,145.0
+2026-08-11,Enervon,1,9.0
+2026-08-12,Biogesic 500mg,1,8.5
+2026-08-12,Tempra Syrup,2,95.0
+2026-08-12,Neozep Forte,4,9.5
+2026-08-13,Tempra Syrup,3,95.0
+2026-08-13,Amoxicillin 500mg,3,18.0
+2026-08-13,Neozep Forte,3,9.5
+2026-08-14,Kremil-S,3,7.5
+2026-08-14,Mefenamic Acid,1,11.0
+2026-08-14,Bioflu,3,12.0
+2026-08-15,Tempra Syrup,3,95.0
+2026-08-15,Kremil-S,3,7.5
+2026-08-16,Amoxicillin 500mg,5,18.0
+2026-08-16,Neozep Forte,2,9.5
+2026-08-16,Mefenamic Acid,3,11.0
+2026-08-16,Bioflu,3,12.0
+2026-08-17,Kremil-S,5,7.5
+2026-08-17,Neozep Forte,4,9.5
+2026-08-17,Biogesic 500mg,3,8.5
+2026-08-17,Tempra Syrup,2,95.0
+2026-08-18,Tempra Syrup,3,95.0
+2026-08-18,Biogesic 500mg,1,8.5
+2026-08-18,Kremil-S,3,7.5
+2026-08-18,Enervon,3,9.0
+2026-08-19,Cetirizine,4,10.0
+2026-08-19,Mefenamic Acid,2,11.0
+2026-08-20,Neozep Forte,1,9.5
+2026-08-20,Amoxicillin 500mg,3,18.0
+2026-08-21,Tempra Syrup,5,95.0
+2026-08-21,Amoxicillin 500mg,1,18.0
+2026-08-22,Mefenamic Acid,2,11.0
+2026-08-22,Neozep Forte,2,9.5
+2026-08-22,Kremil-S,5,7.5
+2026-08-22,Biogesic 500mg,2,8.5
+2026-08-23,Solmux Syrup,2,145.0
+2026-08-23,Bioflu,4,12.0
+2026-08-23,Kremil-S,5,7.5
+2026-08-23,Neozep Forte,3,9.5
+2026-08-24,Solmux Syrup,4,145.0
+2026-08-24,Cetirizine,2,10.0
+2026-08-24,Tempra Syrup,3,95.0
+2026-08-24,Neozep Forte,5,9.5
+2026-08-25,Solmux Syrup,5,145.0
+2026-08-25,Enervon,5,9.0
+2026-08-25,Kremil-S,4,7.5
+2026-08-26,Cetirizine,3,10.0
+2026-08-26,Neozep Forte,1,9.5
+2026-08-27,Solmux Syrup,5,145.0
+2026-08-27,Mefenamic Acid,1,11.0
+2026-08-27,Biogesic 500mg,3,8.5
+2026-08-27,Tempra Syrup,1,95.0
+2026-08-28,Enervon,5,9.0
+2026-08-28,Solmux Syrup,2,145.0
+2026-08-29,Biogesic 500mg,3,8.5
+2026-08-29,Cetirizine,1,10.0
+2026-08-29,Solmux Syrup,4,145.0
+2026-08-30,Kremil-S,3,7.5
+2026-08-30,Tempra Syrup,2,95.0
+2026-08-31,Biogesic 500mg,1,8.5
+2026-08-31,Mefenamic Acid,3,11.0
+2026-08-31,Cetirizine,1,10.0
+2026-09-01,Mefenamic Acid,3,11.0
+2026-09-01,Neozep Forte,4,9.5
+2026-09-01,Tempra Syrup,2,95.0
+2026-09-01,Bioflu,4,12.0
+2026-09-02,Amoxicillin 500mg,1,18.0
+2026-09-02,Bioflu,3,12.0
+2026-09-02,Biogesic 500mg,2,8.5
+2026-09-03,Tempra Syrup,4,95.0
+2026-09-03,Amoxicillin 500mg,1,18.0
+2026-09-04,Cetirizine,1,10.0
+2026-09-04,Enervon,2,9.0
+2026-09-04,Biogesic 500mg,4,8.5
+2026-09-05,Amoxicillin 500mg,4,18.0
+2026-09-05,Solmux Syrup,5,145.0
+2026-09-05,Biogesic 500mg,5,8.5
+2026-09-05,Bioflu,1,12.0
+2026-09-06,Tempra Syrup,4,95.0
+2026-09-06,Cetirizine,1,10.0
+2026-09-06,Neozep Forte,5,9.5
+2026-09-06,Solmux Syrup,3,145.0
+2026-09-07,Amoxicillin 500mg,2,18.0
+2026-09-07,Kremil-S,1,7.5
+2026-09-08,Mefenamic Acid,4,11.0
+2026-09-08,Biogesic 500mg,1,8.5
+2026-09-08,Bioflu,4,12.0
+2026-09-08,Cetirizine,3,10.0
+2026-09-09,Bioflu,3,12.0
+2026-09-09,Mefenamic Acid,2,11.0
+2026-09-09,Biogesic 500mg,1,8.5
+2026-09-10,Mefenamic Acid,5,11.0
+2026-09-10,Neozep Forte,3,9.5
+2026-09-10,Bioflu,2,12.0
+2026-09-10,Tempra Syrup,4,95.0
+2026-09-11,Solmux Syrup,4,145.0
+2026-09-11,Neozep Forte,1,9.5
+2026-09-11,Tempra Syrup,3,95.0
+2026-09-11,Bioflu,2,12.0
+2026-09-12,Cetirizine,3,10.0
+2026-09-12,Bioflu,3,12.0
+2026-09-13,Kremil-S,1,7.5
+2026-09-13,Tempra Syrup,2,95.0
+2026-09-13,Solmux Syrup,3,145.0
+2026-09-13,Neozep Forte,3,9.5
+2026-09-14,Mefenamic Acid,1,11.0
+2026-09-14,Enervon,3,9.0
+2026-09-15,Kremil-S,3,7.5
+2026-09-15,Solmux Syrup,2,145.0
+2026-09-15,Amoxicillin 500mg,4,18.0
+2026-09-16,Solmux Syrup,1,145.0
+2026-09-16,Mefenamic Acid,4,11.0
+2026-09-16,Enervon,1,9.0
+2026-09-16,Kremil-S,4,7.5
+2026-09-17,Neozep Forte,1,9.5
+2026-09-17,Tempra Syrup,1,95.0
+2026-09-17,Enervon,3,9.0
+2026-09-17,Amoxicillin 500mg,3,18.0
+2026-09-18,Solmux Syrup,4,145.0
+2026-09-18,Kremil-S,3,7.5
+2026-09-18,Neozep Forte,4,9.5
+2026-09-19,Mefenamic Acid,3,11.0
+2026-09-19,Kremil-S,1,7.5
+2026-09-20,Kremil-S,5,7.5
+2026-09-20,Mefenamic Acid,2,11.0
+2026-09-21,Neozep Forte,1,9.5
+2026-09-21,Solmux Syrup,2,145.0
+2026-09-22,Cetirizine,3,10.0
+2026-09-22,Mefenamic Acid,4,11.0
+2026-09-23,Bioflu,3,12.0
+2026-09-23,Neozep Forte,4,9.5
+2026-09-23,Solmux Syrup,1,145.0
+2026-09-23,Tempra Syrup,5,95.0
+2026-09-24,Tempra Syrup,4,95.0
+2026-09-24,Mefenamic Acid,3,11.0
+2026-09-25,Enervon,2,9.0
+2026-09-25,Cetirizine,4,10.0
+2026-09-25,Biogesic 500mg,5,8.5
+2026-09-25,Bioflu,4,12.0
+2026-09-26,Biogesic 500mg,4,8.5
+2026-09-26,Enervon,2,9.0
+2026-09-26,Tempra Syrup,5,95.0
+2026-09-26,Mefenamic Acid,3,11.0
+2026-09-27,Solmux Syrup,1,145.0
+2026-09-27,Cetirizine,4,10.0
+2026-09-27,Biogesic 500mg,2,8.5
+2026-09-27,Amoxicillin 500mg,4,18.0
+2026-09-28,Mefenamic Acid,1,11.0
+2026-09-28,Amoxicillin 500mg,5,18.0
+2026-09-29,Enervon,2,9.0
+2026-09-29,Amoxicillin 500mg,3,18.0
+2026-09-29,Neozep Forte,5,9.5
+2026-09-29,Mefenamic Acid,2,11.0
+2026-09-30,Cetirizine,2,10.0
+2026-09-30,Neozep Forte,4,9.5
+2026-10-01,Mefenamic Acid,5,11.0
+2026-10-01,Tempra Syrup,3,95.0
+2026-10-02,Tempra Syrup,1,95.0
+2026-10-02,Neozep Forte,3,9.5
+2026-10-02,Biogesic 500mg,4,8.5
+2026-10-03,Solmux Syrup,4,145.0
+2026-10-03,Tempra Syrup,5,95.0
+2026-10-03,Kremil-S,1,7.5
+2026-10-03,Amoxicillin 500mg,2,18.0
+2026-10-04,Biogesic 500mg,5,8.5
+2026-10-04,Solmux Syrup,3,145.0
+2026-10-04,Tempra Syrup,2,95.0
+2026-10-05,Amoxicillin 500mg,5,18.0
+2026-10-05,Neozep Forte,1,9.5
+2026-10-05,Tempra Syrup,1,95.0
+2026-10-05,Cetirizine,5,10.0
+2026-10-06,Enervon,2,9.0
+2026-10-06,Neozep Forte,3,9.5
+2026-10-07,Cetirizine,1,10.0
+2026-10-07,Mefenamic Acid,3,11.0
+2026-10-07,Enervon,2,9.0
+2026-10-07,Kremil-S,5,7.5
+2026-10-08,Neozep Forte,5,9.5
+2026-10-08,Enervon,2,9.0
+2026-10-08,Biogesic 500mg,5,8.5
+2026-10-09,Neozep Forte,5,9.5
+2026-10-09,Amoxicillin 500mg,1,18.0
+2026-10-09,Mefenamic Acid,1,11.0
+2026-10-09,Kremil-S,1,7.5
+2026-10-10,Amoxicillin 500mg,2,18.0
+2026-10-10,Enervon,5,9.0
+2026-10-11,Amoxicillin 500mg,5,18.0
+2026-10-11,Bioflu,3,12.0
+2026-10-11,Solmux Syrup,3,145.0
+2026-10-12,Cetirizine,4,10.0
+2026-10-12,Kremil-S,1,7.5
+2026-10-12,Enervon,1,9.0
+2026-10-13,Solmux Syrup,4,145.0
+2026-10-13,Kremil-S,4,7.5
+2026-10-14,Mefenamic Acid,3,11.0
+2026-10-14,Neozep Forte,3,9.5
+2026-10-15,Mefenamic Acid,3,11.0
+2026-10-15,Kremil-S,5,7.5
+2026-10-15,Neozep Forte,5,9.5
+2026-10-15,Tempra Syrup,1,95.0
+2026-10-16,Cetirizine,3,10.0
+2026-10-16,Solmux Syrup,4,145.0
+2026-10-16,Biogesic 500mg,2,8.5
+2026-10-17,Biogesic 500mg,3,8.5
+2026-10-17,Bioflu,4,12.0
+2026-10-18,Kremil-S,3,7.5
+2026-10-18,Cetirizine,5,10.0
+2026-10-18,Neozep Forte,3,9.5
+2026-10-18,Amoxicillin 500mg,2,18.0
+2026-10-19,Solmux Syrup,4,145.0
+2026-10-19,Tempra Syrup,4,95.0
+2026-10-20,Solmux Syrup,4,145.0
+2026-10-20,Bioflu,5,12.0
+2026-10-20,Biogesic 500mg,4,8.5
+2026-10-21,Cetirizine,1,10.0
+2026-10-21,Mefenamic Acid,1,11.0
