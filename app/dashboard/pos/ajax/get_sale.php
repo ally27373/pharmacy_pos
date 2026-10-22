@@ -136,7 +136,7 @@ $header = $items[0];
 
 <td>₱<?= number_format((float) ($item['unit_price'] ?? 0), 2); ?></td>
 
-<td>₱<?= number_format((float) ($item['subtotal'] ?? 0), 2); ?></td>
+<td>₱<?= number_format((float) ($item['item_subtotal'] ?? 0), 2); ?></td>
 
 </tr>
 

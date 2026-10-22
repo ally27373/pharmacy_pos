@@ -160,7 +160,7 @@ $receiptAsset = static function (string $path): string {
 
 <td><?= $item['quantity']; ?></td><td><?= htmlspecialchars($item['batch_allocations'] ?? '—'); ?></td>
 
-<td>₱<?= number_format((float) ($item['subtotal'] ?? 0), 2); ?></td>
+<td>₱<?= number_format((float) ($item['item_subtotal'] ?? 0), 2); ?></td>
 
 </tr>
 
@@ -174,7 +174,7 @@ $receiptAsset = static function (string $path): string {
 
 <div class="receipt-totals">
 
-<p><span>Subtotal:</span> <span>₱<?= number_format((float) ($header['subtotal'] ?? 0), 2); ?></span></p>
+<p><span>Subtotal:</span> <span>₱<?= number_format((float) ($header['sale_subtotal'] ?? 0), 2); ?></span></p>
 
 <p><span>Discount:</span> <span>₱<?= number_format((float) ($header['discount_amount'] ?? 0), 2); ?></span></p>
 

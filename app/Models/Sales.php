@@ -106,7 +106,7 @@ class Sales
             SELECT
                 s.sale_id,
                 s.transaction_number,
-                s.subtotal,
+                s.subtotal AS sale_subtotal,
                 s.discount_amount,
                 s.total_amount,
                 CONCAT('INV-', LPAD(s.sale_id,6,'0')) AS invoice_number,
@@ -121,7 +121,7 @@ class Sales
                 p.product_name,
                 si.quantity,
                 si.unit_price,
-                si.subtotal,
+                si.subtotal AS item_subtotal,
                 (
                     SELECT GROUP_CONCAT(
                         CONCAT(
