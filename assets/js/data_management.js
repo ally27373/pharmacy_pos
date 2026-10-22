@@ -225,13 +225,36 @@ if (importConfirmBtn) {
         const result = await callImport(true);
         if (!result) return;
         if (result.status === 'success') {
-            showImportMessage('success', result.message);
+            // Build a richer success message that includes the forecast refresh
+            // outcome so the user sees the real-time update status without
+            // needing to run any VPS commands.
+            let msg = result.message;
+            const refresh = result.refresh || null;
+            if (refresh && refresh.attempted) {
+                if (refresh.success) {
+                    msg += ' Forecast refresh: ' + (refresh.ready ? 'READY (updated)' : 'completed (' + refresh.status + ')')
+                         + (refresh.forecast_first_date ? ' — first forecast date ' + refresh.forecast_first_date + '.' : '.');
+                } else {
+                    msg += ' Forecast refresh FAILED: ' + (refresh.error || 'unknown error') + '. Run manual refresh on the server.';
+                }
+            }
+            showImportMessage(refresh && refresh.success ? 'success' : 'warning', msg);
             importPreview.innerHTML = '';
             if (importFile) importFile.value = '';
             lastPreview = null;
             importConfirmBtn.disabled = true;
             if (importUndoBtn) importUndoBtn.disabled = false;
             loadImportHistory();
+
+            // Real-time chart update: the refresh above already rewrote the
+            // forecast files on the server. Redirect to the analytics dashboard
+            // so the charts render with the fresh data (no manual page reload
+            // or VPS command required).
+            if (refresh && refresh.success) {
+                setTimeout(function () {
+                    window.location.href = '../analytics/index.php?forecast_refreshed=1';
+                }, 1500);
+            }
         } else {
             showImportMessage('danger', result.message || 'Import failed.');
         }

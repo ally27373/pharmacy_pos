@@ -94,6 +94,18 @@ $dashboardData = $dashboardController->getDashboardData($period);
 
 <?php require_once '../../../includes/footer.php'; ?>
 
+<?php if (isset($_GET['forecast_refreshed']) && $_GET['forecast_refreshed'] === '1'): ?>
+<script>
+(function () {
+    if (typeof NxToast !== 'undefined') {
+        NxToast.show('Forecast updated in real time after import. Charts reflect the new data.', 'success');
+    } else if (window.console) {
+        console.log('Forecast refreshed in real time after import.');
+    }
+})();
+</script>
+<?php endif; ?>
+
 <script>
 function changePeriod(period)
 {

@@ -122,19 +122,35 @@ try {
     ]);
 
     // Trigger forecast refresh automatically after import.
+    // Runs synchronously so the forecast files are already updated
+    // by the time this response reaches the browser (real-time update).
+    $refreshResult = null;
+    $refreshError = null;
     try {
         require_once '../../../../app/Services/ForecastRefreshService.php';
         $service = new \App\Services\ForecastRefreshService(new Database()->connect());
-        $service->refresh();
+        $refreshResult = $service->refresh();
     } catch (Throwable $refreshErr) {
         // Forecast refresh failure must not block the import success.
-        error_log('Auto-refresh after import failed: ' . $refreshErr->getMessage());
+        $refreshError = $refreshErr->getMessage();
+        error_log('Auto-refresh after import failed: ' . $refreshError);
     }
+
+    $refreshSummary = [
+        'attempted' => true,
+        'success' => $refreshResult !== null && empty($refreshError),
+        'ready' => (bool) ($refreshResult['status']['ready'] ?? false),
+        'status' => (string) ($refreshResult['status']['status'] ?? 'unknown'),
+        'forecast_first_date' => (string) ($refreshResult['status']['forecast_start']
+            ?? ($refreshResult['status']['input_last_date'] ?? '')),
+        'error' => $refreshError,
+    ];
 
     echo json_encode([
         'status' => 'success',
         'message' => 'Import completed: ' . $result['imported_sales'] . ' sales, ' . $result['imported_items'] . ' line items.',
         'result' => $result,
+        'refresh' => $refreshSummary,
     ]);
     exit;
 
