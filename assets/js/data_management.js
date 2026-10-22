@@ -117,7 +117,6 @@ if (salesButton) {
 const importFile = document.getElementById('import-file');
 const importPreviewBtn = document.getElementById('import-preview-btn');
 const importConfirmBtn = document.getElementById('import-confirm-btn');
-const importUndoBtn = document.getElementById('import-undo-btn');
 const importMessage = document.getElementById('import-message');
 const importPreview = document.getElementById('import-preview');
 const importHistoryTable = document.getElementById('import-history-table');
@@ -243,7 +242,6 @@ if (importConfirmBtn) {
             if (importFile) importFile.value = '';
             lastPreview = null;
             importConfirmBtn.disabled = true;
-            if (importUndoBtn) importUndoBtn.disabled = false;
             loadImportHistory();
 
             // Real-time chart update: the refresh above already rewrote the
@@ -261,40 +259,6 @@ if (importConfirmBtn) {
     });
 }
 
-if (importUndoBtn) {
-    importUndoBtn.addEventListener('click', async () => {
-        const proceed = await (typeof NxSwal !== 'undefined'
-            ? NxSwal.confirm('Undo ALL imported sales?', 'This removes every sale marked as imported historical data (and their line items). Live POS sales are NOT affected. This cannot be undone.', { confirmText: 'Undo', icon: 'warning' })
-            : Promise.resolve(confirm('Undo ALL imported sales?')));
-        if (!proceed) return;
-
-        importUndoBtn.disabled = true;
-        try {
-            const formData = new FormData();
-            formData.append('csrf_token', window.CSRF_TOKEN || '');
-            const response = await fetch('ajax/undo_import.php', {
-                method: 'POST',
-                credentials: 'same-origin',
-                body: formData,
-            });
-            const result = await response.json();
-            if (result.status === 'success') {
-                showImportMessage('success', result.message);
-                if (importPreview) importPreview.innerHTML = '';
-                lastPreview = null;
-                importConfirmBtn.disabled = true;
-                loadImportHistory();
-            } else {
-                showImportMessage('danger', result.message || 'Undo failed.');
-                importUndoBtn.disabled = false;
-            }
-        } catch (err) {
-            showImportMessage('danger', 'Undo request failed: ' + (err.message || err));
-            importUndoBtn.disabled = false;
-        }
-    });
-}
-
 async function loadImportHistory() {
     if (!importHistoryTable) return;
     try {
@@ -308,15 +272,10 @@ async function loadImportHistory() {
         if (!tbody) return;
         if (!result.entries || result.entries.length === 0) {
             tbody.innerHTML = '<tr><td colspan="4" class="text-muted text-center">No import actions yet.</td></tr>';
-            if (importUndoBtn) importUndoBtn.disabled = true;
             return;
         }
-        let hasImport = false;
         tbody.innerHTML = result.entries.map(e => {
-            if (e.action_type === 'IMPORT') hasImport = true;
-            const badge = e.action_type === 'IMPORT'
-                ? '<span class="badge bg-success">Import</span>'
-                : '<span class="badge bg-danger">Undo</span>';
+            const badge = '<span class="badge bg-success">Import</span>';
             const when = new Date(e.created_at).toLocaleString();
             return '<tr>' +
                 '<td>' + when + '</td>' +
@@ -325,7 +284,6 @@ async function loadImportHistory() {
                 '<td>' + (e.user_id || '') + '</td>' +
                 '</tr>';
         }).join('');
-        if (importUndoBtn) importUndoBtn.disabled = !hasImport;
     } catch (err) {
         if (importHistoryMessage) showHistoryMessage('danger', 'Failed to load history: ' + (err.message || err));
     }

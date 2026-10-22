@@ -104,9 +104,6 @@ require_once '../../../includes/header.php';
                             <button type="button" id="import-confirm-btn" class="btn btn-success" disabled>
                                 <i class="bi bi-check2-circle me-2"></i>Confirm Import
                             </button>
-                            <button type="button" id="import-undo-btn" class="btn btn-outline-danger" disabled>
-                                <i class="bi bi-arrow-counterclockwise me-2"></i>Undo Last Import
-                            </button>
                         </div>
 
                         <div id="import-message" class="mt-3" aria-live="polite"></div>
@@ -115,7 +112,7 @@ require_once '../../../includes/header.php';
                         <div class="alert alert-warning small mt-3 mb-0">
                             <i class="bi bi-exclamation-triangle me-1"></i>
                             <strong>Backup first:</strong> before a large import, back up the database.
-                            Undo removes <em>all</em> imported historical sales (not just the last file).
+                            Re-importing replaces previously imported historical sales.
                         </div>
                     </div>
                 </div>
@@ -130,7 +127,7 @@ require_once '../../../includes/header.php';
                 <div class="data-card-content">
                     <h3>Import History</h3>
                     <p class="text-muted small mb-2">
-                        Recent import and undo actions recorded in the audit log.
+                        Recent import actions recorded in the audit log.
                     </p>
 
                     <div id="import-history-message" class="mb-2" aria-live="polite"></div>

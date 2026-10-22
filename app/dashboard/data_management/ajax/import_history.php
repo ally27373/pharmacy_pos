@@ -24,7 +24,7 @@ try {
             created_at
         FROM audit_logs
         WHERE module_name = 'DATA_MANAGEMENT'
-          AND action_type IN ('IMPORT', 'UNDO_IMPORT')
+          AND action_type = 'IMPORT'
         ORDER BY created_at DESC
         LIMIT 25
     ");
