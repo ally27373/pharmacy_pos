@@ -186,7 +186,10 @@ $this->dashboard->getFastMovingProducts(
             $this->dashboard->getProductDemandForecast(),
 
             'annual_forecast' =>
-    $this->getAnnualForecastArtifact()
+    $this->getAnnualForecastArtifact(),
+
+        'data_completeness' =>
+    $this->dashboard->getDataCompleteness()
 
     ];
 }

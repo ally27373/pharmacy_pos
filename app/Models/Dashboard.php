@@ -1419,6 +1419,83 @@ public function getMonthlyDemand($month = null, $year = null)
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
 
+    /**
+     * Data completeness for the forecasting input series.
+     */
+    public function getDataCompleteness(): array
+    {
+        $row = $this->conn->query("
+            SELECT
+                MIN(DATE(created_at)) AS first_date,
+                MAX(DATE(created_at)) AS last_date,
+                COUNT(DISTINCT DATE(created_at)) AS present_days
+            FROM sales
+            WHERE transaction_status = 'Completed'
+        ")->fetch(PDO::FETCH_ASSOC);
+
+        $firstDate = $row['first_date'] ?? null;
+        $lastDate  = $row['last_date'] ?? null;
+        $present   = (int) ($row['present_days'] ?? 0);
+
+        if ($firstDate === null || $lastDate === null) {
+            return [
+                'first_date'         => null,
+                'last_date'          => null,
+                'expected_days'      => 0,
+                'present_days'       => 0,
+                'missing_days'       => 0,
+                'missing_dates'      => [],
+                'is_continuous'      => true,
+                'post_training_days' => 0,
+                'completeness_pct'   => 0.0,
+            ];
+        }
+
+        $start = new DateTime($firstDate);
+        $end   = new DateTime($lastDate);
+        $expected = (int) $start->diff($end)->days + 1;
+
+        $presentDates = [];
+        $stmt = $this->conn->query("
+            SELECT DISTINCT DATE(created_at) AS d
+            FROM sales
+            WHERE transaction_status = 'Completed'
+        ");
+        foreach ($stmt->fetchAll(PDO::FETCH_ASSOC) as $r) {
+            $presentDates[$r['d']] = true;
+        }
+
+        $missing = [];
+        $cur = clone $start;
+        while ($cur <= $end) {
+            $d = $cur->format('Y-m-d');
+            if (!isset($presentDates[$d])) {
+                $missing[] = $d;
+            }
+            $cur->modify('+1 day');
+        }
+
+        $postTraining = 0;
+        foreach (array_keys($presentDates) as $d) {
+            if ($d > '2025-12-31') {
+                $postTraining++;
+            }
+        }
+
+        $pct = $expected > 0 ? round(($present / $expected) * 100, 2) : 0.0;
+
+        return [
+            'first_date'         => $firstDate,
+            'last_date'          => $lastDate,
+            'expected_days'      => $expected,
+            'present_days'       => $present,
+            'missing_days'       => count($missing),
+            'missing_dates'      => array_slice($missing, 0, 30),
+            'is_continuous'      => empty($missing),
+            'post_training_days' => $postTraining,
+            'completeness_pct'   => $pct,
+        ];
+    }
 
 }
 

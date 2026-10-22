@@ -289,14 +289,178 @@ if ($legacySchema) {
         </script>
     <?php endif; ?>
 
+    <?php
+    /*
+     * Data completeness indicator + Actual vs Forecast variance panel.
+     */
+    $completeness = $dashboardData['data_completeness'] ?? [];
+
+    // Variance (actual - forecast) per month from the annual artifact.
+    $varianceRows = [];
+    $absErrors = [];
+    $pctErrors = [];
+    $monthsLabel = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+    for ($m = 1; $m <= 12; $m++) {
+        $idx = $m - 1;
+        $a = $actual[$idx];
+        $f = $forecast[$idx];
+        $l = $lower[$idx];
+        $u = $upper[$idx];
+        if ($a === null || $f === null) {
+            $varianceRows[] = [
+                'month' => $monthsLabel[$idx],
+                'actual' => $a, 'forecast' => $f, 'variance' => null,
+                'lower' => $l, 'upper' => $u, 'in_band' => null,
+            ];
+            continue;
+        }
+        $var = (float) $a - (float) $f;
+        $varianceRows[] = [
+            'month' => $monthsLabel[$idx],
+            'actual' => (float) $a, 'forecast' => (float) $f, 'variance' => $var,
+            'lower' => $l, 'upper' => $u,
+            'in_band' => ($l === null || $u === null) ? null : ($a >= $l && $a <= $u),
+        ];
+        $absErrors[] = abs($var);
+        if ((float) $f != 0.0) {
+            $pctErrors[] = abs($var) / (float) $f * 100.0;
+        }
+    }
+    $mae = !empty($absErrors) ? array_sum($absErrors) / count($absErrors) : null;
+    $mape = !empty($pctErrors) ? array_sum($pctErrors) / count($pctErrors) : null;
+    ?>
+
+    <?php if (!empty($completeness) && ($completeness['expected_days'] ?? 0) > 0): ?>
+    <div class="forecast-completeness mt-2 p-2 border rounded small">
+        <strong>Data completeness (forecast input):</strong>
+        <?= (int) ($completeness['present_days'] ?? 0); ?> /
+        <?= (int) ($completeness['expected_days'] ?? 0); ?> days present
+        (<?= number_format((float) ($completeness['completeness_pct'] ?? 0), 1); ?>%)
+        <?php if (($completeness['missing_days'] ?? 0) > 0): ?>
+            — <span class="text-danger"><?= (int) $completeness['missing_days']; ?> missing</span>
+        <?php else: ?>
+            — <span class="text-success">no gaps</span>
+        <?php endif; ?>
+        <?php if (($completeness['first_date'] ?? null) && ($completeness['last_date'] ?? null)): ?>
+            <span class="text-muted">(<?= htmlspecialchars($completeness['first_date']); ?> → <?= htmlspecialchars($completeness['last_date']); ?>)</span>
+        <?php endif; ?>
+        | Post-training 2026 obs: <?= (int) ($completeness['post_training_days'] ?? 0); ?>
+    </div>
+    <?php endif; ?>
+
+    <?php if ($hasAnnualForecast && !empty($varianceRows)): ?>
+    <details class="forecast-variance mt-2">
+        <summary class="small">Actual vs Forecast variance (monthly)</summary>
+        <div class="table-responsive mt-1">
+            <table class="table table-sm table-striped mb-1">
+                <thead>
+                    <tr>
+                        <th>Month</th>
+                        <th>Actual</th>
+                        <th>Forecast</th>
+                        <th>Variance (A−F)</th>
+                        <th>In band?</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php foreach ($varianceRows as $vr): ?>
+                        <tr>
+                            <td><?= htmlspecialchars($vr['month']); ?></td>
+                            <td><?= $vr['actual'] === null ? '—' : number_format($vr['actual'], 0); ?></td>
+                            <td><?= $vr['forecast'] === null ? '—' : number_format($vr['forecast'], 0); ?></td>
+                            <td><?= $vr['variance'] === null ? '—' : number_format($vr['variance'], 0); ?></td>
+                            <td>
+                                <?php if ($vr['in_band'] === null): ?>
+                                    —
+                                <?php elseif ($vr['in_band']): ?>
+                                    <span class="text-success">Yes</span>
+                                <?php else: ?>
+                                    <span class="text-danger">No</span>
+                                <?php endif; ?>
+                            </td>
+                        </tr>
+                    <?php endforeach; ?>
+                </tbody>
+            </table>
+        </div>
+        <p class="small text-muted mb-0">
+            Accuracy (months with both actual &amp; forecast):
+            MAE = <?= $mae === null ? 'N/A' : number_format($mae, 2); ?> units,
+            MAPE = <?= $mape === null ? 'N/A' : number_format($mape, 2) . '%'; ?>
+            (<?= count($absErrors); ?> month(s)).
+        </p>
+    </details>
+    <?php endif; ?>
+
+    <?php
+    /*
+     * Dynamic limitations: built from the actual system state (forecast status,
+     * data completeness, annual forecast availability) instead of a static list.
+     */
+    $completeness = $dashboardData['data_completeness'] ?? [];
+    $limitations = [];
+
+    // Model / refit status
+    if (($forecastStatus['ready'] ?? false) === true) {
+        $limitations[] = 'Forecast model was refit on live 2026 POS demand (Ready: YES).';
+    } else {
+        $limitations[] = 'Forecast is still the validated 2025 baseline (Ready: NO). '
+            . ($forecastStatus['reason'] ?? 'Insufficient continuous live history for a refit.');
+    }
+
+    // Data completeness
+    $present = (int) ($completeness['present_days'] ?? 0);
+    $expected = (int) ($completeness['expected_days'] ?? 0);
+    $missing = (int) ($completeness['missing_days'] ?? 0);
+    $postTraining = (int) ($completeness['post_training_days'] ?? 0);
+    if ($expected > 0) {
+        $limitations[] = sprintf(
+            'Input data completeness: %d of %d calendar days present (%.1f%%).',
+            $present, $expected, (float) ($completeness['completeness_pct'] ?? 0)
+        );
+        if ($missing > 0) {
+            $limitations[] = sprintf(
+                'Missing %d calendar day(s) in the input series (gaps block a model refit).',
+                $missing
+            );
+            $sampleMissing = array_slice($completeness['missing_dates'] ?? [], 0, 5);
+            if (!empty($sampleMissing)) {
+                $limitations[] = 'Sample missing dates: ' . implode(', ', $sampleMissing)
+                    . (count($completeness['missing_dates'] ?? []) > 5 ? ' ...' : '');
+            }
+        } else {
+            $limitations[] = 'Input series is fully continuous (no missing calendar days).';
+        }
+    } else {
+        $limitations[] = 'No completed POS sales available yet; forecast is the 2025 baseline.';
+    }
+
+    if ($postTraining > 0) {
+        $limitations[] = sprintf(
+            'Post-training (2026) observations available: %d (minimum 30 required for refit).',
+            $postTraining
+        );
+    }
+
+    // Annual forecast availability
+    if (!$hasAnnualForecast) {
+        $limitations[] = 'Annual (monthly) forecast artifact has not been generated yet.';
+    }
+
+    // Generic constraints
+    $limitations[] = 'Baseline model is trained on 2025 historical data; live 2026 data is used only after 30 consecutive days of complete daily sales.';
+    $limitations[] = 'Missing calendar days are not treated as zero sales and will block a model refit.';
+    $limitations[] = 'Product demand forecasts require at least 60 observed sale days per product.';
+    $limitations[] = 'Lower bounds are clamped to 0; negative forecasts are not displayed.';
+    $limitations[] = 'Historical import (Data Management) records completed sales without changing product stock.';
+    ?>
+
     <details class="forecast-limitations mt-2">
         <summary>Forecast limitations &amp; data requirements</summary>
         <ul class="mb-0 small text-muted">
-            <li>Baseline model is trained on 2025 historical data; live 2026 data is used only after 30 consecutive days of complete daily sales.</li>
-            <li>Missing calendar days are not treated as zero sales and will block a model refit.</li>
-            <li>Product demand forecasts require at least 60 observed sale days per product.</li>
-            <li>Lower bounds are clamped to 0; negative forecasts are not displayed.</li>
-            <li>Historical import (Data Management) records completed sales without changing product stock.</li>
+            <?php foreach ($limitations as $lim): ?>
+                <li><?= htmlspecialchars($lim); ?></li>
+            <?php endforeach; ?>
         </ul>
     </details>
 </div>
