@@ -12,7 +12,6 @@ $page = 'data_management';
 
 require_once '../../../includes/header.php';
 ?>
-
 <link rel="stylesheet" href="/assets/css/dashboard-shell.css">
 <link rel="stylesheet" href="/assets/css/sidebar.css">
 <link rel="stylesheet" href="/assets/css/navbar.css">
@@ -105,10 +104,50 @@ require_once '../../../includes/header.php';
                             <button type="button" id="import-confirm-btn" class="btn btn-success" disabled>
                                 <i class="bi bi-check2-circle me-2"></i>Confirm Import
                             </button>
+                            <button type="button" id="import-undo-btn" class="btn btn-outline-danger" disabled>
+                                <i class="bi bi-arrow-counterclockwise me-2"></i>Undo Last Import
+                            </button>
                         </div>
 
                         <div id="import-message" class="mt-3" aria-live="polite"></div>
                         <div id="import-preview" class="mt-3"></div>
+
+                        <div class="alert alert-warning small mt-3 mb-0">
+                            <i class="bi bi-exclamation-triangle me-1"></i>
+                            <strong>Backup first:</strong> before a large import, back up the database.
+                            Undo removes <em>all</em> imported historical sales (not just the last file).
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="data-management-card import-history-card">
+
+                <div class="data-card-icon history-icon">
+                    <i class="bi bi-clock-history"></i>
+                </div>
+
+                <div class="data-card-content">
+                    <h3>Import History</h3>
+                    <p class="text-muted small mb-2">
+                        Recent import and undo actions recorded in the audit log.
+                    </p>
+
+                    <div id="import-history-message" class="mb-2" aria-live="polite"></div>
+                    <div class="table-responsive">
+                        <table class="table table-sm table-striped" id="import-history-table">
+                            <thead>
+                                <tr>
+                                    <th>When</th>
+                                    <th>Action</th>
+                                    <th>Details</th>
+                                    <th>User</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr><td colspan="4" class="text-muted text-center">Loading...</td></tr>
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>
