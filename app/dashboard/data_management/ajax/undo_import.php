@@ -47,9 +47,40 @@ try {
     $itemsStmt->execute();
     $importedItems = (int) $itemsStmt->fetchColumn();
 
-    // Delete in a transaction. FK cascade removes sale_items automatically.
+    // Delete in a transaction. Remove dependent rows explicitly (in FK-safe
+    // order) so we do not rely on cascade behaviour across every table.
     $conn->beginTransaction();
     try {
+        // 1. sale_item_batches (depends on sale_items)
+        $conn->exec("
+            DELETE sib FROM sale_item_batches sib
+            INNER JOIN sale_items si ON si.sale_item_id = sib.sale_item_id
+            INNER JOIN sales s ON s.sale_id = si.sale_id
+            WHERE s.remarks = 'Imported historical sales data'
+        ");
+
+        // 2. sale_items
+        $conn->exec("
+            DELETE si FROM sale_items si
+            INNER JOIN sales s ON s.sale_id = si.sale_id
+            WHERE s.remarks = 'Imported historical sales data'
+        ");
+
+        // 3. payments
+        $conn->exec("
+            DELETE p FROM payments p
+            INNER JOIN sales s ON s.sale_id = p.sale_id
+            WHERE s.remarks = 'Imported historical sales data'
+        ");
+
+        // 4. inventory_movements (nullable sale_id FK; delete to keep things clean)
+        $conn->exec("
+            DELETE inv FROM inventory_movements inv
+            INNER JOIN sales s ON s.sale_id = inv.sale_id
+            WHERE s.remarks = 'Imported historical sales data'
+        ");
+
+        // 5. sales
         $deleteStmt = $conn->prepare("
             DELETE FROM sales
             WHERE remarks = 'Imported historical sales data'
@@ -89,7 +120,7 @@ try {
     http_response_code(500);
     echo json_encode([
         'status' => 'error',
-        'message' => 'Undo failed. Please check the server error log.',
+        'message' => 'Undo failed: ' . $e->getMessage(),
     ]);
     error_log('Undo import failed: ' . $e->getMessage());
     exit;
