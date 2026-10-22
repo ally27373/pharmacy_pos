@@ -75,10 +75,54 @@ require_once '../../../includes/header.php';
                 </div>
             </div>
 
+            <div class="data-management-card import-card">
+
+                <div class="data-card-icon import-icon">
+                    <i class="bi bi-database-up"></i>
+                </div>
+
+                <div class="data-card-content">
+                    <h3>Historical Sales Import</h3>
+                    <p>
+                        Import historical sales data (CSV) for forecasting and reporting.
+                        <strong>Note:</strong> imported data is recorded as completed historical
+                        sales and does not change current product stock. Admin only.
+                    </p>
+
+                    <div class="import-form">
+                        <div class="mb-3">
+                            <label for="import-file" class="form-label">CSV file</label>
+                            <input type="file" class="form-control" id="import-file" accept=".csv,text/csv">
+                            <div class="form-text">
+                                Required columns: <code>date, product_name, quantity, unit_price</code>
+                            </div>
+                        </div>
+
+                        <div class="import-actions">
+                            <button type="button" id="import-preview-btn" class="btn btn-outline-primary">
+                                <i class="bi bi-search me-2"></i>Preview
+                            </button>
+                            <button type="button" id="import-confirm-btn" class="btn btn-success" disabled>
+                                <i class="bi bi-check2-circle me-2"></i>Confirm Import
+                            </button>
+                        </div>
+
+                        <div id="import-message" class="mt-3" aria-live="polite"></div>
+                        <div id="import-preview" class="mt-3"></div>
+                    </div>
+                </div>
+            </div>
+
         </div>
     </div>
 </div>
 
+<script>
+window.CSRF_TOKEN = <?php
+require_once '../../Helpers/Csrf.php';
+echo json_encode(Csrf::token());
+?>;
+</script>
 <script src="/assets/js/data_management.js"></script>
 
 <?php require_once '../../../includes/footer.php'; ?>

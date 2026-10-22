@@ -113,3 +113,123 @@ if (salesButton) {
         );
     });
 }
+
+// ---------- Historical Sales Import ----------
+const importFile = document.getElementById('import-file');
+const importPreviewBtn = document.getElementById('import-preview-btn');
+const importConfirmBtn = document.getElementById('import-confirm-btn');
+const importMessage = document.getElementById('import-message');
+const importPreview = document.getElementById('import-preview');
+
+let lastPreview = null;
+
+function showImportMessage(type, text) {
+    if (!importMessage) return;
+    const icon = type === 'success' ? 'bi-check-circle-fill' : 'bi-exclamation-triangle-fill';
+    importMessage.innerHTML = `<div class="alert alert-${type} mb-0"><i class="bi ${icon} me-2"></i>${text}</div>`;
+}
+
+async function callImport(confirm) {
+    if (!importFile || !importFile.files || !importFile.files[0]) {
+        showImportMessage('danger', 'Please select a CSV file first.');
+        return null;
+    }
+    const formData = new FormData();
+    formData.append('file', importFile.files[0]);
+    formData.append('csrf_token', window.CSRF_TOKEN || '');
+    if (confirm) formData.append('confirm', '1');
+
+    if (importPreviewBtn) importPreviewBtn.disabled = true;
+    if (importConfirmBtn) importConfirmBtn.disabled = true;
+
+    try {
+        const response = await fetch('ajax/import_sales.php', {
+            method: 'POST',
+            credentials: 'same-origin',
+            body: formData,
+        });
+        const result = await response.json();
+        return result;
+    } catch (err) {
+        showImportMessage('danger', 'Import request failed: ' + (err.message || err));
+        return null;
+    } finally {
+        if (importPreviewBtn) importPreviewBtn.disabled = false;
+    }
+}
+
+function renderPreview(preview) {
+    if (!importPreview) return;
+    if (!preview) { importPreview.innerHTML = ''; return; }
+
+    const unmatched = (preview.unmatched_product_names || []).map(n => `<li>${n}</li>`).join('');
+    const dateRows = (preview.date_summary || []).map(d =>
+        `<tr><td>${d.date}</td><td>${d.items}</td><td>${Number(d.total).toFixed(2)}</td></tr>`
+    ).join('');
+
+    importPreview.innerHTML = `
+        <div class="card">
+            <div class="card-body">
+                <h6>Preview</h6>
+                <ul class="mb-2">
+                    <li>Total rows: ${preview.total_rows}</li>
+                    <li>Valid rows: ${preview.valid_count}</li>
+                    <li>Invalid rows: ${preview.invalid_count}</li>
+                    <li>Duplicate rows: ${preview.duplicate_count}</li>
+                    <li>Matched products: ${preview.matched_products}</li>
+                    <li>Unmatched products: ${preview.unmatched_products}</li>
+                </ul>
+                ${preview.unmatched_products > 0 ? `<div class="alert alert-warning py-1"><strong>Unmatched:</strong><ul class="mb-0">${unmatched}</ul></div>` : ''}
+                ${preview.invalid_count > 0 ? `<div class="alert alert-danger py-1">Some rows are invalid and will be skipped.</div>` : ''}
+                <table class="table table-sm">
+                    <thead><tr><th>Date</th><th>Items</th><th>Total</th></tr></thead>
+                    <tbody>${dateRows}</tbody>
+                </table>
+            </div>
+        </div>
+    `;
+}
+
+if (importPreviewBtn) {
+    importPreviewBtn.addEventListener('click', async () => {
+        importPreview.innerHTML = '';
+        if (importConfirmBtn) importConfirmBtn.disabled = true;
+        const result = await callImport(false);
+        if (!result) return;
+        if (result.status === 'preview') {
+            lastPreview = result.preview;
+            renderPreview(result.preview);
+            if (result.preview.valid_count > 0) {
+                if (importConfirmBtn) importConfirmBtn.disabled = false;
+            }
+            showImportMessage('success', result.message);
+        } else {
+            showImportMessage('danger', result.message || 'Preview failed.');
+        }
+    });
+}
+
+if (importConfirmBtn) {
+    importConfirmBtn.addEventListener('click', async () => {
+        if (!lastPreview || lastPreview.valid_count === 0) {
+            showImportMessage('danger', 'Nothing to import. Run preview first.');
+            return;
+        }
+        const proceed = await (typeof NxSwal !== 'undefined'
+            ? NxSwal.confirm('Import sales data?', 'This will insert historical sales records. This cannot be undone easily.', { confirmText: 'Import', icon: 'warning' })
+            : Promise.resolve(confirm('Import sales data?')));
+        if (!proceed) return;
+
+        const result = await callImport(true);
+        if (!result) return;
+        if (result.status === 'success') {
+            showImportMessage('success', result.message);
+            importPreview.innerHTML = '';
+            if (importFile) importFile.value = '';
+            lastPreview = null;
+            importConfirmBtn.disabled = true;
+        } else {
+            showImportMessage('danger', result.message || 'Import failed.');
+        }
+    });
+}

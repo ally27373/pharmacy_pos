@@ -288,4 +288,15 @@ if ($legacySchema) {
         })();
         </script>
     <?php endif; ?>
+
+    <details class="forecast-limitations mt-2">
+        <summary>Forecast limitations &amp; data requirements</summary>
+        <ul class="mb-0 small text-muted">
+            <li>Baseline model is trained on 2025 historical data; live 2026 data is used only after 30 consecutive days of complete daily sales.</li>
+            <li>Missing calendar days are not treated as zero sales and will block a model refit.</li>
+            <li>Product demand forecasts require at least 60 observed sale days per product.</li>
+            <li>Lower bounds are clamped to 0; negative forecasts are not displayed.</li>
+            <li>Historical import (Data Management) records completed sales without changing product stock.</li>
+        </ul>
+    </details>
 </div>
