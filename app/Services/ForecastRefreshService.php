@@ -66,6 +66,61 @@ class ForecastRefreshService
     }
 
     /**
+     * Export completed POS demand per product per day for the per-product
+     * SARIMA refresh (script 10). Same completed-sales convention as
+     * exportLatestDailyDemand; aggregated to (date, product) rows.
+     */
+    public function exportProductDailyDemand(): array
+    {
+        $sql = "
+            SELECT
+                DATE(s.created_at) AS date,
+                TRIM(p.product_name) AS product_name,
+                SUM(si.quantity) AS quantity_sold
+            FROM sales s
+            INNER JOIN sale_items si ON s.sale_id = si.sale_id
+            INNER JOIN products p ON p.product_id = si.product_id
+            WHERE s.transaction_status = 'Completed'
+            GROUP BY DATE(s.created_at), TRIM(p.product_name)
+            ORDER BY date ASC, product_name ASC
+        ";
+
+        $rows = $this->conn->query($sql)->fetchAll(PDO::FETCH_ASSOC);
+        if (!$rows) {
+            return [
+                'path' => null,
+                'records' => 0,
+                'first_date' => null,
+                'last_date' => null,
+            ];
+        }
+
+        $outputDir = $this->sarimaRoot . DIRECTORY_SEPARATOR . 'outputs' . DIRECTORY_SEPARATOR . 'deployment';
+        if (!is_dir($outputDir) && !mkdir($outputDir, 0777, true) && !is_dir($outputDir)) {
+            throw new RuntimeException('Unable to create SARIMA deployment output directory.');
+        }
+
+        $path = $outputDir . DIRECTORY_SEPARATOR . 'latest_product_daily_demand.csv';
+        $handle = fopen($path, 'wb');
+        if ($handle === false) {
+            throw new RuntimeException('Unable to write latest_product_daily_demand.csv.');
+        }
+
+        fputcsv($handle, ['date', 'product_name', 'quantity_sold']);
+        foreach ($rows as $row) {
+            fputcsv($handle, [$row['date'], $row['product_name'], (float) $row['quantity_sold']]);
+        }
+        fclose($handle);
+
+        return [
+            'path' => $path,
+            'records' => count($rows),
+            'first_date' => $rows[0]['date'],
+            'last_date' => $rows[count($rows) - 1]['date'],
+        ];
+    }
+
+    /**
      * Resolve which Python executable to invoke.
      *
      * Priority: an explicit PYTHON_BIN override, then this project's own
@@ -143,6 +198,38 @@ class ForecastRefreshService
             $annualError = 'Annual SARIMA forecast generation script is missing or empty.';
         }
 
+        // Per-product 30-day demand refresh (script 10) — a presentation and
+        // stock-planning artifact. Like the annual script it must never
+        // block the operational 30-day forecast if it fails. The script
+        // self-throttles: it skips refitting when the exported data has not
+        // changed since the last run.
+        $productForecast = [
+            'success' => false,
+            'output' => '',
+            'error' => null,
+        ];
+        try {
+            $productInput = $this->exportProductDailyDemand();
+            $productScript = $this->sarimaRoot . DIRECTORY_SEPARATOR . 'scripts'
+                . DIRECTORY_SEPARATOR . '10_product_demand_refresh.py';
+
+            if (is_file($productScript) && filesize($productScript) > 0 && ($productInput['records'] ?? 0) > 0) {
+                $productCommand = escapeshellarg($python) . ' ' . escapeshellarg($productScript) . ' 2>&1';
+                $productOutput = [];
+                $productExitCode = 0;
+                exec($productCommand, $productOutput, $productExitCode);
+                $productForecast['success'] = $productExitCode === 0;
+                $productForecast['output'] = implode(PHP_EOL, $productOutput);
+                if ($productExitCode !== 0) {
+                    $productForecast['error'] = implode(PHP_EOL, $productOutput);
+                }
+            } else {
+                $productForecast['error'] = 'Product demand script missing or no per-product rows exported.';
+            }
+        } catch (Throwable $e) {
+            $productForecast['error'] = $e->getMessage();
+        }
+
         $statusPath = $this->sarimaRoot . DIRECTORY_SEPARATOR . 'outputs' . DIRECTORY_SEPARATOR . 'deployment' . DIRECTORY_SEPARATOR . 'forecast_status.json';
         $status = null;
         if (is_file($statusPath) && filesize($statusPath) > 0) {
@@ -160,6 +247,7 @@ class ForecastRefreshService
                 'output' => implode(PHP_EOL, $annualOutput),
                 'error' => $annualError,
             ],
+            'product_demand_forecast' => $productForecast,
         ];
     }
 }

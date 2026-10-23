@@ -1271,6 +1271,110 @@ public function exportSalesHistory()
                 ->fetchAll(PDO::FETCH_ASSOC);
 }
 
+    /**
+     * Totals for the trailing "days" calendar window anchored to the newest
+     * completed sale date (window = newest_date - (days-1) .. newest_date).
+     * Anchoring to the newest RECORDED date (not wall-clock) keeps the window
+     * identical to the SARIMA refit window while no sales exist yet today.
+     * Peso follows the exact net-revenue convention used by Revenue by
+     * Category and getMonthlySales: sale-item subtotals minus the
+     * sale-level discount applied proportionally per line, so every peso
+     * panel in the dashboard reports the same figure.
+     */
+    public function getRecentWindowTotals(int $days = 30): array
+    {
+        $days = max(1, $days);
+
+        $endRow = $this->conn
+            ->query("
+                SELECT DATE(MAX(s.created_at)) AS window_end
+                FROM sales s
+                WHERE s.transaction_status = 'Completed'
+            ")
+            ->fetch(PDO::FETCH_ASSOC);
+
+        $windowEnd = is_array($endRow) ? ($endRow['window_end'] ?? null) : null;
+
+        if ($windowEnd === null) {
+            return [
+                'window_start' => null,
+                'window_end' => null,
+                'units' => 0,
+                'peso' => 0.0,
+                'transactions' => 0,
+                'products' => [],
+            ];
+        }
+
+        $windowStart = date('Y-m-d', strtotime((string) $windowEnd) - (($days - 1) * 86400));
+
+        $stmtTotals = $this->conn->prepare("
+            SELECT
+                COUNT(DISTINCT s.sale_id) AS transactions,
+                COALESCE(SUM(si.quantity), 0) AS units,
+                COALESCE(SUM(
+                    si.subtotal - COALESCE(
+                        s.discount_amount * si.subtotal
+                            / NULLIF(sl.line_subtotal, 0),
+                        0
+                    )
+                ), 0) AS peso
+            FROM sales s
+            INNER JOIN sale_items si ON s.sale_id = si.sale_id
+            INNER JOIN (
+                SELECT sale_id, SUM(subtotal) AS line_subtotal
+                FROM sale_items
+                GROUP BY sale_id
+            ) sl ON sl.sale_id = si.sale_id
+            WHERE s.transaction_status = 'Completed'
+                AND DATE(s.created_at) BETWEEN :window_start AND :window_end
+        ");
+        $stmtTotals->execute([
+            ':window_start' => $windowStart,
+            ':window_end' => $windowEnd,
+        ]);
+        $totals = $stmtTotals->fetch(PDO::FETCH_ASSOC) ?: [];
+
+        $stmtProducts = $this->conn->prepare("
+            SELECT
+                TRIM(p.product_name) AS product_name,
+                SUM(si.quantity) AS units,
+                ROUND(COALESCE(SUM(
+                    si.subtotal - COALESCE(
+                        s.discount_amount * si.subtotal
+                            / NULLIF(sl.line_subtotal, 0),
+                        0
+                    )
+                ), 0), 2) AS peso
+            FROM sales s
+            INNER JOIN sale_items si ON s.sale_id = si.sale_id
+            INNER JOIN products p ON p.product_id = si.product_id
+            INNER JOIN (
+                SELECT sale_id, SUM(subtotal) AS line_subtotal
+                FROM sale_items
+                GROUP BY sale_id
+            ) sl ON sl.sale_id = si.sale_id
+            WHERE s.transaction_status = 'Completed'
+                AND DATE(s.created_at) BETWEEN :window_start AND :window_end
+            GROUP BY TRIM(p.product_name)
+            ORDER BY units DESC
+            LIMIT 7
+        ");
+        $stmtProducts->execute([
+            ':window_start' => $windowStart,
+            ':window_end' => $windowEnd,
+        ]);
+
+        return [
+            'window_start' => $windowStart,
+            'window_end' => (string) $windowEnd,
+            'units' => (int) ($totals['units'] ?? 0),
+            'peso' => (float) ($totals['peso'] ?? 0),
+            'transactions' => (int) ($totals['transactions'] ?? 0),
+            'products' => $stmtProducts->fetchAll(PDO::FETCH_ASSOC),
+        ];
+    }
+
 public function getForecastData()
 {
     $forecastService = $this->forecastService ?? new \App\Services\ForecastService();

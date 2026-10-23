@@ -139,6 +139,179 @@ if ($legacySchema) {
     $chartForecastLabel = 'Forecast (' . $forecastYear . ')';
 }
 
+/*
+ * Visual forecasting cluster (KPI cards + 30-day daily chart + top demand
+ * medicines). Every number comes from recorded data or the deployed
+ * artifacts — nothing is invented:
+ *  - Trailing-30 actual totals (units/peso/transactions + per product):
+ *    Dashboard::getRecentWindowTotals via the controller, anchored to the
+ *    newest completed sale date so it matches the refit window exactly.
+ *    Peso follows the dashboard's net-revenue convention (sale-item subtotals
+ *    minus the proportional sale-level discount), the same basis as the
+ *    Revenue by Category panel and getMonthlySales, so they always agree.
+ *  - Next-30 predicted units + confidence band: deployed operational
+ *    30-day SARIMA forecast rows.
+ *  - Hold-out accuracy: the deployed artifact's own evaluation metadata
+ *    (2025 hold-out backtest of the validated SARIMA configuration).
+ *  - Per-product forecast: product_demand_forecast_30_day artifact
+ *    (per-product SARIMA refits on live POS + imported history).
+ */
+$forecastDailyRows = is_array($dashboardData['forecast'] ?? null) ? $dashboardData['forecast'] : [];
+$recentWindow = is_array($dashboardData['recent_window'] ?? null) ? $dashboardData['recent_window'] : [];
+$productForecast = $dashboardData['product_demand_forecast'] ?? [];
+
+$fxForecastDates = [];
+$fxForecastSeries = [];
+$fxLowerSeries = [];
+$fxUpperSeries = [];
+$fxPredicted30 = 0.0;
+foreach ($forecastDailyRows as $fxRow) {
+    if (!is_array($fxRow) || empty($fxRow['date']) || !array_key_exists('forecast_quantity', $fxRow)) {
+        continue;
+    }
+    $fxForecastDates[] = (string) $fxRow['date'];
+    $fxForecastSeries[] = round((float) $fxRow['forecast_quantity'], 2);
+    $fxLowerSeries[] = isset($fxRow['lower_bound']) && $fxRow['lower_bound'] !== null
+        ? round((float) $fxRow['lower_bound'], 2)
+        : null;
+    $fxUpperSeries[] = isset($fxRow['upper_bound']) && $fxRow['upper_bound'] !== null
+        ? round((float) $fxRow['upper_bound'], 2)
+        : null;
+    $fxPredicted30 += (float) $fxRow['forecast_quantity'];
+}
+$fxPredicted30 = round($fxPredicted30, 2);
+
+$fxHistoryByDate = [];
+foreach ((is_array($dashboardData['historical_demand'] ?? null) ? $dashboardData['historical_demand'] : []) as $fxHRow) {
+    if (is_array($fxHRow) && !empty($fxHRow['date'])) {
+        $fxHistoryByDate[(string) $fxHRow['date']] = (float) $fxHRow['quantity_sold'];
+    }
+}
+
+$fxActualDates = [];
+$fxActualSeries = [];
+$fxLastActualValue = null;
+$fxPrev30Total = null;
+if (!empty($fxForecastDates)) {
+    $fxForecastStartTs = strtotime($fxForecastDates[0]);
+
+    for ($fxI = 30; $fxI >= 1; $fxI--) {
+        $fxDay = date('Y-m-d', $fxForecastStartTs - $fxI * 86400);
+        $fxActualDates[] = $fxDay;
+        $fxActualSeries[] = array_key_exists($fxDay, $fxHistoryByDate)
+            ? round($fxHistoryByDate[$fxDay], 2)
+            : null;
+    }
+
+    // Bridge point: the value of the LAST recorded day in the window,
+    // only if that exact day is present (missing dates stay missing).
+    $fxLastActualDate = count($fxActualDates) ? end($fxActualDates) : null;
+    if ($fxLastActualDate !== null && array_key_exists($fxLastActualDate, $fxHistoryByDate)) {
+        $fxLastActualValue = round($fxHistoryByDate[$fxLastActualDate], 2);
+    }
+
+    // Previous 30-day window for an honest delta — only when all 30 days
+    // are recorded; missing dates are never treated as zero.
+    $fxPrevTotal = 0.0;
+    $fxPrevComplete = true;
+    for ($fxI = 60; $fxI >= 31; $fxI--) {
+        $fxDay = date('Y-m-d', $fxForecastStartTs - $fxI * 86400);
+        if (array_key_exists($fxDay, $fxHistoryByDate)) {
+            $fxPrevTotal += (float) $fxHistoryByDate[$fxDay];
+        } else {
+            $fxPrevComplete = false;
+            break;
+        }
+    }
+    $fxPrev30Total = $fxPrevComplete ? $fxPrevTotal : null;
+}
+
+$fxWindowStart = count($fxActualDates) ? $fxActualDates[0] : null;
+$fxWindowEnd = count($fxActualDates) ? end($fxActualDates) : null;
+$fxForecastStart = count($fxForecastDates) ? $fxForecastDates[0] : null;
+$fxForecastEnd = count($fxForecastDates) ? end($fxForecastDates) : null;
+
+$fxUnitsDeltaPct = null;
+if ($fxPrev30Total !== null && (float) $fxPrev30Total != 0.0 && (float) ($recentWindow['units'] ?? 0) > 0) {
+    $fxUnitsDeltaPct = round(
+        ((float) $recentWindow['units'] - (float) $fxPrev30Total) / (float) $fxPrev30Total * 100.0,
+        1
+    );
+}
+
+$fxPredictedDeltaPct = null;
+if ((float) ($recentWindow['units'] ?? 0) > 0) {
+    $fxPredictedDeltaPct = round(
+        ($fxPredicted30 - (float) $recentWindow['units']) / (float) $recentWindow['units'] * 100.0,
+        1
+    );
+}
+
+$fxMape = isset($metrics['MAPE']) && $metrics['MAPE'] !== null ? (float) $metrics['MAPE'] : null;
+$fxMae = isset($metrics['MAE']) && $metrics['MAE'] !== null ? (float) $metrics['MAE'] : null;
+
+// Top demand medicines: join the DB trailing-30 product breakdown with the
+// per-product forecast artifact by product name.
+$fxProductByName = [];
+foreach ((is_array($productForecast['products'] ?? null) ? $productForecast['products'] : []) as $fxPRow) {
+    if (is_array($fxPRow) && !empty($fxPRow['product_name'])) {
+        $fxProductByName[(string) $fxPRow['product_name']] = $fxPRow;
+    }
+}
+
+$fxProductChart = [];
+foreach (($recentWindow['products'] ?? []) as $fxPRow) {
+    if (!is_array($fxPRow) || empty($fxPRow['product_name'])) {
+        continue;
+    }
+    $fxName = (string) $fxPRow['product_name'];
+    $fxActual = (float) ($fxPRow['units'] ?? 0);
+    $fxEntry = [
+        'name' => $fxName,
+        'actual' => round($fxActual, 2),
+        'forecast' => null,
+        'delta_pct' => null,
+        'method' => 'no_product_forecast',
+    ];
+    $fxPF = $fxProductByName[$fxName] ?? null;
+    if ($fxPF !== null
+        && array_key_exists('forecast_30_day_units', $fxPF)
+        && $fxPF['forecast_30_day_units'] !== null) {
+        $fxFc = (float) $fxPF['forecast_30_day_units'];
+        $fxEntry['forecast'] = round($fxFc, 2);
+        $fxEntry['method'] = (string) ($fxPF['forecast_method'] ?? 'per_product_sarima');
+        if ($fxActual > 0) {
+            $fxEntry['delta_pct'] = round(($fxFc - $fxActual) / $fxActual * 100.0, 1);
+        }
+    }
+    $fxProductChart[] = $fxEntry;
+}
+
+$fxPayload = [
+    'actualDates' => $fxActualDates,
+    'actualValues' => $fxActualSeries,
+    'forecastDates' => $fxForecastDates,
+    'forecastValues' => $fxForecastSeries,
+    'lowerValues' => $fxLowerSeries,
+    'upperValues' => $fxUpperSeries,
+    'lastActualValue' => $fxLastActualValue,
+    'windowActual' => ['start' => $fxWindowStart, 'end' => $fxWindowEnd],
+    'windowForecast' => ['start' => $fxForecastStart, 'end' => $fxForecastEnd],
+    'productLabels' => array_column($fxProductChart, 'name'),
+    'productActual' => array_column($fxProductChart, 'actual'),
+    'productForecast' => array_column($fxProductChart, 'forecast'),
+    'productDelta' => array_column($fxProductChart, 'delta_pct'),
+    'productMethod' => array_column($fxProductChart, 'method'),
+];
+
+$fxPayloadJson = json_encode(
+    $fxPayload,
+    JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_INVALID_UTF8_SUBSTITUTE
+);
+if (!is_string($fxPayloadJson) || trim($fxPayloadJson) === '') {
+    $fxPayloadJson = 'null';
+}
+
 ?>
 
 
@@ -160,6 +333,376 @@ if ($legacySchema) {
             </span>
         <?php endif; ?>
     </div>
+
+    <?php if (!empty($fxForecastDates)): ?>
+    <style>
+        .fx-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(215px, 1fr)); gap: 12px; margin-bottom: 14px; }
+        .fx-card {
+            background: linear-gradient(180deg, #ffffff, #f6fbf8);
+            border: 1px solid #dcebe3;
+            border-radius: 14px;
+            padding: 13px 16px;
+            box-shadow: 0 1px 2px rgba(15, 61, 46, 0.06);
+        }
+        .fx-card-label {
+            font-size: 0.72rem; font-weight: 600; letter-spacing: .05em;
+            text-transform: uppercase; color: #5b7a6f;
+            display: flex; align-items: center; gap: 6px;
+        }
+        .fx-card-value { font-size: 1.42rem; font-weight: 700; color: #0f3d2e; line-height: 1.3; margin-top: 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .fx-card-note { font-size: 0.72rem; color: #7d958b; margin-top: 3px; }
+        .fx-chip {
+            display: inline-block; font-size: 0.68rem; font-weight: 700;
+            padding: 1px 8px; border-radius: 999px; white-space: nowrap;
+        }
+        .fx-chip-up   { background: #e4f5ee; color: #0e7a5a; }
+        .fx-chip-down { background: #fdf1e2; color: #b4540a; }
+        .fx-chip-neutral { background: #eef2f9; color: #46576f; }
+        .fx-visual-grid {
+            display: grid; grid-template-columns: minmax(0, 2fr) minmax(0, 1fr);
+            gap: 12px; margin-bottom: 16px;
+        }
+        .fx-visual-panel {
+            background: #ffffff; border: 1px solid #dcebe3; border-radius: 14px;
+            padding: 14px; box-shadow: 0 1px 2px rgba(15, 61, 46, 0.05);
+        }
+        .fx-panel-title { font-size: 0.82rem; font-weight: 700; color: #234d3d; margin-bottom: 2px; }
+        .fx-panel-sub { font-size: 0.71rem; color: #7d958b; margin-bottom: 8px; }
+        .fx-chart-wrap { position: relative; height: 290px; }
+        .fx-delta-list { list-style: none; margin: 10px 0 0; padding: 0; font-size: 0.74rem; max-height: 148px; overflow: auto; }
+        .fx-delta-list li { display: flex; justify-content: space-between; gap: 8px; padding: 4px 0; border-top: 1px dashed #e3ece7; }
+        .fx-method-note { font-size: 0.7rem; color: #80968c; margin: 0 0 10px; }
+        @media (max-width: 991.98px) {
+            .fx-visual-grid { grid-template-columns: 1fr; }
+            .fx-chart-wrap { height: 250px; }
+        }
+    </style>
+
+    <div class="fx-cards">
+        <div class="fx-card">
+            <div class="fx-card-label"><i class="bi bi-cash-coin"></i> Sales — last 30 days</div>
+            <div class="fx-card-value">₱<?= number_format((float) ($recentWindow['peso'] ?? 0), 2); ?></div>
+            <div class="fx-card-note">
+                <?php if (!empty($recentWindow['window_start']) && !empty($recentWindow['window_end'])): ?>
+                    <?= htmlspecialchars($recentWindow['window_start']); ?> → <?= htmlspecialchars($recentWindow['window_end']); ?>
+                    · <?= (int) ($recentWindow['transactions'] ?? 0); ?> transactions ·
+                <?php endif; ?>
+                sale-item subtotals
+            </div>
+        </div>
+
+        <div class="fx-card">
+            <div class="fx-card-label"><i class="bi bi-box-seam"></i> Units sold — last 30 days</div>
+            <div class="fx-card-value"><?= number_format((float) ($recentWindow['units'] ?? 0)); ?></div>
+            <div class="fx-card-note">
+                <?php if ($fxUnitsDeltaPct !== null): ?>
+                    <span class="fx-chip <?= $fxUnitsDeltaPct >= 0 ? 'fx-chip-up' : 'fx-chip-down'; ?>">
+                        <?= ($fxUnitsDeltaPct >= 0 ? '+' : ''); ?><?= number_format($fxUnitsDeltaPct, 1); ?>% vs prev 30
+                    </span>
+                <?php else: ?>
+                    recorded completed sales
+                <?php endif; ?>
+            </div>
+        </div>
+
+        <div class="fx-card">
+            <div class="fx-card-label"><i class="bi bi-graph-up-arrow"></i> Predicted units — next 30 days</div>
+            <div class="fx-card-value"><?= number_format($fxPredicted30); ?></div>
+            <div class="fx-card-note">
+                <?php if ($fxForecastStart && $fxForecastEnd): ?>
+                    <?= htmlspecialchars($fxForecastStart); ?> → <?= htmlspecialchars($fxForecastEnd); ?>
+                <?php endif; ?>
+                <?php if ($fxPredictedDeltaPct !== null): ?>
+                    · <span class="fx-chip fx-chip-neutral">
+                        <?= ($fxPredictedDeltaPct >= 0 ? '+' : ''); ?><?= number_format($fxPredictedDeltaPct, 1); ?>% vs last 30
+                    </span>
+                <?php endif; ?>
+                · refit SARIMA
+            </div>
+        </div>
+
+        <div class="fx-card">
+            <div class="fx-card-label"><i class="bi bi-bullseye"></i> Model accuracy — hold-out MAPE</div>
+            <div class="fx-card-value"><?= $fxMape !== null ? number_format($fxMape, 2) . '%' : 'n/a'; ?></div>
+            <div class="fx-card-note">
+                2025 hold-out backtest<?= $fxMae !== null ? ' · MAE ' . number_format($fxMae, 2) . ' units' : ''; ?>
+            </div>
+        </div>
+    </div>
+
+    <p class="fx-method-note">
+        All values come from recorded data and the deployed SARIMA artifacts. Predictions are
+        model outputs, not guarantees; the October historical fill is disclosed as simulated in
+        the methodology.
+    </p>
+
+    <div class="fx-visual-grid">
+        <div class="fx-visual-panel">
+            <div class="fx-panel-title">Daily Demand &amp; 30-Day Forecast</div>
+            <div class="fx-panel-sub" id="fxDailyRange">…</div>
+            <div class="fx-chart-wrap"><canvas id="fxDailyChart"></canvas></div>
+        </div>
+
+        <div class="fx-visual-panel">
+            <div class="fx-panel-title">Top Demand Medicines</div>
+            <div class="fx-panel-sub">Actual (last 30 days) vs forecast (next 30 days), units</div>
+            <div class="fx-chart-wrap"><canvas id="fxProductChart"></canvas></div>
+            <ul class="fx-delta-list" id="fxDeltaList"></ul>
+        </div>
+    </div>
+
+    <script>
+        (function () {
+            function fxFmtNum(v, dec) {
+                return Number(v).toLocaleString(undefined, {
+                    minimumFractionDigits: dec || 0,
+                    maximumFractionDigits: dec || 0
+                });
+            }
+            function fxSigned(pct) {
+                return (pct > 0 ? '+' : (pct < 0 ? '' : '')) + Number(pct).toFixed(1) + '%';
+            }
+            function fxDayLabel(d) {
+                try {
+                    return new Date(d + 'T00:00:00').toLocaleDateString(undefined, { month: 'short', day: 'numeric' });
+                } catch (e) {
+                    return d;
+                }
+            }
+
+            function initFxCharts() {
+                const payload = <?= $fxPayloadJson; ?>;
+                if (!payload || typeof Chart === 'undefined') return;
+
+                const fxColors = {
+                    actual: '#159577',
+                    forecast: '#2563eb',
+                    band: 'rgba(37, 99, 235, 0.10)',
+                    soft: 'rgba(21, 149, 119, 0.16)'
+                };
+
+                // 30-day daily demand + forecast ------------------------------- //
+                const dailyCanvas = document.getElementById('fxDailyChart');
+                if (dailyCanvas) {
+                    const aDates = payload.actualDates || [];
+                    const fDates = payload.forecastDates || [];
+                    const aVals = payload.actualValues || [];
+                    const fVals = payload.forecastValues || [];
+                    const labels = aDates.concat(fDates);
+
+                    const actualLine = aVals.map(function (v) { return v === null ? null : v; })
+                        .concat(fDates.map(function () { return null; }));
+                    const bridge = (payload.lastActualValue === null || payload.lastActualValue === undefined)
+                        ? []
+                        : [payload.lastActualValue];
+                    const forecastLine = aDates.slice(0, -1).map(function () { return null; })
+                        .concat(bridge, fVals);
+                    const lowerLine = aDates.map(function () { return null; })
+                        .concat(payload.lowerValues || fDates.map(function () { return null; }));
+                    const upperLine = aDates.map(function () { return null; })
+                        .concat(payload.upperValues || fDates.map(function () { return null; }));
+
+                    new Chart(dailyCanvas, {
+                        type: 'line',
+                        data: {
+                            labels: labels,
+                            datasets: [
+                                {
+                                    label: 'Actual units',
+                                    data: actualLine,
+                                    borderColor: fxColors.actual,
+                                    backgroundColor: 'rgba(21, 149, 119, 0.08)',
+                                    fill: true,
+                                    tension: 0.25,
+                                    pointRadius: 0,
+                                    pointHoverRadius: 3,
+                                    borderWidth: 2,
+                                    spanGaps: true
+                                },
+                                {
+                                    label: '30-day forecast',
+                                    data: forecastLine,
+                                    borderColor: fxColors.forecast,
+                                    borderDash: [6, 4],
+                                    backgroundColor: 'transparent',
+                                    fill: false,
+                                    tension: 0.25,
+                                    pointRadius: 0,
+                                    pointHoverRadius: 3,
+                                    borderWidth: 2,
+                                    spanGaps: true
+                                },
+                                {
+                                    label: '95% band lower',
+                                    data: lowerLine,
+                                    borderColor: 'transparent',
+                                    backgroundColor: fxColors.band,
+                                    borderWidth: 0,
+                                    pointRadius: 0,
+                                    fill: '+1',
+                                    tension: 0.25
+                                },
+                                {
+                                    label: '95% band upper',
+                                    data: upperLine,
+                                    borderColor: 'transparent',
+                                    backgroundColor: 'transparent',
+                                    borderWidth: 0,
+                                    pointRadius: 0,
+                                    fill: false,
+                                    tension: 0.25
+                                }
+                            ]
+                        },
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            interaction: { mode: 'index', intersect: false },
+                            plugins: {
+                                legend: {
+                                    labels: {
+                                        boxWidth: 12,
+                                        font: { size: 10 },
+                                        filter: function (item) { return item.datasetIndex <= 1; }
+                                    }
+                                },
+                                tooltip: {
+                                    callbacks: {
+                                        title: function (items) {
+                                            return items.length ? fxDayLabel(items[0].label) : '';
+                                        },
+                                        label: function (ctx) {
+                                            if (ctx.parsed.y === null || ctx.parsed.y === undefined) return;
+                                            return ctx.dataset.label + ': ' + fxFmtNum(ctx.parsed.y, 1) + ' units';
+                                        }
+                                    }
+                                }
+                            },
+                            scales: {
+                                y: {
+                                    beginAtZero: true,
+                                    title: { display: true, text: 'Units per day' },
+                                    ticks: { precision: 0, font: { size: 10 } }
+                                },
+                                x: {
+                                    ticks: {
+                                        autoSkip: true,
+                                        maxTicksLimit: 10,
+                                        maxRotation: 0,
+                                        font: { size: 10 },
+                                        callback: function (value) {
+                                            return fxDayLabel(this.getLabelForValue(value));
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    });
+
+                    const rangeEl = document.getElementById('fxDailyRange');
+                    const wA = payload.windowActual || {};
+                    const wF = payload.windowForecast || {};
+                    if (rangeEl && wA.start && wF.start) {
+                        rangeEl.textContent = 'Actual ' + wA.start + ' → ' + wA.end
+                            + ' • Forecast ' + wF.start + ' → ' + wF.end;
+                    }
+                }
+
+                // Top demand medicines --------------------------------------- //
+                const deltaList = document.getElementById('fxDeltaList');
+                if (deltaList && Array.isArray(payload.productLabels)) {
+                    payload.productLabels.forEach(function (name, i) {
+                        const li = document.createElement('li');
+                        const nm = document.createElement('span');
+                        nm.textContent = name;
+                        const chip = document.createElement('span');
+                        const pct = payload.productDelta ? payload.productDelta[i] : null;
+                        chip.textContent = (pct === null || pct === undefined) ? 'no forecast' : fxSigned(pct) + ' anticipated';
+                        chip.className = 'fx-chip '
+                            + (pct === null || pct === undefined ? 'fx-chip-neutral' : (pct >= 0 ? 'fx-chip-up' : 'fx-chip-down'));
+                        li.appendChild(nm);
+                        li.appendChild(chip);
+                        deltaList.appendChild(li);
+                    });
+                }
+
+                const prodCanvas = document.getElementById('fxProductChart');
+                if (prodCanvas && Array.isArray(payload.productLabels) && payload.productLabels.length) {
+                    const pLabels = payload.productLabels;
+                    const trunc = function (s) {
+                        const t = String(s);
+                        return t.length > 18 ? t.slice(0, 17) + '…' : t;
+                    };
+                    const truncMap = [];
+                    pLabels.forEach(function (name, i) { truncMap.push(trunc(name)); });
+
+                    new Chart(prodCanvas, {
+                        type: 'bar',
+                        data: {
+                            labels: truncMap,
+                            datasets: [
+                                {
+                                    label: 'Actual (last 30d)',
+                                    data: payload.productActual,
+                                    backgroundColor: 'rgba(21, 149, 119, 0.85)',
+                                    borderColor: fxColors.actual,
+                                    borderWidth: 1,
+                                    borderRadius: 6,
+                                    categoryPercentage: 0.72,
+                                    barPercentage: 0.9
+                                },
+                                {
+                                    label: 'Forecast (next 30d)',
+                                    data: payload.productForecast,
+                                    backgroundColor: fxColors.soft,
+                                    borderColor: fxColors.actual,
+                                    borderWidth: 1.5,
+                                    borderDash: [5, 4],
+                                    borderRadius: 6,
+                                    categoryPercentage: 0.72,
+                                    barPercentage: 0.9
+                                }
+                            ]
+                        },
+                        options: {
+                            indexAxis: 'y',
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            plugins: {
+                                legend: { position: 'bottom', labels: { boxWidth: 12, font: { size: 10 } } },
+                                tooltip: {
+                                    mode: 'index',
+                                    callbacks: {
+                                        title: function (items) {
+                                            return items.length ? pLabels[items[0].dataIndex] : '';
+                                        },
+                                        label: function (ctx) {
+                                            return ctx.dataset.label + ': ' + fxFmtNum(ctx.parsed.x) + ' units';
+                                        }
+                                    }
+                                }
+                            },
+                            scales: {
+                                x: {
+                                    beginAtZero: true,
+                                    title: { display: true, text: 'Units' },
+                                    ticks: { precision: 0, font: { size: 10 } }
+                                },
+                                y: { ticks: { font: { size: 10 } } }
+                            }
+                        }
+                    });
+                }
+            }
+
+            if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', initFxCharts, { once: true });
+            } else {
+                initFxCharts();
+            }
+        })();
+    </script>
+    <?php endif; ?>
 
     <?php if (!$hasAnnualForecast): ?>
         <div class="empty-chart">

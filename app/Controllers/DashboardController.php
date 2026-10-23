@@ -182,6 +182,9 @@ $this->dashboard->getFastMovingProducts(
         'historical_demand' =>
             $this->dashboard->getHistoricalDemand(),
 
+        'recent_window' =>
+            $this->dashboard->getRecentWindowTotals(30),
+
         'product_demand_forecast' =>
             $this->dashboard->getProductDemandForecast(),
 
