@@ -80,16 +80,24 @@ class ForecastRefreshService
             return $override;
         }
 
-        $venvPython = $this->projectRoot . DIRECTORY_SEPARATOR . '.venv' . DIRECTORY_SEPARATOR
-            . (PHP_OS_FAMILY === 'Windows'
-                ? 'Scripts' . DIRECTORY_SEPARATOR . 'python.exe'
-                : 'bin' . DIRECTORY_SEPARATOR . 'python');
+        // Prefer the project's own virtualenv (so the app never touches
+        // whatever else is on PATH). Check both conventional layout names:
+        // ".venv" (local dev convention) and "venv" (the layout deployed on
+        // the server). Plain "python" is not a safe fallback on Linux, where
+        // only "python3" is guaranteed to exist.
+        $isWindows = PHP_OS_FAMILY === 'Windows';
+        $binPath = $isWindows
+            ? 'Scripts' . DIRECTORY_SEPARATOR . 'python.exe'
+            : 'bin' . DIRECTORY_SEPARATOR . 'python';
 
-        if (is_file($venvPython)) {
-            return $venvPython;
+        foreach (['.venv', 'venv'] as $envDir) {
+            $candidate = $this->projectRoot . DIRECTORY_SEPARATOR . $envDir . DIRECTORY_SEPARATOR . $binPath;
+            if (is_file($candidate)) {
+                return $candidate;
+            }
         }
 
-        return PHP_OS_FAMILY === 'Windows' ? 'python' : 'python3';
+        return $isWindows ? 'python' : 'python3';
     }
 
     /**
