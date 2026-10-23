@@ -365,16 +365,22 @@ if (!is_string($fxPayloadJson) || trim($fxPayloadJson) === '') {
         .fx-visual-panel {
             background: #ffffff; border: 1px solid #dcebe3; border-radius: 14px;
             padding: 14px; box-shadow: 0 1px 2px rgba(15, 61, 46, 0.05);
+            display: flex; flex-direction: column;
         }
         .fx-panel-title { font-size: 0.82rem; font-weight: 700; color: #234d3d; margin-bottom: 2px; }
         .fx-panel-sub { font-size: 0.71rem; color: #7d958b; margin-bottom: 8px; }
-        .fx-chart-wrap { position: relative; height: 290px; }
+        .fx-chart-wrap { position: relative; flex: 1 1 auto; min-height: 320px; height: auto; }
+        .dashboard-panel .fx-visual-panel .fx-chart-wrap canvas {
+            position: absolute; inset: 0;
+            width: 100% !important; height: 100% !important;
+            max-height: none;
+        }
         .fx-delta-list { list-style: none; margin: 10px 0 0; padding: 0; font-size: 0.74rem; max-height: 148px; overflow: auto; }
         .fx-delta-list li { display: flex; justify-content: space-between; gap: 8px; padding: 4px 0; border-top: 1px dashed #e3ece7; }
         .fx-method-note { font-size: 0.7rem; color: #80968c; margin: 0 0 10px; }
         @media (max-width: 991.98px) {
             .fx-visual-grid { grid-template-columns: 1fr; }
-            .fx-chart-wrap { height: 250px; }
+            .fx-chart-wrap { flex: 0 0 250px; min-height: 250px; height: 250px; }
         }
     </style>
 
