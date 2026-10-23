@@ -18,7 +18,10 @@ OUTPUT_DIR = BASE_DIR / "outputs" / "deployment"
 STATUS_PATH = OUTPUT_DIR / "forecast_status.json"
 
 FORECAST_HORIZON = 30
-MIN_NEW_OBSERVATIONS_FOR_REFIT = 30
+# Refit rule: the refit fires when the newest REFIT_WINDOW_DAYS consecutive
+# calendar days of POS observations are fully covered (trailing-30 window).
+REFIT_WINDOW_DAYS = 30
+MIN_NEW_OBSERVATIONS_FOR_REFIT = REFIT_WINDOW_DAYS  # kept for status payloads
 
 
 def load_config():
@@ -186,7 +189,19 @@ def main():
     series = df.set_index("date")["quantity_sold"].astype(float).sort_index()
     post_training = series[series.index > model_last_date]
 
-    # No post-training observations: preserve the already deployed artifact.
+    # Steady state after a successful refit: the model endpoint then equals
+    # the newest input date, so between POS transactions post_training is
+    # empty while nothing is actually stale. PRESERVE both the status file
+    # and the artifacts here — rewriting them would flip a validated
+    # "updated" deployment back to a not-ready state on every cron cycle
+    # until a new POS row arrives.
+    if post_training.empty and input_last_date <= model_last_date:
+        print(f"Model already covers the input data through {input_last_date.date()}.")
+        print("No new observations since the last update; status and artifacts preserved.")
+        return
+
+    # No observations beyond the model endpoint at all (fresh deployment
+    # before the first live POS sale or historical import).
     if post_training.empty:
         status = {
             "ready": False,
@@ -203,17 +218,25 @@ def main():
         print("Forecast refresh not ready; existing forecast artifact was not overwritten.")
         return
 
-    # The first legitimate POS observation establishes the live operational
-    # start. We do NOT require observations for the calendar gap between the
-    # historical training period and system go-live.
-    live_start = post_training.index.min()
-    expected_live_index = pd.date_range(live_start, post_training.index.max(), freq="D")
+    # Refit rule (trailing-30): the refit is allowed once the newest
+    # REFIT_WINDOW_DAYS consecutive calendar days are all covered by POS
+    # observations, regardless of how the older history looks. Missing dates
+    # inside the window are never invented as zero sales; they only postpone
+    # the refit. This replaces the earlier live-start-to-today continuity
+    # rule, with which permanent older gaps (days missing before a data
+    # repair) would block a refit forever.
+    window_end = input_last_date
+    window_start = window_end - pd.Timedelta(days=REFIT_WINDOW_DAYS - 1)
+    trailing = series[(series.index >= window_start) & (series.index <= window_end)]
+    expected_window_index = pd.date_range(window_start, window_end, freq="D")
+    missing_in_window = expected_window_index.difference(pd.DatetimeIndex(trailing.index))
 
-    if not expected_live_index.equals(pd.DatetimeIndex(post_training.index)):
-        # A calendar gap blocks MODEL REFITTING, but it does not prevent the
-        # trained 2025 model from producing a legitimate baseline forecast.
-        # Anchor that baseline to the latest live POS observation so the
-        # dashboard remains useful during the early operational period.
+    if not missing_in_window.empty:
+        # A gap inside the trailing window blocks MODEL REFITTING, but the
+        # latest validated model still produces a legitimate baseline
+        # forecast anchored to the newest live POS observation so the
+        # dashboard remains useful. This also covers the early-operations
+        # case where the window reaches back before the first recorded sale.
         forecast_df, metadata = generate_forecast(
             fitted_model,
             config,
@@ -224,7 +247,7 @@ def main():
             forecast_start_date=input_last_date + pd.Timedelta(days=1),
         )
         metadata["input_first_date"] = input_first_date.strftime("%Y-%m-%d")
-        metadata["live_operational_start"] = live_start.strftime("%Y-%m-%d")
+        metadata["live_operational_start"] = input_first_date.strftime("%Y-%m-%d")
         metadata_path = OUTPUT_DIR / "forecast_30_day.json"
         metadata_payload = {
             "metadata": metadata,
@@ -241,14 +264,28 @@ def main():
         with metadata_path.open("w", encoding="utf-8") as f:
             json.dump(metadata_payload, f, indent=4)
 
+        missing_dates = [d.strftime("%Y-%m-%d") for d in missing_in_window]
         status = {
             "ready": False,
-            "status": "waiting_for_continuous_history",
-            "reason": "Live POS demand contains one or more missing calendar days after the operational start. Missing dates are not treated as zero sales. The trained 2025 SARIMA model remains available as the baseline forecast.",
+            "status": "waiting_for_trailing_30_window",
+            "reason": (
+                "The newest 30-calendar-day window ({start} to {end}) is missing {count} day(s) "
+                "of POS observations, so the model refit is postponed. Missing dates are never "
+                "treated as zero sales. The most recent validated SARIMA model remains available "
+                "as the baseline forecast."
+            ).format(
+                start=window_start.strftime("%Y-%m-%d"),
+                end=window_end.strftime("%Y-%m-%d"),
+                count=len(missing_dates),
+            ),
+            "refit_rule": "trailing_30_consecutive_days",
+            "refit_window_start": window_start.strftime("%Y-%m-%d"),
+            "refit_window_end": window_end.strftime("%Y-%m-%d"),
+            "missing_in_trailing_window": missing_dates,
             "model_last_date": model_last_date.strftime("%Y-%m-%d"),
             "training_start": config.get("training_start"),
             "training_end": config.get("training_end"),
-            "live_operational_start": live_start.strftime("%Y-%m-%d"),
+            "live_operational_start": input_first_date.strftime("%Y-%m-%d"),
             "input_last_date": input_last_date.strftime("%Y-%m-%d"),
             "new_observations": int(len(post_training)),
             "minimum_new_observations_for_refit": MIN_NEW_OBSERVATIONS_FOR_REFIT,
@@ -258,75 +295,22 @@ def main():
             "updated_at": metadata["forecast_generated_at"],
         }
         write_status(status)
-        print(f"Refresh not ready: live history from {live_start.date()} contains calendar gaps.")
-        print("Missing dates are not treated as zero sales.")
-        print(f"Baseline forecast start  : {forecast_df['Date'].min().date()}")
-        print(f"Baseline forecast end    : {forecast_df['Date'].max().date()}")
-        print("Baseline forecast updated safely; model refit not performed.")
-        return
-
-    # Until enough legitimate live observations exist, publish a baseline
-    # forecast anchored to the latest live POS observation. The trained model
-    # forecasts through the calendar gap; no artificial POS observations are
-    # inserted into the training series.
-    if len(post_training) < MIN_NEW_OBSERVATIONS_FOR_REFIT:
-        forecast_df, metadata = generate_forecast(
-            fitted_model,
-            config,
-            model_last_date,
-            input_last_date,
-            len(post_training),
-            False,
-            forecast_start_date=input_last_date + pd.Timedelta(days=1),
+        print(
+            f"Refresh not ready: {len(missing_dates)} missing day(s) inside the trailing "
+            f"{REFIT_WINDOW_DAYS}-day window {window_start.date()} .. {window_end.date()}."
         )
-        metadata["input_first_date"] = input_first_date.strftime("%Y-%m-%d")
-        metadata["live_operational_start"] = live_start.strftime("%Y-%m-%d")
-
-        # Rewrite the JSON with the completed baseline metadata.
-        json_path = OUTPUT_DIR / "forecast_30_day.json"
-        payload = {
-            "metadata": metadata,
-            "forecast": [
-                {
-                    "date": pd.Timestamp(row.Date).strftime("%Y-%m-%d"),
-                    "forecast_quantity": round(float(row.Forecast_Quantity), 6),
-                    "lower_bound": round(float(row.Lower_Bound), 6),
-                    "upper_bound": round(float(row.Upper_Bound), 6),
-                }
-                for row in forecast_df.itertuples(index=False)
-            ],
-        }
-        with json_path.open("w", encoding="utf-8") as f:
-            json.dump(payload, f, indent=4)
-
-        status = {
-            "ready": False,
-            "status": "collecting_new_data",
-            "reason": "Live POS demand is continuous but there are not yet enough observations for a production SARIMA refit. The trained 2025 model is retained as the baseline and the forecast is anchored to the latest live POS date.",
-            "model_last_date": model_last_date.strftime("%Y-%m-%d"),
-            "training_start": config.get("training_start"),
-            "training_end": config.get("training_end"),
-            "live_operational_start": live_start.strftime("%Y-%m-%d"),
-            "input_last_date": input_last_date.strftime("%Y-%m-%d"),
-            "new_observations": int(len(post_training)),
-            "minimum_new_observations_for_refit": MIN_NEW_OBSERVATIONS_FOR_REFIT,
-            "forecast_start": forecast_df["Date"].min().strftime("%Y-%m-%d"),
-            "forecast_end": forecast_df["Date"].max().strftime("%Y-%m-%d"),
-            "forecast_type": "baseline",
-            "updated_at": metadata["forecast_generated_at"],
-        }
-        write_status(status)
-        print(f"Continuous live observations: {len(post_training)}")
+        print("Missing dates are never treated as zero sales; model refit is postponed.")
+        print("Days before the first recorded observation also count as not yet covered.")
         print(f"Baseline forecast start  : {forecast_df['Date'].min().date()}")
         print(f"Baseline forecast end    : {forecast_df['Date'].max().date()}")
-        print(f"Refresh not ready: {len(post_training)} new observations; {MIN_NEW_OBSERVATIONS_FOR_REFIT} required for refit.")
         print("Baseline forecast updated safely; model refit not performed.")
         return
 
     # Refit using the complete historical model series plus the legitimate
-    # continuous live observations. The Jan-Aug 2026 calendar gap remains NaN
-    # (missing), never zero. SARIMAX can handle missing observations during
-    # state-space estimation.
+    # live observations. Calendar days with no observation (days before the
+    # first recorded sale, or true gaps that fall outside the trailing
+    # window) remain NaN, never zero. SARIMAX can handle missing observations
+    # during state-space estimation.
     combined = pd.concat([model_series, post_training]).sort_index()
     combined = combined[~combined.index.duplicated(keep="last")].asfreq("D")
 
@@ -461,7 +445,7 @@ def main():
             "model_last_date": model_last_date.strftime("%Y-%m-%d"),
             "training_start": config.get("training_start"),
             "training_end": config.get("training_end"),
-            "live_operational_start": live_start.strftime("%Y-%m-%d"),
+            "live_operational_start": input_first_date.strftime("%Y-%m-%d"),
             "input_last_date": input_last_date.strftime("%Y-%m-%d"),
             "new_observations": int(len(post_training)),
             "minimum_new_observations_for_refit": MIN_NEW_OBSERVATIONS_FOR_REFIT,
@@ -479,8 +463,14 @@ def main():
             if backup.exists():
                 backup.unlink()
     metadata["input_first_date"] = input_first_date.strftime("%Y-%m-%d")
-    metadata["live_operational_start"] = live_start.strftime("%Y-%m-%d")
+    metadata["live_operational_start"] = input_first_date.strftime("%Y-%m-%d")
     metadata["updated_model_last_date"] = input_last_date.strftime("%Y-%m-%d")
+    metadata["refit_rule"] = "trailing_30_consecutive_days"
+    metadata["refit_window_start"] = window_start.strftime("%Y-%m-%d")
+    metadata["refit_window_end"] = window_end.strftime("%Y-%m-%d")
+    # After a refit the training span honestly extends through the newest
+    # live observation (the 2025 origin stays as training_start).
+    metadata["training_end"] = input_last_date.strftime("%Y-%m-%d")
 
     json_path = OUTPUT_DIR / "forecast_30_day.json"
     payload = {
@@ -501,12 +491,15 @@ def main():
     status = {
         "ready": True,
         "status": "updated",
-        "reason": "Continuous live POS demand was sufficient for a SARIMA refit.",
+        "reason": "The newest 30 consecutive calendar days of live POS observations were fully covered (trailing-30 rule), so the SARIMA model was refit on the full series (2025 history + 2026 live data).",
+        "refit_rule": "trailing_30_consecutive_days",
+        "refit_window_start": window_start.strftime("%Y-%m-%d"),
+        "refit_window_end": window_end.strftime("%Y-%m-%d"),
         "model_last_date_before_refit": model_last_date.strftime("%Y-%m-%d"),
         "updated_model_last_date": input_last_date.strftime("%Y-%m-%d"),
-        "training_start": config.get("training_start"),
-        "training_end": config.get("training_end"),
-        "live_operational_start": live_start.strftime("%Y-%m-%d"),
+        "training_start": combined.index.min().strftime("%Y-%m-%d"),
+        "training_end": input_last_date.strftime("%Y-%m-%d"),
+        "live_operational_start": input_first_date.strftime("%Y-%m-%d"),
         "new_observations": int(len(post_training)),
         "minimum_new_observations_for_refit": MIN_NEW_OBSERVATIONS_FOR_REFIT,
         "forecast_start": forecast_df["Date"].min().strftime("%Y-%m-%d"),

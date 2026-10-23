@@ -63,9 +63,13 @@ try {
         throw new RuntimeException('Forecast does not begin after the latest live POS observation.');
     }
 
-    if (($forecastMetadata['training_start'] ?? null) !== '2025-01-01'
-        || ($forecastMetadata['training_end'] ?? null) !== '2025-12-31') {
-        throw new RuntimeException('Forecast metadata does not preserve the 2025 training period.');
+    // training_start must always keep the 2025 origin. training_end stays at
+    // '2025-12-31' for the pristine baseline and extends to the newest live
+    // observation after a successful refit (both must be valid ISO dates).
+    $trainingStart = (string) ($forecastMetadata['training_start'] ?? '');
+    $trainingEnd = (string) ($forecastMetadata['training_end'] ?? '');
+    if ($trainingStart !== '2025-01-01' || $trainingEnd < '2025-12-31') {
+        throw new RuntimeException('Forecast metadata does not preserve the 2025 training origin.');
     }
 
     echo "Forecast artifact: PASSED\n";

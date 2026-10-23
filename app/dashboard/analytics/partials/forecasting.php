@@ -439,7 +439,7 @@ if ($legacySchema) {
         $limitations[] = 'Forecast model was refit on live 2026 POS demand (Ready: YES).';
     } else {
         $limitations[] = 'Forecast is still the validated 2025 baseline (Ready: NO). '
-            . ($forecastStatus['reason'] ?? 'Insufficient continuous live history for a refit.');
+            . ($forecastStatus['reason'] ?? 'Insufficient trailing 30-day live history for a refit.');
     }
 
     // Data completeness
@@ -454,7 +454,7 @@ if ($legacySchema) {
         );
         if ($missing > 0) {
             $limitations[] = sprintf(
-                'Missing %d calendar day(s) in the input series (gaps block a model refit).',
+                'Missing %d calendar day(s) in the input series (gaps inside the trailing 30-day window postpone a model refit).',
                 $missing
             );
             $sampleMissing = array_slice($completeness['missing_dates'] ?? [], 0, 5);
@@ -471,7 +471,7 @@ if ($legacySchema) {
 
     if ($postTraining > 0) {
         $limitations[] = sprintf(
-            'Post-training (2026) observations available: %d (minimum 30 required for refit).',
+            'Post-training (2026) observations available: %d. The model refits when the newest 30 consecutive calendar days are fully covered by POS sales.',
             $postTraining
         );
     }
@@ -482,8 +482,8 @@ if ($legacySchema) {
     }
 
     // Generic constraints
-    $limitations[] = 'Baseline model is trained on 2025 historical data; live 2026 data is used only after 30 consecutive days of complete daily sales.';
-    $limitations[] = 'Missing calendar days are not treated as zero sales and will block a model refit.';
+    $limitations[] = 'The SARIMA model refits whenever the newest 30 consecutive calendar days of daily sales are complete (trailing-30 refit rule).';
+    $limitations[] = 'Missing calendar days are not treated as zero sales; only gaps inside the trailing 30-day window postpone a refit.';
     $limitations[] = 'Product demand forecasts require at least 60 observed sale days per product.';
     $limitations[] = 'Lower bounds are clamped to 0; negative forecasts are not displayed.';
     $limitations[] = 'Historical import (Data Management) records completed sales without changing product stock.';
