@@ -292,8 +292,21 @@ if ($legacySchema) {
     <?php
     /*
      * Data completeness indicator + Actual vs Forecast variance panel.
+     *
+     * Months are only compared like-for-like: if the actual series ends
+     * mid-month and the forecast starts in that same month (a "split"
+     * month), the two numbers come from different slices of the month and
+     * must not be used for A-F variance or MAE/MAPE.
      */
     $completeness = $dashboardData['data_completeness'] ?? [];
+
+    $splitActualThrough = $annualMeta['actual_data_through'] ?? null;
+    $splitForecastStart = $annualMeta['forecast_start'] ?? null;
+    $splitMonth = null;
+    if ($splitActualThrough && $splitForecastStart
+        && substr((string) $splitActualThrough, 0, 7) === substr((string) $splitForecastStart, 0, 7)) {
+        $splitMonth = (int) substr((string) $splitActualThrough, 5, 2);
+    }
 
     // Variance (actual - forecast) per month from the annual artifact.
     $varianceRows = [];
@@ -310,7 +323,15 @@ if ($legacySchema) {
             $varianceRows[] = [
                 'month' => $monthsLabel[$idx],
                 'actual' => $a, 'forecast' => $f, 'variance' => null,
-                'lower' => $l, 'upper' => $u, 'in_band' => null,
+                'lower' => $l, 'upper' => $u, 'in_band' => null, 'split' => false,
+            ];
+            continue;
+        }
+        if ($splitMonth === $m) {
+            $varianceRows[] = [
+                'month' => $monthsLabel[$idx],
+                'actual' => (float) $a, 'forecast' => (float) $f, 'variance' => null,
+                'lower' => $l, 'upper' => $u, 'in_band' => null, 'split' => true,
             ];
             continue;
         }
@@ -320,6 +341,7 @@ if ($legacySchema) {
             'actual' => (float) $a, 'forecast' => (float) $f, 'variance' => $var,
             'lower' => $l, 'upper' => $u,
             'in_band' => ($l === null || $u === null) ? null : ($a >= $l && $a <= $u),
+            'split' => false,
         ];
         $absErrors[] = abs($var);
         if ((float) $f != 0.0) {
@@ -368,7 +390,15 @@ if ($legacySchema) {
                             <td><?= htmlspecialchars($vr['month']); ?></td>
                             <td><?= $vr['actual'] === null ? '—' : number_format($vr['actual'], 0); ?></td>
                             <td><?= $vr['forecast'] === null ? '—' : number_format($vr['forecast'], 0); ?></td>
-                            <td><?= $vr['variance'] === null ? '—' : number_format($vr['variance'], 0); ?></td>
+                            <td>
+                                <?php if (!empty($vr['split'])): ?>
+                                    <span class="text-warning" title="Split month: partial actual (through <?= htmlspecialchars((string) $splitActualThrough); ?>) and partial forecast (from <?= htmlspecialchars((string) $splitForecastStart); ?>) fall inside the same month, so they come from different slices of the month — excluded from variance and accuracy.">Split</span>
+                                <?php elseif ($vr['variance'] === null): ?>
+                                    —
+                                <?php else: ?>
+                                    <?= number_format($vr['variance'], 0); ?>
+                                <?php endif; ?>
+                            </td>
                             <td>
                                 <?php if ($vr['in_band'] === null): ?>
                                     —
@@ -384,10 +414,14 @@ if ($legacySchema) {
             </table>
         </div>
         <p class="small text-muted mb-0">
-            Accuracy (months with both actual &amp; forecast):
-            MAE = <?= $mae === null ? 'N/A' : number_format($mae, 2); ?> units,
-            MAPE = <?= $mape === null ? 'N/A' : number_format($mape, 2) . '%'; ?>
-            (<?= count($absErrors); ?> month(s)).
+            <?php if (empty($absErrors)): ?>
+                No like-for-like full-month comparison yet: past months contain actuals only (the deployed baseline does not store historical month forecasts) and forecast months are still upcoming. Split months are excluded from MAE/MAPE by design.
+            <?php else: ?>
+                Accuracy (full months with both actual &amp; forecast<?= $splitMonth !== null ? ', split month excluded' : ''; ?>):
+                MAE = <?= number_format($mae, 2); ?> units,
+                MAPE = <?= number_format($mape, 2) . '%'; ?> (of forecast)
+                (<?= count($absErrors); ?> month(s)).
+            <?php endif; ?>
         </p>
     </details>
     <?php endif; ?>
