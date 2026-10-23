@@ -47,8 +47,57 @@ default:
     }
 }
 
+/*
+|--------------------------------------------------------------------------
+| Recorded-data window
+|--------------------------------------------------------------------------
+|
+| Wall-clock filters (NOW() - INTERVAL 30 DAY) slide with the server
+| clock, so their edges can slice a day in half and land on a different
+| month anchor than the SARIMA pipeline, which always models the last 30
+| CALENDAR days of recorded data starting from the newest Completed
+| sale. Every "Last 30 Days" surface resolves its bounds through this
+| helper instead: one window, one truth, matching the forecast cluster
+| to the centavo and the unit.
+|
+*/
+
+private function recordedWindowBounds(int $days = 30): ?array
+{
+    $days = max(1, $days);
+
+    $endRow = $this->conn
+        ->query("
+            SELECT DATE(MAX(s.created_at)) AS window_end
+            FROM sales s
+            WHERE s.transaction_status = 'Completed'
+        ")
+        ->fetch(PDO::FETCH_ASSOC);
+
+    $windowEnd = is_array($endRow) ? ($endRow['window_end'] ?? null) : null;
+
+    if ($windowEnd === null) {
+        return null;
+    }
+
+    $windowStart = date(
+        'Y-m-d',
+        strtotime((string) $windowEnd) - (($days - 1) * 86400)
+    );
+
+    return [
+        'start' => $windowStart,
+        'end' => (string) $windowEnd,
+    ];
+}
+
 public function getTotalSales($period = '7days')
 {
+    if ($period === '30days') {
+        return $this
+            ->getRecentWindowTotals(30)['peso'];
+    }
+
     $where = $this->getDateCondition($period, 'created_at');
 
     $sql = "
@@ -107,6 +156,11 @@ public function getTotalSales($period = '7days')
 
    public function getItemsSold($period = '7days')
 {
+    if ($period === '30days') {
+        return $this
+            ->getRecentWindowTotals(30)['units'];
+    }
+
     $where = $this->getDateCondition($period, 's.created_at');
 
 $sql = "
@@ -134,6 +188,11 @@ AND $where
 
 public function getTransactions($period = '7days')
 {
+    if ($period === '30days') {
+        return $this
+            ->getRecentWindowTotals(30)['transactions'];
+    }
+
     $where = $this->getDateCondition($period,'created_at');
 
 $sql="
@@ -162,6 +221,27 @@ public function getSalesGrowth($period = '7days')
 
 public function getSalesGrowthDetails($period = '7days'): array
 {
+    if ($period === '30days') {
+        $window = $this->getRecentWindowTotals(30);
+
+        return [
+            'current_sales' => $window['peso'],
+            'previous_sales' => $window['peso_prev'],
+            'growth_percent' => $window['peso_prev'] > 0
+                ? round(
+                    (
+                        ($window['peso'] - $window['peso_prev'])
+                        / $window['peso_prev']
+                    ) * 100,
+                    2
+                )
+                : null,
+            'has_previous_period' => $window['peso_prev'] > 0,
+            'has_current_period' => $window['peso'] > 0,
+            'comparison_label' => 'vs previous 30 days (recorded data)'
+        ];
+    }
+
     $currentCondition = $this->getDateCondition($period, 'created_at');
 
     switch ($period) {
@@ -340,7 +420,13 @@ public function getSalesGrowthDetails($period = '7days'): array
  */
 public function getSalesTransactions(string $period, int $limit, int $offset): array
 {
-    $where = $this->getDateCondition($period, 's.created_at');
+    $window = $period === '30days'
+        ? $this->recordedWindowBounds(30)
+        : null;
+
+    $where = $window !== null
+        ? "DATE(s.created_at) BETWEEN :window_start AND :window_end"
+        : $this->getDateCondition($period, 's.created_at');
 
     $sql = "
         SELECT
@@ -393,6 +479,11 @@ public function getSalesTransactions(string $period, int $limit, int $offset): a
     $stmt->bindValue(':limit', $limit, PDO::PARAM_INT);
     $stmt->bindValue(':offset', $offset, PDO::PARAM_INT);
 
+    if ($window !== null) {
+        $stmt->bindValue(':window_start', $window['start']);
+        $stmt->bindValue(':window_end', $window['end']);
+    }
+
     $stmt->execute();
 
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -400,7 +491,13 @@ public function getSalesTransactions(string $period, int $limit, int $offset): a
 
 public function countSalesTransactions(string $period): int
 {
-    $where = $this->getDateCondition($period, 'created_at');
+    $window = $period === '30days'
+        ? $this->recordedWindowBounds(30)
+        : null;
+
+    $where = $window !== null
+        ? "DATE(created_at) BETWEEN :window_start AND :window_end"
+        : $this->getDateCondition($period, 'created_at');
 
     $sql = "
         SELECT COUNT(*)
@@ -409,8 +506,16 @@ public function countSalesTransactions(string $period): int
           AND $where
     ";
 
-    return (int) ($this->conn
-        ->query($sql)
+    $stmt = $this->conn->prepare($sql);
+
+    if ($window !== null) {
+        $stmt->bindValue(':window_start', $window['start']);
+        $stmt->bindValue(':window_end', $window['end']);
+    }
+
+    $stmt->execute();
+
+    return (int) ($stmt
         ->fetch(PDO::FETCH_ASSOC)['COUNT(*)'] ?? 0);
 }
 
@@ -422,7 +527,13 @@ public function countSalesTransactions(string $period): int
  */
 public function getSoldItems(string $period, int $limit, int $offset): array
 {
-    $where = $this->getDateCondition($period, 's.created_at');
+    $window = $period === '30days'
+        ? $this->recordedWindowBounds(30)
+        : null;
+
+    $where = $window !== null
+        ? "DATE(s.created_at) BETWEEN :window_start AND :window_end"
+        : $this->getDateCondition($period, 's.created_at');
 
     $sql = "
         SELECT
@@ -474,6 +585,11 @@ public function getSoldItems(string $period, int $limit, int $offset): array
     $stmt->bindValue(':limit', $limit, PDO::PARAM_INT);
     $stmt->bindValue(':offset', $offset, PDO::PARAM_INT);
 
+    if ($window !== null) {
+        $stmt->bindValue(':window_start', $window['start']);
+        $stmt->bindValue(':window_end', $window['end']);
+    }
+
     $stmt->execute();
 
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -481,7 +597,13 @@ public function getSoldItems(string $period, int $limit, int $offset): array
 
 public function countSoldItems(string $period): int
 {
-    $where = $this->getDateCondition($period, 's.created_at');
+    $window = $period === '30days'
+        ? $this->recordedWindowBounds(30)
+        : null;
+
+    $where = $window !== null
+        ? "DATE(s.created_at) BETWEEN :window_start AND :window_end"
+        : $this->getDateCondition($period, 's.created_at');
 
     $sql = "
         SELECT COUNT(*)
@@ -498,8 +620,16 @@ public function countSoldItems(string $period): int
         ) grouped_products
     ";
 
-    return (int) ($this->conn
-        ->query($sql)
+    $stmt = $this->conn->prepare($sql);
+
+    if ($window !== null) {
+        $stmt->bindValue(':window_start', $window['start']);
+        $stmt->bindValue(':window_end', $window['end']);
+    }
+
+    $stmt->execute();
+
+    return (int) ($stmt
         ->fetch(PDO::FETCH_ASSOC)['COUNT(*)'] ?? 0);
 }
 
@@ -1285,17 +1415,9 @@ public function exportSalesHistory()
     {
         $days = max(1, $days);
 
-        $endRow = $this->conn
-            ->query("
-                SELECT DATE(MAX(s.created_at)) AS window_end
-                FROM sales s
-                WHERE s.transaction_status = 'Completed'
-            ")
-            ->fetch(PDO::FETCH_ASSOC);
+        $bounds = $this->recordedWindowBounds($days);
 
-        $windowEnd = is_array($endRow) ? ($endRow['window_end'] ?? null) : null;
-
-        if ($windowEnd === null) {
+        if ($bounds === null) {
             return [
                 'window_start' => null,
                 'window_end' => null,
@@ -1306,7 +1428,8 @@ public function exportSalesHistory()
             ];
         }
 
-        $windowStart = date('Y-m-d', strtotime((string) $windowEnd) - (($days - 1) * 86400));
+        $windowStart = $bounds['start'];
+        $windowEnd = $bounds['end'];
 
         $stmtTotals = $this->conn->prepare("
             SELECT
@@ -1365,13 +1488,57 @@ public function exportSalesHistory()
             ':window_end' => $windowEnd,
         ]);
 
+        /*
+            Previous window (the 30 days before this one) exists so the
+            Sales Growth card can compare recorded data against recorded
+            data instead of clock against clock.
+        */
+
+        $prevEnd = date('Y-m-d', strtotime($windowStart) - 86400);
+        $prevStart = date(
+            'Y-m-d',
+            strtotime($windowStart) - ($days * 86400)
+        );
+
+        $stmtPrev = $this->conn->prepare("
+            SELECT
+                COUNT(DISTINCT s.sale_id) AS transactions,
+                COALESCE(SUM(si.quantity), 0) AS units,
+                COALESCE(SUM(
+                    si.subtotal - COALESCE(
+                        s.discount_amount * si.subtotal
+                            / NULLIF(sl.line_subtotal, 0),
+                        0
+                    )
+                ), 0) AS peso
+            FROM sales s
+            INNER JOIN sale_items si ON s.sale_id = si.sale_id
+            INNER JOIN (
+                SELECT sale_id, SUM(subtotal) AS line_subtotal
+                FROM sale_items
+                GROUP BY sale_id
+            ) sl ON sl.sale_id = si.sale_id
+            WHERE s.transaction_status = 'Completed'
+                AND DATE(s.created_at) BETWEEN :prev_start AND :prev_end
+        ");
+        $stmtPrev->execute([
+            ':prev_start' => $prevStart,
+            ':prev_end' => $prevEnd,
+        ]);
+        $prev = $stmtPrev->fetch(PDO::FETCH_ASSOC) ?: [];
+
         return [
             'window_start' => $windowStart,
-            'window_end' => (string) $windowEnd,
+            'window_end' => $windowEnd,
             'units' => (int) ($totals['units'] ?? 0),
             'peso' => (float) ($totals['peso'] ?? 0),
             'transactions' => (int) ($totals['transactions'] ?? 0),
             'products' => $stmtProducts->fetchAll(PDO::FETCH_ASSOC),
+            'window_prev_start' => $prevStart,
+            'window_prev_end' => $prevEnd,
+            'peso_prev' => (float) ($prev['peso'] ?? 0),
+            'units_prev' => (int) ($prev['units'] ?? 0),
+            'transactions_prev' => (int) ($prev['transactions'] ?? 0),
         ];
     }
 

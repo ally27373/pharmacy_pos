@@ -700,6 +700,33 @@ if (!is_string($fxPayloadJson) || trim($fxPayloadJson) === '') {
             } else {
                 initFxCharts();
             }
+
+            /*
+             * Rescue sweep: some page states (late layout, browser zoom,
+             * fonts still loading) can leave a constructed chart unsized or
+             * a canvas without an instance. Re-check shortly after load and
+             * force a resize where possible; log anything still missing so
+             * problems are visible instead of a silent blank canvas.
+             */
+            function fxRescue(attempt) {
+                ['fxDailyChart', 'fxProductChart'].forEach(function (id) {
+                    const c = document.getElementById(id);
+                    if (!c || typeof Chart === 'undefined' || !Chart.getChart) return;
+                    const inst = Chart.getChart(c);
+                    if (inst) {
+                        const r = c.getBoundingClientRect();
+                        if (r.height < 2 || r.width < 2) {
+                            console.warn('[fx] zero-size canvas, forcing resize:', id);
+                            try { inst.resize(); } catch (e) { console.warn('[fx] resize failed:', id, e); }
+                        }
+                    } else if (attempt > 0) {
+                        console.warn('[fx] canvas has no Chart instance:', id);
+                    }
+                });
+            }
+            [300, 800, 1600].forEach(function (ms, i) {
+                setTimeout(function () { fxRescue(i); }, ms);
+            });
         })();
     </script>
     <?php endif; ?>

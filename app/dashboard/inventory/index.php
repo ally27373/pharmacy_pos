@@ -24,7 +24,6 @@ $dashboardData=$dashboardController->getDashboardData();
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <section class="inventory-full-row inventory-distribution-row"><?php include __DIR__."/partials/quantity_chart.php"; ?></section>
 <section class="inventory-full-row inventory-current-row"><?php include __DIR__."/partials/current_inventory.php"; ?></section>
-<section class="inventory-full-row inventory-demand-row"><?php include __DIR__."/partials/product_demand.php"; ?></section>
 <section class="inventory-two-column-row inventory-operational-row"><div class="inventory-column-panel"><?php include __DIR__."/partials/fast_moving.php"; ?></div><div class="inventory-column-panel"><?php include __DIR__."/partials/near_expiry.php"; ?></div></section>
 <section class="inventory-full-row inventory-insights-row"><?php include __DIR__."/partials/inventory_insights.php"; ?></section>
 </main></div></div>
