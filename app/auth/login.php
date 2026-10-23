@@ -101,21 +101,22 @@ require_once '../../includes/header.php';
                 <div class="left-decor-corner"></div>
                 <div class="left-decor-bottom"></div>
 
-                <div class="brand-header">
-                    <div class="brand-icon-box">
-                        <i class="bi bi-capsule-fill"></i>
+                <div class="brand-hero">
+
+                    <div class="brand-hero-ring">
+                        <img
+                            src="/assets/image/nica-xandra-logo.png"
+                            alt="Nica Xandra logo"
+                        >
                     </div>
-                    <div>
-                        <h2>NICA XANDRA</h2>
-                        <div class="brand-subtitle">Nica Xandra Pharmacy Management System</div>
+
+                    <h1 class="brand-hero-name">NICA XANDRA</h1>
+
+                    <div class="brand-hero-system">
+                        Nica Xandra Pharmacy Management System
                     </div>
+
                 </div>
-
-                <h2 class="welcome-title">Welcome</h2>
-
-                <p class="welcome-subtitle">
-                    Sign in to manage your inventory, sales, and reports.
-                </p>
 
             </div>
 

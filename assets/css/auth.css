@@ -104,69 +104,51 @@ body{
     pointer-events:none;
 }
 
-/* Brand header */
-.brand-header{
+/* Brand hero: the greeting used to be a big "Welcome" headline with the
+   brand shrunk into a small strip above it. The panel now leads with the
+   brand itself -- the same NX logo the side menu uses, inside its white
+   ring, with the system name as the headline. */
+.brand-hero{
+    text-align:center;
+    position:relative; z-index:2;
+}
+
+.brand-hero-ring{
+    width:112px; height:112px;
+    margin:0 auto 22px;
+    border-radius:50%;
+    background:#ffffff;
     display:flex;
     align-items:center;
-    gap:14px;
-    margin-bottom:50px;
-    position:relative; z-index:2;
-}
-
-.brand-header i{
-    font-size:28px;
-    color:#fff;
-    width:52px; height:52px;
-    display:inline-flex;
-    align-items:center;
     justify-content:center;
-    background:rgba(255,255,255,.18);
-    border-radius:14px;
-    backdrop-filter:blur(8px);
-    border:1px solid rgba(255,255,255,.15);
+    overflow:hidden;
+    box-shadow:0 10px 30px rgba(0,0,0,.18);
 }
 
-.brand-header h2{
-    font-size:24px;
-    font-weight:800;
+.brand-hero-ring img{
+    width:84px; height:84px;
+    object-fit:contain;
+    display:block;
+}
+
+.brand-hero-name{
+    font-size:48px;
+    font-weight:900;
     letter-spacing:-.03em;
+    line-height:1.05;
     color:#fff;
-    line-height:1.15;
+    margin-bottom:10px;
 }
 
-/* The subtitle carried the old name, "PHARMACY POS SYSTEM", which was
-   short enough to sit on one line with no styling of its own. It now reads
-   "Nica Xandra Pharmacy Management System", which needs its own scale,
-   tracking and a wrap limit or it collides with the logo box. */
-.brand-subtitle{
+.brand-hero-system{
     font-size:12px;
     font-weight:600;
-    letter-spacing:.12em;
+    letter-spacing:.22em;
     text-transform:uppercase;
-    color:rgba(255,255,255,.72);
-    margin-top:4px;
-    max-width:230px;
-    line-height:1.5;
-}
-
-/* Welcome text */
-.welcome-title{
-    font-size:52px;
-    font-weight:900;
-    line-height:1.05;
-    letter-spacing:-.04em;
-    margin-bottom:12px;
-    color:#fff;
-    position:relative; z-index:2;
-}
-
-.welcome-subtitle{
-    font-size:16px;
-    font-weight:400;
-    color:rgba(255,255,255,.88);
-    margin-bottom:55px;
-    line-height:1.55;
-    position:relative; z-index:2;
+    color:rgba(255,255,255,.78);
+    max-width:300px;
+    line-height:1.7;
+    margin:0 auto;
 }
 
 /* Decorative bottom curves (reference style) */
@@ -438,13 +420,14 @@ body{
         width:100% !important;
         padding:20px 16px !important;
     }
-    .welcome-title{ font-size:38px !important; }
+    .brand-hero-name{ font-size:36px !important; }
+    .brand-hero-ring{ width:92px; height:92px; }
+    .brand-hero-ring img{ width:68px; height:68px; }
     .login-card{ padding:36px 24px !important; }
-    .brand-header{ justify-content:center; margin-bottom:32px; }
 }
 
 @media (max-width:480px){
-    .welcome-title{ font-size:30px !important; }
+    .brand-hero-name{ font-size:30px !important; }
     .left-side{ padding:36px 20px !important; }
 }
 
